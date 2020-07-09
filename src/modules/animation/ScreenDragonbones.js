@@ -38,7 +38,7 @@ var ScreenDragonbones = cc.Layer.extend({
         this.lblLog = gv.commonText(fr.Localization.text("..."), xPos, size.height*0.2);
         this.addChild(this.lblLog);
 
-        this.nodeAnimation = new cc.Node();
+        this.nodeAnimation = new cc.Node();  
         this.nodeAnimation.setPosition(xPos, size.height*0.5);
 		this.nodeAnimation.setScaleX(-1);
         this.addChild(this.nodeAnimation);
@@ -84,7 +84,6 @@ var ScreenDragonbones = cc.Layer.extend({
     {
         if(this.character)
             this.character.removeFromParent(true);
-
         this.character = fr.createAnimationById(resAniId.chipu,this);
         //doi mau, yeu cau phai co file shader, nhung bone co ten bat dau tu color_ se bi doi mau
         this.character.setBaseColor(255,255,0);
