@@ -24,8 +24,24 @@ var ScreenMenu = cc.Layer.extend({
         this.addChild(btnDragonbones);
         btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
 
-        this.onPlane.bind(this);
+        var plane = cc.Sprite.create("res/game/animation/character/plane/logoBack.png");
+        plane.setAnchorPoint(cc.p(0.5,0.5));
+        plane.setPosition(cc.p(750,100));
+        this.addChild(plane);
+
+        var plane_scale = cc.ScaleTo.create(0.5,0.5,0.5);
+        plane.runAction(plane_scale);
+
+
+        var plane_action_1 = cc.MoveTo.create(4, cc.p(750, 500));
+        plane.runAction(plane_action_1);
        
+        // var plane_action_2 = cc.MoveTo.create(4, cc.p(250, 500));
+        // plane.runAction(plane_action_2);
+        // var plane_action_3 = cc.MoveTo.create(4, cc.p(250, 100));
+        // plane.runAction(plane_action_3);
+
+        
 
     },
     onEnter:function(){
@@ -43,19 +59,6 @@ var ScreenMenu = cc.Layer.extend({
     {
         fr.view(ScreenDragonbones);
     },
-    onPlane:function(sender)
-    {
-        if(this.character)
-            this.character.removeFromParent(true);
-        this.character = fr.createAnimationById(resAniId.chipu,this);
-        //doi mau, yeu cau phai co file shader, nhung bone co ten bat dau tu color_ se bi doi mau
-        this.character.setBaseColor(255,255,0);
-        //chinh toc do play animation
-        this.character.getAnimation().setTimeScale(0.5);
-        this.nodeAnimation.addChild(this.character);
-        //play animation gotoAndPlay(animationName, fadeInTime, duration, playTimes)
-        this.character.getAnimation().gotoAndPlay("idle_0_",-1);
-
-    }
+    
 
 });
