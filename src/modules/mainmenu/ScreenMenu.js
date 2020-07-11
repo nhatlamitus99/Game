@@ -11,6 +11,23 @@ var ScreenMenu = cc.Layer.extend({
         this._super();
         var size = cc.director.getVisibleSize();
 
+        var light = cc.Sprite.create("res/game/animation/light/flare.jpg");
+        light.setAnchorPoint(cc.p(0.5,0.5));
+        light.setPosition(cc.p(0, 0));
+        this.addChild(light);
+        var light_scale = cc.ScaleTo.create(0.35,0.35,0.35);
+        //var light_reverse = cc.Reverse.create();
+        light.runAction(light_scale);
+        //light.runAction(light_reverse);
+
+        var plane = cc.Sprite.create("res/game/animation/character/plane/logoBack.png");
+        plane.setAnchorPoint(cc.p(0.5,0.5));
+        plane.setPosition(cc.p(4*cc.winSize.width/5, 0));
+        this.addChild(plane);
+        var plane_scale = cc.ScaleTo.create(0.5,0.5,0.5);
+        plane.runAction(plane_scale);
+
+
 
         var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5,"New Game");
         this.addChild(btnNetwork);
@@ -24,22 +41,41 @@ var ScreenMenu = cc.Layer.extend({
         this.addChild(btnDragonbones);
         btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
 
-        var plane = cc.Sprite.create("res/game/animation/character/plane/logoBack.png");
-        plane.setAnchorPoint(cc.p(0.5,0.5));
-        plane.setPosition(cc.p(750,100));
-        this.addChild(plane);
+        
 
-        var plane_scale = cc.ScaleTo.create(0.5,0.5,0.5);
-        plane.runAction(plane_scale);
+        
 
 
-        var plane_action_1 = cc.MoveTo.create(4, cc.p(750, 500));
-        plane.runAction(plane_action_1);
+        
+        plane.runAction(cc.Sequence(           
+            cc.MoveTo.create(4, cc.p(4*cc.winSize.width/5, size.height)),
+            cc.MoveTo.create(0, cc.p(1*cc.winSize.width/5, 0)),
+            (cc.Spawn.create(
+                cc.MoveTo.create(3, cc.p(4*cc.winSize.width/5, 0)),
+                cc.MoveTo.create(3, cc.p(4*cc.winSize.width/5, 7*size.height/5))
+            )),
+            cc.MoveTo.create(0, cc.p(1*cc.winSize.width/5, 0)),
+            cc.MoveTo.create(4, cc.p(4*cc.winSize.width/5, size.height)),
+            cc.MoveTo.create(0, cc.p(1*cc.winSize.width/5, 0))
+        ).repeatForever());
+
+        light.runAction(cc.Sequence(       
+            cc.DelayTime.create(2),
+            cc.Spawn.create(
+                cc.MoveTo.create(8, cc.p(4*cc.winSize.width/5, 0)),
+                cc.MoveTo.create(8, cc.p(4*cc.winSize.width/5, 7*size.height/5)),
+                cc.SkewTo.create(7, 45, 180) 
+            ),
+            cc.MoveTo.create(0, cc.p(0, 0)),
+            cc.SkewTo.create(0, 0, 0) 
+                     
+            
+        ).repeatForever());
+
+        
+        
        
-        // var plane_action_2 = cc.MoveTo.create(4, cc.p(250, 500));
-        // plane.runAction(plane_action_2);
-        // var plane_action_3 = cc.MoveTo.create(4, cc.p(250, 100));
-        // plane.runAction(plane_action_3);
+        
 
         
 
