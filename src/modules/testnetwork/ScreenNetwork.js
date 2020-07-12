@@ -9,112 +9,181 @@ var Direction =
     LEFT:3,
     RIGHT:4
 };
+
+var Objs = { 
+    EnemiesDirection: [],
+    Enemies: [],
+    myPlane: null,
+    soundInfo: null,
+    gameScore: null,
+    gameLive: null
+
+}
+
+var timePlayed = 0; //game time
+var isAlive = false; //is the game is running
+
+function movePlane(destination){ //move my plane to destination
+}
+function gameStart(){//game start, hide texts
+}
+function gameOver(){//game over, check score
+}
+
 var ScreenNetwork = cc.Layer.extend({
     ctor:function() {
         this._super();
         var size = cc.director.getVisibleSize();
+        isAlive = true;
 
-        var yBtn = 2*size.height/3;
+        var backGround = cc.Sprite.create("res/game/animation/back_ground/backGround.png");
+        backGround.setAnchorPoint(cc.p(0.5, 0.5));
+        backGround.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(backGround, 0);
+        backGround.runAction(cc.Sequence(
+            cc.MoveBy.create(15, 0, -110),
+            cc.MoveBy.create(0, 0, 110)
+        ).repeatForever());
 
-        var btnBack = gv.commonButton(200, 64, size.width - 120, 50,"Back");
-        this.addChild(btnBack);
-        btnBack.addClickEventListener(this.onSelectBack.bind(this));
+        
 
-        var btnLogin = gv.commonButton(200, 64, size.width/4, yBtn,"Login");
-        this.addChild(btnLogin);
-        btnLogin.addClickEventListener(this.onSelectLogin.bind(this));
+        var object_1 = cc.Sprite.create("res/game/animation/object_ground/object_1.png");
+        object_1.setAnchorPoint(cc.p(0.5, 0.5));
+        object_1.setPosition(cc.p(size.width, size.height+100));
+        this.addChild(object_1, 1);
+        var object_1_scale = cc.ScaleTo.create(0,0.5,0.5);
+        object_1.runAction(object_1_scale);
+        
+        var object_2 = cc.Sprite.create("res/game/animation/object_ground/object_2.png");
+        object_2.setAnchorPoint(cc.p(0.5, 0.5));
+        object_2.setPosition(cc.p(size.width/5, size.height+100));
+        this.addChild(object_2, 1);
+        var object_2_scale = cc.ScaleTo.create(0,0.5,0.5);
+        object_2.runAction(object_2_scale);
+        
 
-        var btnDisconnect = gv.commonButton(200, 64, size.width/2, yBtn,"Disconnect");
-        this.addChild(btnDisconnect);
-        btnDisconnect.addClickEventListener(this.onSelectDisconnect.bind(this));
+        var object_3 = cc.Sprite.create("res/game/animation/object_ground/object_3.png");
+        object_3.setAnchorPoint(cc.p(0.5, 0.5));
+        object_3.setPosition(cc.p(size.width/3, size.height+100));
+        this.addChild(object_3, 1);
+        
+        var object_4 = cc.Sprite.create("res/game/animation/object_ground/object_4.png");
+        object_4.setAnchorPoint(cc.p(0.5, 0.5));
+        object_4.setPosition(cc.p(size.width/2, size.height+100));
+        this.addChild(object_4, 1);
+        var object_4_scale = cc.ScaleTo.create(0,0.5,0.5);
+        object_4.runAction(object_4_scale);
+        
 
-        var btnReconnect = gv.commonButton(200, 64, 3*size.width/4, yBtn,"Reconnect");
-        this.addChild(btnReconnect);
-        btnReconnect.addClickEventListener(this.onSelectReconnect.bind(this));
+        
 
-        this.lblLog = gv.commonText(fr.Localization.text("..."), size.width*0.4, size.height*0.05);
-        this.addChild(this.lblLog);
+        var myPlane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
+        myPlane.setAnchorPoint(cc.p(0.5,0.5));
+        myPlane.setPosition(cc.p(size.width/2, size.height/10));
+        this.addChild(myPlane, 1, 9);
+        myPlane.runAction(cc.blink(4,12));
+    
+        var score = cc.LabelTTF.create("Score:", res.TitleFont, 22);
+        score.setPosition(cc.p(size.width-100, size.height-35));
+        this.addChild(score);
 
-        this.initGuiGame();
+        Objs.gameScore = cc.LabelTTF.create("000", res.TitleFont, 20);
+        Objs.gameScore.setPosition(cc.p(size.width-40, size.height-35));
+        this.addChild(Objs.gameScore);
+
+        var back = cc.LabelTTF.create("Main Menu", res.TitleFont, 26);
+        back.setPosition(cc.p(size.width-80, 35));
+        back.setColor(cc.color.BLUE);
+        this.addChild(back);
+
+        var live = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
+        live.setAnchorPoint(cc.p(0.5,0.5));
+        live.setPosition(cc.p(50, size.height-40));
+        this.addChild(live);
+        var live_scale = cc.ScaleTo.create(0.5,0.5,0.5);
+        live.runAction(live_scale);
+
+        Objs.gameLive = cc.LabelTTF.create("4", res.TitleFont, 20);
+        Objs.gameLive.setPosition(cc.p(80, size.height-30));
+        Objs.gameLive.setColor(cc.color.RED);
+        this.addChild(Objs.gameLive);
+
+        object_3.runAction(cc.Sequence(
+            cc.MoveTo.create(10, size.width/3, -100),
+            cc.MoveTo.create(0, 2*size.width/3, size.height+100)
+        ).repeatForever())
+        object_2.runAction(cc.Sequence(
+            cc.DelayTime.create(6),
+            cc.MoveTo.create(10, size.width/5, -100),
+            cc.MoveTo.create(0, size.width/5, size.height+100)
+        ).repeatForever())
+        object_1.runAction(cc.Sequence(
+            cc.DelayTime.create(12),
+            cc.MoveTo.create(10, size.width/3+50, -100),
+            cc.MoveTo.create(0, size.width/3, size.height+100)
+        ).repeatForever())       
+        object_4.runAction(cc.Sequence(
+            cc.DelayTime.create(15),
+            cc.MoveTo.create(10, size.width/2, -100),
+            cc.MoveTo.create(0, size.width/2, size.height+100),
+            cc.DelayTime.create(12)
+        ).repeatForever())
+                
+        
+
+        if( 'touches' in cc.sys.capabilities )
+            cc.eventManager.addListener(cc.EventListener.create({
+                event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+                onTouchesEnded:function (touches, event) {
+                    if (touches.length <= 0)
+                        return;
+                    event.getCurrentTarget().moveSprite(touches[0].getLocation());
+                }
+            }), this);
+        else if ('mouse' in cc.sys.capabilities )
+            cc.eventManager.addListener({
+                event: cc.EventListener.MOUSE,
+                onMouseUp: function (event) {
+                    event.getCurrentTarget().moveSprite(event.getLocation());
+                }
+            }, this);
+             
+       
+        
     },
-    initGuiGame:function()
-    {
-        var size = cc.director.getVisibleSize();
 
-        this._gameNode = new cc.Node();
-        this._gameNode.setPosition(cc.p(size.width*0.4, size.height*0.4));
-        this._gameNode.setVisible(false);
-        this.addChild(this._gameNode);
+    moveSprite: function(pos){
+        var sprite = this.getChildByTag(9);
+        sprite.stopAllActions();
+        sprite.runAction(cc.moveTo(0.4, pos));
+        for(var i=0;i<7;i++){
+            var bullet = cc.Sprite.create()
+        }
 
-        var btnLeft = gv.commonButton(64, 64, -80, 0,"<");
-        this._gameNode.addChild(btnLeft);
-        btnLeft.addClickEventListener(function()
-        {
-            testnetwork.connector.sendMove(Direction.LEFT);
-        }.bind(this));
-
-        var btnRight = gv.commonButton(64, 64, 80, 0,">");
-        this._gameNode.addChild(btnRight);
-        btnRight.addClickEventListener(function()
-        {
-            testnetwork.connector.sendMove(Direction.RIGHT);
-        }.bind(this));
-        var btnUp = gv.commonButton(64, 64, 0, 80,"<");
-        btnUp.setRotation(90);
-        this._gameNode.addChild(btnUp);
-        btnUp.addClickEventListener(function()
-        {
-            testnetwork.connector.sendMove(Direction.UP);
-        }.bind(this));
-        var btnDown = gv.commonButton(64, 64, 0, -80,">");
-        btnDown.setRotation(90);
-        this._gameNode.addChild(btnDown);
-        btnDown.addClickEventListener(function()
-        {
-            testnetwork.connector.sendMove(Direction.DOWN);
-        }.bind(this));
-
-
-
+    },
+    
+    
+    update: function(dt){//update callback, run every frame
+    },
+    checkCollision: function(){
+    },
+    onTouchBegan: function(touch, event){//touchbegan callback
+    },
+    onTouchMoved: function(touch, event){//touchmoved callback
+    },
+    addTexts: function(){//add the texts to the screen
+    },
+    SoundClicked: function(){
+    },
+    addSquares: function(){//add the squares to the scene
+    },
+    generateDirection: function(){//generate a random direction
     },
     onSelectBack:function(sender)
     {
         fr.view(ScreenMenu);
-    },
-    onSelectLogin:function(sender)
-    {
-        this.lblLog.setString("Start Connect!");
-        gv.gameClient.connect();
-    },
-    onSelectDisconnect:function(sender)
-    {
-        this.lblLog.setString("Coming soon!");
-    },
-    onSelectReconnect:function(sender)
-    {
-        this.lblLog.setString("Coming soon!");
-    },
-    onConnectSuccess:function()
-    {
-        this.lblLog.setString("Connect Success!");
-    },
-    onConnectFail:function(text)
-    {
-        this.lblLog.setString("Connect fail: " + text);
-    },
-    onFinishLogin:function()
-    {
-       // this.lblLog.setString("Finish login!");
-        this._gameNode.setVisible(true);
-    },
-    onUserInfo:function(userName, x, y)
-    {
-        this._gameNode.setVisible(true);
-        this.lblLog.setString("Pos:" + x + "," + y);
-    },
-    updateMove:function(x, y)
-    {
-        this.lblLog.setString("Pos:" + x + "," + y);
     }
+    
+    
 
 });

@@ -15,29 +15,26 @@ var ScreenMenu = cc.Layer.extend({
         light.setAnchorPoint(cc.p(0.5,0.5));
         light.setPosition(cc.p(0, 0));
         this.addChild(light);
-        var light_scale = cc.ScaleTo.create(0.35,0.35,0.35);
-        //var light_reverse = cc.Reverse.create();
+        var light_scale = cc.ScaleTo.create(0,0.35,0.35);
         light.runAction(light_scale);
-        //light.runAction(light_reverse);
 
-        var plane = cc.Sprite.create("res/game/animation/character/plane/logoBack.png");
+        var plane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
         plane.setAnchorPoint(cc.p(0.5,0.5));
         plane.setPosition(cc.p(4*cc.winSize.width/5, 0));
         this.addChild(plane);
-        var plane_scale = cc.ScaleTo.create(0.5,0.5,0.5);
-        plane.runAction(plane_scale);
+       
 
 
 
-        var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5,"New Game");
+        var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5);
         this.addChild(btnNetwork);
         btnNetwork.addClickEventListener(this.onSelectNetwork.bind(this));
 
-        var btnLocalization = gv.commonButton(200, 64, cc.winSize.width/2, 1.8*size.height/5,"Option");
+        var btnLocalization = gv.commonButton(200, 64, cc.winSize.width/2, 1.8*size.height/5);
         this.addChild(btnLocalization);
         btnLocalization.addClickEventListener(this.onSelectLocalization.bind(this));
 
-        var btnDragonbones = gv.commonButton(200, 64, cc.winSize.width/2, size.height/5,"About");
+        var btnDragonbones = gv.commonButton(200, 64, cc.winSize.width/2, size.height/5);
         this.addChild(btnDragonbones);
         btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
 
