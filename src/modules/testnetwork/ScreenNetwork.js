@@ -12,13 +12,17 @@ var Direction =
 
 var Objs = { 
     EnemiesDirection: [],
+    Bullet: [],
     Enemies: [],
     myPlane: null,
+    numberBullet: 6,
     soundInfo: null,
     gameScore: null,
     gameLive: null
 
 }
+
+
 
 var timePlayed = 0; //game time
 var isAlive = false; //is the game is running
@@ -35,6 +39,8 @@ var ScreenNetwork = cc.Layer.extend({
         this._super();
         var size = cc.director.getVisibleSize();
         isAlive = true;
+
+        cc.audioEngine.playEffect("res/Music/bgMusic.wav", true)
 
         var backGround = cc.Sprite.create("res/game/animation/back_ground/backGround.png");
         backGround.setAnchorPoint(cc.p(0.5, 0.5));
@@ -77,11 +83,11 @@ var ScreenNetwork = cc.Layer.extend({
 
         
 
-        var myPlane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
-        myPlane.setAnchorPoint(cc.p(0.5,0.5));
-        myPlane.setPosition(cc.p(size.width/2, size.height/10));
-        this.addChild(myPlane, 1, 9);
-        myPlane.runAction(cc.blink(4,12));
+        Objs.myPlane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
+        Objs.myPlane.setAnchorPoint(cc.p(0.5,0.5));
+        Objs.myPlane.setPosition(cc.p(size.width/2, size.height/10));
+        this.addChild(Objs.myPlane, 1, 0);
+        Objs.myPlane.runAction(cc.blink(4,12));
     
         var score = cc.LabelTTF.create("Score:", res.TitleFont, 22);
         score.setPosition(cc.p(size.width-100, size.height-35));
@@ -113,6 +119,17 @@ var ScreenNetwork = cc.Layer.extend({
         Objs.gameLive.setColor(cc.color.RED);
         this.addChild(Objs.gameLive);
 
+        for(var i=1;i<=6;i++){
+            Objs.Enemies[i] = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
+            Objs.Enemies[i].setAnchorPoint(cc.p(0.5,0.5));
+            Objs.Enemies[i].setPosition(cc.p(size.width - Math.random()*200, size.height - Math.random()*200));
+            this.addChild(Objs.Enemies[i], i, i);
+            Objs.Enemies[i].runAction(cc.Sequence(
+                cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*80: Math.random()*80, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
+                ).repeatForever())
+        }
+
+
         object_3.runAction(cc.Sequence(
             cc.MoveTo.create(10, size.width/3, -100),
             cc.MoveTo.create(0, 2*size.width/3, size.height+100)
@@ -134,7 +151,19 @@ var ScreenNetwork = cc.Layer.extend({
             cc.DelayTime.create(12)
         ).repeatForever())
                 
-        
+        for(var i=1;i<=Objs.numberBullet;i++){
+            
+            Objs.Bullet[i] = cc.Sprite.create("res/game/animation/bullet/bullet.png");
+            Objs.Bullet[i].setAnchorPoint(cc.p(0.5,0.5));
+            Objs.Bullet[i].setPosition(cc.p(Objs.myPlane.x-20, Objs.myPlane.y + i*150));
+            this.addChild(Objs.Bullet[i], i, i+6);
+            Objs.Bullet[i].runAction(cc.blink(3, 20).repeatForever());
+            Objs.Bullet[i+Objs.numberBullet] = cc.Sprite.create("res/game/animation/bullet/bullet.png");
+            Objs.Bullet[i+Objs.numberBullet].setAnchorPoint(cc.p(0.5,0.5));
+            Objs.Bullet[i+Objs.numberBullet].setPosition(cc.p(Objs.myPlane.x+20, Objs.myPlane.y + i*150));
+            this.addChild(Objs.Bullet[i+Objs.numberBullet], i, i+6+Objs.numberBullet);
+            Objs.Bullet[i+Objs.numberBullet].runAction(cc.blink(3, 20).repeatForever());
+        }
 
         if( 'touches' in cc.sys.capabilities )
             cc.eventManager.addListener(cc.EventListener.create({
@@ -143,7 +172,7 @@ var ScreenNetwork = cc.Layer.extend({
                     if (touches.length <= 0)
                         return;
                     event.getCurrentTarget().moveSprite(touches[0].getLocation());
-                    
+                    event.getCurrentTarget().moveBullet(touches[0].getLocation(), this);
                 }
             }), this);
         else if ('mouse' in cc.sys.capabilities )
@@ -151,7 +180,7 @@ var ScreenNetwork = cc.Layer.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseUp: function (event) {
                     event.getCurrentTarget().moveSprite(event.getLocation());
-                    
+                    event.getCurrentTarget().moveBullet(event.getLocation(), this);
                 }
             }, this);
              
@@ -160,25 +189,24 @@ var ScreenNetwork = cc.Layer.extend({
     },
 
     moveSprite: function(pos){
-        var sprite = this.getChildByTag(9);
+        var sprite = this.getChildByTag(0);
         sprite.stopAllActions();
-        sprite.runAction(cc.moveTo(0.4, pos));
-        
-        // var bullet = cc.Sprite.create("res/game/animation/bullet/bullet.png");
-        //             bullet.setAnchorPoint(cc.p(0.5, 0.5));
-        //             bullet.setPosition(cc.p(event.getLocation()));
-        //             this.addChild(bullet);
-        // for(var i=0;i<7;i++){
-        //     var bullet = cc.Sprite.create("res/game/animation/bullet/bullet.png");
-        //     bullet.setAnchorPoint(cc.p(0.5, 0.5));
-        //     bullet.setPosition(cc.p(pos));
-        //     this.addChild(bullet);
-        //     bullet.runAction(cc.Sequence(
-        //         cc.MoveBy.create(0, 0, 50*(i+1)),
-        //         cc.MoveTo.create(0, 0, -10)
-        //     ))
-        // }
+        sprite.runAction(cc.moveTo(0.6, pos));
 
+
+    },
+
+    moveBullet: function(pos, node){
+        var bullets = [];
+        for(var i=7;i<=Objs.numberBullet*2+6;i++){
+            bullets[i-7] = this.getChildByTag(i);
+            bullets[i-7].stopAllActions();
+            if(i<Objs.numberBullet+7)
+                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x-20, pos.y + (i-6)*150)));
+            else
+                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x+20, pos.y + (i-6)*150)));
+
+        }
     },
     
     
@@ -200,6 +228,7 @@ var ScreenNetwork = cc.Layer.extend({
     },
     onSelectBack:function(sender)
     {
+        cc.audioEngine.stopAllEffects();
         fr.view(ScreenMenu);
     }
     

@@ -11,6 +11,8 @@ var ScreenMenu = cc.Layer.extend({
         this._super();
         var size = cc.director.getVisibleSize();
 
+        cc.audioEngine.playEffect("res/Music/mainMainMusic.wav", true)
+
         var light = cc.Sprite.create("res/game/animation/light/flare.jpg");
         light.setAnchorPoint(cc.p(0.5,0.5));
         light.setPosition(cc.p(0, 0));
@@ -99,14 +101,17 @@ var ScreenMenu = cc.Layer.extend({
     },
     onSelectNetwork:function(sender)
     {
+        cc.audioEngine.stopAllEffects();
         fr.view(ScreenNetwork);
     },
     onSelectLocalization:function(sender)
     {
+        cc.audioEngine.stopAllEffects();
         fr.view(ScreenLocalization);
     },
     onSelectDragonbones:function(sender)
     {
+        cc.audioEngine.stopAllEffects();
         fr.view(ScreenDragonbones);
     },
     

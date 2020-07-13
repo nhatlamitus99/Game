@@ -39,7 +39,12 @@ var g_resources = [
     "Default/Button_Disable.png",
     "Default/Button_Normal.png",
     "Default/Button_Press.png",
-
+    "Music/bgMusic.wav",
+    "Music/buttonEffet.wav",
+    "Music/explodeEffect.wav",
+    "Music/fireEffect.wav",
+    "Music/mainMainMusic.wav",
+    "Main/shipDestroyEffect.wav",
     "favicon.ico",
     "HelloWorld.png",
     "fonts/diceNumber.fnt",
