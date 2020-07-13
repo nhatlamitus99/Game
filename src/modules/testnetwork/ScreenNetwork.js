@@ -91,10 +91,15 @@ var ScreenNetwork = cc.Layer.extend({
         Objs.gameScore.setPosition(cc.p(size.width-40, size.height-35));
         this.addChild(Objs.gameScore);
 
-        var back = cc.LabelTTF.create("Main Menu", res.TitleFont, 26);
-        back.setPosition(cc.p(size.width-80, 35));
-        back.setColor(cc.color.BLUE);
-        this.addChild(back);
+        var backButton = gv.commonButton(200, 64, size.width - 80, 30 );
+        backButton.setColor(cc.color.BLUE);
+        this.addChild(backButton);
+        backButton.addClickEventListener(this.onSelectBack.bind(this));
+
+        var backLabel = cc.LabelTTF.create("Main Menu", res.TitleFont, 28);
+        backLabel.setPosition(cc.p(size.width-80, 30));
+        backLabel.setColor(cc.color.BLUE);
+        this.addChild(backLabel);
 
         var live = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
         live.setAnchorPoint(cc.p(0.5,0.5));
@@ -138,6 +143,7 @@ var ScreenNetwork = cc.Layer.extend({
                     if (touches.length <= 0)
                         return;
                     event.getCurrentTarget().moveSprite(touches[0].getLocation());
+                    
                 }
             }), this);
         else if ('mouse' in cc.sys.capabilities )
@@ -145,6 +151,7 @@ var ScreenNetwork = cc.Layer.extend({
                 event: cc.EventListener.MOUSE,
                 onMouseUp: function (event) {
                     event.getCurrentTarget().moveSprite(event.getLocation());
+                    
                 }
             }, this);
              
@@ -156,9 +163,21 @@ var ScreenNetwork = cc.Layer.extend({
         var sprite = this.getChildByTag(9);
         sprite.stopAllActions();
         sprite.runAction(cc.moveTo(0.4, pos));
-        for(var i=0;i<7;i++){
-            var bullet = cc.Sprite.create()
-        }
+        
+        // var bullet = cc.Sprite.create("res/game/animation/bullet/bullet.png");
+        //             bullet.setAnchorPoint(cc.p(0.5, 0.5));
+        //             bullet.setPosition(cc.p(event.getLocation()));
+        //             this.addChild(bullet);
+        // for(var i=0;i<7;i++){
+        //     var bullet = cc.Sprite.create("res/game/animation/bullet/bullet.png");
+        //     bullet.setAnchorPoint(cc.p(0.5, 0.5));
+        //     bullet.setPosition(cc.p(pos));
+        //     this.addChild(bullet);
+        //     bullet.runAction(cc.Sequence(
+        //         cc.MoveBy.create(0, 0, 50*(i+1)),
+        //         cc.MoveTo.create(0, 0, -10)
+        //     ))
+        // }
 
     },
     

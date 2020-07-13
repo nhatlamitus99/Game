@@ -26,18 +26,35 @@ var ScreenMenu = cc.Layer.extend({
 
 
 
-        var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5);
-        this.addChild(btnNetwork);
-        btnNetwork.addClickEventListener(this.onSelectNetwork.bind(this));
+        // var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5);
+        // this.addChild(btnNetwork);
+        // btnNetwork.addClickEventListener(this.onSelectNetwork.bind(this));
 
-        var btnLocalization = gv.commonButton(200, 64, cc.winSize.width/2, 1.8*size.height/5);
-        this.addChild(btnLocalization);
-        btnLocalization.addClickEventListener(this.onSelectLocalization.bind(this));
+        // var btnLocalization = gv.commonButton(200, 64, cc.winSize.width/2, 1.8*size.height/5);
+        // this.addChild(btnLocalization);
+        // btnLocalization.addClickEventListener(this.onSelectLocalization.bind(this));
 
-        var btnDragonbones = gv.commonButton(200, 64, cc.winSize.width/2, size.height/5);
-        this.addChild(btnDragonbones);
-        btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
+        // var btnDragonbones = gv.commonButton(200, 64, cc.winSize.width/2, size.height/5);
+        // this.addChild(btnDragonbones);
+        // btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
 
+        var btnNewGame = ccui.Button.create("res/Default/NewGame.png");
+        btnNewGame.setPosition(size.width/2, size.height/2);
+        this.addChild(btnNewGame);
+        btnNewGame.runAction(cc.ScaleTo.create(0, 2, 2));
+        btnNewGame.addClickEventListener(this.onSelectNetwork.bind(this));
+
+        var btnOption = ccui.Button.create("res/Default/Option.png");
+        btnOption.setPosition(size.width/2, size.height/2-100);
+        this.addChild(btnOption);
+        btnOption.runAction(cc.ScaleTo.create(0, 2, 2));
+        btnOption.addClickEventListener(this.onSelectLocalization.bind(this));
+
+        var btnAbout = ccui.Button.create("res/Default/About.png");
+        btnAbout.setPosition(size.width/2, size.height/2-200);
+        this.addChild(btnAbout);
+        btnAbout.runAction(cc.ScaleTo.create(0, 2, 2));
+        btnAbout.addClickEventListener(this.onSelectDragonbones.bind(this));
         
 
         
