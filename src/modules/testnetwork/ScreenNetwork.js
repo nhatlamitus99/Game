@@ -204,7 +204,7 @@ var ScreenNetwork = cc.Layer.extend({
             if(i<Objs.numberBullet+7)
                 bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x-20, pos.y + (i-6)*150)));
             else
-                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x+20, pos.y + (i-6)*150)));
+                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x+20, pos.y + (i-6*2)*150)));
 
         }
     },
