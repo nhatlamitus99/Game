@@ -60,6 +60,8 @@ var g_resources = [
     "game/animation/character/chipu/texture.png",
     "game/animation/character/plane/b01.plist",
     "game/animation/character/plane/b01.png",
+    "game/animation/game_over/gameOver.png",
+    "game/animation/game_over/gameoverBack.png",
     "game/animation/object_ground/b01.png",
     "game/animation/light/flare.jpg",
     "game/animation/eff_dice_number/texture.plist",
