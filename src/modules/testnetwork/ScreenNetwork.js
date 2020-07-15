@@ -14,6 +14,7 @@ var Objs = {
     EnemiesDirection: [],
     Bullet: [],
     Enemies: [],
+    Bullet_Enemies: [],
     myPlane: null,
     numberBullet: 6,
     soundInfo: null,
@@ -41,6 +42,8 @@ var ScreenNetwork = cc.Layer.extend({
         isAlive = true;
 
         cc.audioEngine.playEffect("res/Music/bgMusic.wav", true)
+
+        cc.sys.localStorage.setItem("point", 0)
 
         var backGround = cc.Sprite.create("res/game/animation/back_ground/backGround.png");
         backGround.setAnchorPoint(cc.p(0.5, 0.5));
@@ -127,6 +130,13 @@ var ScreenNetwork = cc.Layer.extend({
             Objs.Enemies[i].runAction(cc.Sequence(
                 cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*80: Math.random()*80, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
                 ).repeatForever())
+            
+            for(var k=1;k<=4;k++){
+                Objs.Bullet_Enemies[k] = cc.Sprite.create("res/game/animation/bullet/bullet_enemy.png");
+                Objs.Bullet_Enemies[k].setAnchorPoint(cc.p(0.5,0.5));
+                Objs.Bullet_Enemies[k].setPosition(cc.p(Objs.Enemies[i].x, Objs.Enemies[i].y - k*150));
+                this.addChild(Objs.Bullet_Enemies[k], i, 18+4*(i-1)+k);
+            }
         }
 
 
@@ -157,13 +167,16 @@ var ScreenNetwork = cc.Layer.extend({
             Objs.Bullet[i].setAnchorPoint(cc.p(0.5,0.5));
             Objs.Bullet[i].setPosition(cc.p(Objs.myPlane.x-20, Objs.myPlane.y + i*150));
             this.addChild(Objs.Bullet[i], i, i+6);
-            Objs.Bullet[i].runAction(cc.blink(3, 20).repeatForever());
+            Objs.Bullet[i].runAction(cc.Sequence(cc.blink(10, 30)).repeatForever());
             Objs.Bullet[i+Objs.numberBullet] = cc.Sprite.create("res/game/animation/bullet/bullet.png");
             Objs.Bullet[i+Objs.numberBullet].setAnchorPoint(cc.p(0.5,0.5));
             Objs.Bullet[i+Objs.numberBullet].setPosition(cc.p(Objs.myPlane.x+20, Objs.myPlane.y + i*150));
             this.addChild(Objs.Bullet[i+Objs.numberBullet], i, i+6+Objs.numberBullet);
-            Objs.Bullet[i+Objs.numberBullet].runAction(cc.blink(3, 20).repeatForever());
+            Objs.Bullet[i+Objs.numberBullet].runAction(cc.Sequence(cc.blink(10, 30)).repeatForever());
         }
+
+
+        
 
         if( 'touches' in cc.sys.capabilities )
             cc.eventManager.addListener(cc.EventListener.create({
@@ -171,19 +184,40 @@ var ScreenNetwork = cc.Layer.extend({
                 onTouchesEnded:function (touches, event) {
                     if (touches.length <= 0)
                         return;
+                    cc.log("touches");
                     event.getCurrentTarget().moveSprite(touches[0].getLocation());
                     event.getCurrentTarget().moveBullet(touches[0].getLocation(), this);
+                    //event.getCurrentTarget().moveBullet_Enemy(touches[0].getLocation(), this);
                 }
             }), this);
         else if ('mouse' in cc.sys.capabilities )
             cc.eventManager.addListener({
                 event: cc.EventListener.MOUSE,
                 onMouseUp: function (event) {
+                    cc.log("mouse");
                     event.getCurrentTarget().moveSprite(event.getLocation());
                     event.getCurrentTarget().moveBullet(event.getLocation(), this);
+                    //event.getCurrentTarget().moveBullet_Enemy(event.getLocation(), this);
                 }
             }, this);
-             
+
+        this.scheduleUpdate();
+            
+        // if( 'touches' in cc.sys.capabilities ) {
+        //     cc.eventManager.addListener({
+        //         event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        //         swallowTouches: true,
+        //         onTouchBegan: this.onTouchBegan,
+        //         onTouchMoved: this.onTouchMoved,
+        //         onTouchEnded: this.onTouchEnded,
+        //         onTouchCancelled: this.onTouchCancelled
+        //     }, this);
+        // } else {
+        //     cc.log("TOUCH-ONE-BY-ONE test is not supported on desktop");
+        // }
+        
+        
+        return true;
        
         
     },
@@ -196,7 +230,7 @@ var ScreenNetwork = cc.Layer.extend({
 
     },
 
-    moveBullet: function(pos, node){
+    moveBullet: function(pos){
         var bullets = [];
         for(var i=7;i<=Objs.numberBullet*2+6;i++){
             bullets[i-7] = this.getChildByTag(i);
@@ -208,29 +242,123 @@ var ScreenNetwork = cc.Layer.extend({
 
         }
     },
+
+    // moveBullet_Enemy: function(x, y){
+    //     var bullets = [];
+    //     for(var i=19;i<=24+18;i++){
+    //         bullets[i-19] = this.getChildByTag(i);
+    //         bullets[i-19].stopAllActions();
+    //         bullets[i-19].runAction(cc.Spawn(cc.blink(3,20), cc.MoveTo.create(0.6, x+20, y - (i-18)*150)));
+
+    //     }
+    // },
+
+    onTouchBegan:function(touch, event) {
+        var pos = touch.getLocation();
+        var id = touch.getID();
+        cc.log("onTouchBegan at: " + pos.x + " " + pos.y + " Id:" + id );
+        // if( pos.x < winSize.width/2) {
+        //     event.getCurrentTarget().new_id(id,pos);
+        //     return true;
+        // }
+        // return false;
+    },
+    onTouchMoved:function(touch, event) {
+        var pos = touch.getLocation();
+        var id = touch.getID();
+        cc.log("onTouchMoved at: " + pos.x + " " + pos.y + " Id:" + id );
+        //event.getCurrentTarget().update_id(id,pos);
+    },
+    onTouchEnded:function(touch, event) {
+        var pos = touch.getLocation();
+        var id = touch.getID();
+        cc.log("onTouchEnded at: " + pos.x + " " + pos.y + " Id:" + id );
+        //event.getCurrentTarget().release_id(id,pos);
+    },
+    onTouchCancelled:function(touch, event) {
+        var pos = touch.getLocation();
+        var id = touch.getID();
+        cc.log("onTouchCancelled at: " + pos.x + " " + pos.y + " Id:" + id );
+        //event.getCurrentTarget().update_id(id,pos);
+    },
     
+    
+    
+
+    checkDamage: function() {
+        for(var i=1;i<Objs.numberBullet;i++){
+            for(var j=1;j<Objs.Enemies.length;j++){
+                if(Objs.Enemies[j].x <= Objs.Bullet[i].x + 50 && Objs.Enemies[j].x >= Objs.Bullet[i].x - 50 && Objs.Enemies[j].x <= Objs.Bullet[i].y + 50 && Objs.Enemies[j].x >= Objs.Bullet[i].y + 50 ){
+                    // Objs.Enemies[j].runAction(cc.MoveTo.create(0, -100, -100))
+                    cc.log("yes")
+                }
+            }
+        }
+    },
     
     update: function(dt){//update callback, run every frame
+        var score = cc.sys.localStorage.getItem("point")
+        Objs.gameScore.setString(score)
+        for(var i=1;i<Objs.numberBullet;i++){
+            for(var j=1;j<Objs.Enemies.length;j++){
+                if(((Objs.Enemies[j].x <= Objs.Bullet[i].x + 20) && (Objs.Enemies[j].x >= Objs.Bullet[i].x - 20))){                   
+                    if(((Objs.Enemies[j].y <= Objs.Bullet[i].y + 20) && (Objs.Enemies[j].y >= Objs.Bullet[i].y - 20))){
+                        var ani  = fr.createAnimationById(resAniId.explosion,this);
+                        this.addChild(ani);
+                        cc.sys.localStorage.setItem("point", parseInt(score)+1)
+                        Objs.Enemies[j].runAction(cc.Sequence(
+                            cc.MoveTo.create(0, -100, -100)
+                            
+                            
+                
+                        )
+                    )   
+                    }
+                }
+                
+            }
+        }
     },
+
+
     checkCollision: function(){
+         
     },
-    onTouchBegan: function(touch, event){//touchbegan callback
-    },
-    onTouchMoved: function(touch, event){//touchmoved callback
-    },
-    addTexts: function(){//add the texts to the screen
-    },
-    SoundClicked: function(){
-    },
-    addSquares: function(){//add the squares to the scene
-    },
-    generateDirection: function(){//generate a random direction
-    },
+    
+
     onSelectBack:function(sender)
     {
         cc.audioEngine.stopAllEffects();
         fr.view(ScreenMenu);
-    }
+    },
+
+    explosion:function(x, y)
+    {
+        var ani  = fr.createAnimationById(resAniId.explosion,this);
+        this.addChild(ani);
+        ani.setPosition(cc.p(x,y));
+        ani.getAnimation().gotoAndPlay("run",cc.random0To1()*5,-1,1);
+        ani.setCompleteListener(this.onFinishEffect.bind(this));
+        
+    },
+
+    testLoadAnimation:function()
+    {
+        var testCount = 100;
+        var start = Date.now();
+
+        for(var i = 0; i< testCount; i++)
+        {
+            var ani  = fr.createAnimationById(resAniId.firework_test,this);
+            this.addChild(ani);
+            ani.setPosition(cc.random0To1()*cc.winSize.width, cc.random0To1()*cc.winSize.height);
+            ani.getAnimation().gotoAndPlay("run",cc.random0To1()*5,-1,1);
+            ani.setCompleteListener(this.onFinishEffect.bind(this));
+        }
+        var end = Date.now();
+        cc.log("time: " + (end - start));
+        this.lblLog.setString("time: " + (end - start));
+    },
     
     
 

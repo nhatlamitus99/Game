@@ -8,7 +8,8 @@ var resAniId = {
 	chipu: "chipu",
 	plane: "plane",
 	eff_dice_number: "eff_dice_number",
-	firework_test: "firework_test"
+	firework_test: "firework_test",
+	explosion: "explosion"
 };
 
 //path
@@ -17,5 +18,6 @@ var resAni = {
 	chipu: "game/animation/character/chipu",
 	eff_dice_number: "game/animation/eff_dice_number",
 	firework_test: "game/animation/firework_test",
-	plane: "game/animation/character/plane"
+	plane: "game/animation/character/plane",
+	explosion: "game/animation/explosion"
 };

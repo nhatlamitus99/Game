@@ -15,9 +15,9 @@ var ScreenMenu = cc.Layer.extend({
 
         var light = cc.Sprite.create("res/game/animation/light/flare.jpg");
         light.setAnchorPoint(cc.p(0.5,0.5));
-        light.setPosition(cc.p(0, 0));
+        light.setPosition(cc.p(-100, 3*size.height/5));
         this.addChild(light);
-        var light_scale = cc.ScaleTo.create(0,0.35,0.35);
+        var light_scale = cc.ScaleTo.create(0,0.45,0.45);
         light.runAction(light_scale);
 
         var plane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
@@ -28,18 +28,7 @@ var ScreenMenu = cc.Layer.extend({
 
 
 
-        // var btnNetwork = gv.commonButton(200, 64, cc.winSize.width/2, 2.6*size.height/5);
-        // this.addChild(btnNetwork);
-        // btnNetwork.addClickEventListener(this.onSelectNetwork.bind(this));
-
-        // var btnLocalization = gv.commonButton(200, 64, cc.winSize.width/2, 1.8*size.height/5);
-        // this.addChild(btnLocalization);
-        // btnLocalization.addClickEventListener(this.onSelectLocalization.bind(this));
-
-        // var btnDragonbones = gv.commonButton(200, 64, cc.winSize.width/2, size.height/5);
-        // this.addChild(btnDragonbones);
-        // btnDragonbones.addClickEventListener(this.onSelectDragonbones.bind(this));
-
+        
         var btnNewGame = ccui.Button.create("res/Default/NewGame.png");
         btnNewGame.setPosition(size.width/2, size.height/2);
         this.addChild(btnNewGame);
@@ -78,11 +67,11 @@ var ScreenMenu = cc.Layer.extend({
         light.runAction(cc.Sequence(       
             cc.DelayTime.create(2),
             cc.Spawn.create(
-                cc.MoveTo.create(8, cc.p(4*cc.winSize.width/5, 0)),
-                cc.MoveTo.create(8, cc.p(4*cc.winSize.width/5, 7*size.height/5)),
-                cc.SkewTo.create(7, 45, 180) 
+                cc.MoveTo.create(0.5, cc.p(4*cc.winSize.width/5, 3*size.height/5))
             ),
-            cc.MoveTo.create(0, cc.p(0, 0)),
+
+            cc.SkewTo.create(6, 45, 180),
+            cc.MoveTo.create(0, cc.p(-100, 3*size.height/5)),
             cc.SkewTo.create(0, 0, 0) 
                      
             

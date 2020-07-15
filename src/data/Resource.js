@@ -55,6 +55,8 @@ var g_resources = [
     "fonts/number_1.png",
     "game/animation/character/chipu/texture.plist",
     "game/animation/back_ground/loading.png",
+    "game/animation/explosion/explosion.plist",
+    "game/animation/explosion/explosion.png",
     "game/animation/character/chipu/texture.png",
     "game/animation/character/plane/b01.plist",
     "game/animation/character/plane/b01.png",
