@@ -2,14 +2,6 @@
  * Created by GSN on 7/9/2015.
  */
 
-var Direction =
-{
-    UP:1,
-    DOWN:2,
-    LEFT:3,
-    RIGHT:4
-};
-
 var Objs = { 
     EnemiesDirection: [],
     Bullet: [],
@@ -28,6 +20,21 @@ var Objs = {
 var timePlayed = 0; //game time
 var isAlive = false; //is the game is running
 var gameOver;
+var score = 0;
+var live = 4;
+
+var PADDLE_STATE_GRABBED = 0;
+var PADDLE_STATE_UNGRABBED = 1;
+var HIGH_PLAYER = 0;
+var LOW_PLAYER = 1;
+var STATUS_BAR_HEIGHT = 20.0;
+var SPRITE_TAG = 0;
+
+
+
+
+
+
 
 function movePlane(destination){ //move my plane to destination
 }
@@ -37,14 +44,21 @@ function gameOver(){//game over, check score
 }
 
 var ScreenNetwork = cc.Layer.extend({
+    _ball:null,
+    _paddles:[],
+    _ballStartingVelocity:null,
+    _winSize:null,
+
     ctor:function() {
         this._super();
         var size = cc.director.getVisibleSize();
         isAlive = true;
+        gameLive = 4;
+        gameScore= 0;
+        
 
         cc.audioEngine.playEffect("res/Music/bgMusic.wav", true)
-
-        cc.sys.localStorage.setItem("point", 0)
+       
 
         var backGround = cc.Sprite.create("res/game/animation/back_ground/backGround.png");
         backGround.setAnchorPoint(cc.p(0.5, 0.5));
@@ -87,11 +101,8 @@ var ScreenNetwork = cc.Layer.extend({
 
         
 
-        Objs.myPlane = cc.Sprite.create("res/game/animation/character/plane/myPlane.png");
-        Objs.myPlane.setAnchorPoint(cc.p(0.5,0.5));
-        Objs.myPlane.setPosition(cc.p(size.width/2, size.height/10));
-        this.addChild(Objs.myPlane, 1, 0);
-        Objs.myPlane.runAction(cc.blink(4,12));
+        
+
     
         var score = cc.LabelTTF.create("Score:", res.TitleFont, 22);
         score.setPosition(cc.p(size.width-100, size.height-35));
@@ -126,18 +137,16 @@ var ScreenNetwork = cc.Layer.extend({
         for(var i=1;i<=6;i++){
             Objs.Enemies[i] = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
             Objs.Enemies[i].setAnchorPoint(cc.p(0.5,0.5));
-            Objs.Enemies[i].setPosition(cc.p(size.width - Math.random()*200, size.height - Math.random()*200));
+            if(i%2)
+                Objs.Enemies[i].setPosition(cc.p(size.width/2 + Math.random()*100, size.height + 10));
+            else
+                Objs.Enemies[i].setPosition(cc.p(size.width/2 - Math.random()*100, size.height + 10));
             this.addChild(Objs.Enemies[i], i, i);
             Objs.Enemies[i].runAction(cc.Sequence(
-                cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*80: Math.random()*80, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
+                cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*20: Math.random()*20, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
                 ).repeatForever())
             
-            // for(var k=1;k<=4;k++){
-            //     Objs.Bullet_Enemies[k] = cc.Sprite.create("res/game/animation/bullet/bullet_enemy.png");
-            //     Objs.Bullet_Enemies[k].setAnchorPoint(cc.p(0.5,0.5));
-            //     Objs.Bullet_Enemies[k].setPosition(cc.p(Objs.Enemies[i].x, Objs.Enemies[i].y - k*150));
-            //     this.addChild(Objs.Bullet_Enemies[k], i, 18+4*(i-1)+k);
-            // }
+          
         }
 
 
@@ -162,121 +171,155 @@ var ScreenNetwork = cc.Layer.extend({
             cc.DelayTime.create(12)
         ).repeatForever())
                 
-        for(var i=1;i<=Objs.numberBullet;i++){
-            
-            Objs.Bullet[i] = cc.Sprite.create("res/game/animation/bullet/bullet.png");
-            Objs.Bullet[i].setAnchorPoint(cc.p(0.5,0.5));
-            Objs.Bullet[i].setPosition(cc.p(Objs.myPlane.x-20, Objs.myPlane.y + i*150));
-            this.addChild(Objs.Bullet[i], i, i+6);
-            Objs.Bullet[i].runAction(cc.Sequence(cc.blink(10, 30)).repeatForever());
-            Objs.Bullet[i+Objs.numberBullet] = cc.Sprite.create("res/game/animation/bullet/bullet.png");
-            Objs.Bullet[i+Objs.numberBullet].setAnchorPoint(cc.p(0.5,0.5));
-            Objs.Bullet[i+Objs.numberBullet].setPosition(cc.p(Objs.myPlane.x+20, Objs.myPlane.y + i*150));
-            this.addChild(Objs.Bullet[i+Objs.numberBullet], i, i+6+Objs.numberBullet);
-            Objs.Bullet[i+Objs.numberBullet].runAction(cc.Sequence(cc.blink(10, 30)).repeatForever());
-        }
+        
 
 
         
 
-        if( 'touches' in cc.sys.capabilities )
-            cc.eventManager.addListener(cc.EventListener.create({
-                event: cc.EventListener.TOUCH_ALL_AT_ONCE,
-                onTouchesEnded:function (touches, event) {
-                    if (touches.length <= 0)
-                        return;
-                    event.getCurrentTarget().moveSprite(touches[0].getLocation());
-                    event.getCurrentTarget().moveBullet(touches[0].getLocation(), this);
-                }
-            }), this);
-        else if ('mouse' in cc.sys.capabilities )
-            cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                onMouseUp: function (event) {
-                    event.getCurrentTarget().moveSprite(event.getLocation());
-                    event.getCurrentTarget().moveBullet(event.getLocation(), this);
-                }
-            }, this);
+       
 
         this.scheduleUpdate();
             
-        // if( 'touches' in cc.sys.capabilities ) {
-        //     cc.eventManager.addListener({
-        //         event: cc.EventListener.TOUCH_ONE_BY_ONE,
-        //         swallowTouches: true,
-        //         onTouchBegan: this.onTouchBegan,
-        //         onTouchMoved: this.onTouchMoved,
-        //         onTouchEnded: this.onTouchEnded,
-        //         onTouchCancelled: this.onTouchCancelled
-        //     }, this);
-        // } else {
-        //     cc.log("TOUCH-ONE-BY-ONE test is not supported on desktop");
-        // }
+       
         
+        this._ballStartingVelocity = cc.p(20.0, -100.0);
+        this._winSize = cc.director.getWinSize();
+
+
+      
+
+        this._balls = [];
+        this.schedule(this.generateBullet, 0.3);
+        this.schedule(this.generateBullet_, 0.3);
+
+        this._ballEnemies = [];
+        this.schedule(this.generateBulletEnemy, 0.8);
+
         
+
+        var paddleTexture = cc.textureCache.addImage("res/game/animation/character/plane/plane_shoot.png");
+
+        this._paddles = [];
+
+        Objs.myPlane = Paddle.paddleWithTexture(paddleTexture);
+        Objs.myPlane.x = this._winSize.width / 2;
+        Objs.myPlane.y = this._winSize.width / 12;
+        Objs.myPlane.runAction(cc.blink(3,10));
+        this._paddles.push(Objs.myPlane);
+
+        
+
+        
+
+        for (var i = 0; i < this._paddles.length; i++) {
+            if (!this._paddles[i])
+                break;
+
+            this.addChild(this._paddles[i]);
+        }
+
+        this.schedule(this.doStep);
+        this.schedule(this.level);
+        this.schedule(this.speed);
+
+
+
+
         return true;
        
         
     },
-
-    moveSprite: function(pos){
-        var sprite = this.getChildByTag(0);
-        sprite.stopAllActions();
-        sprite.runAction(cc.moveTo(0.6, pos));
-
-
-    },
-
-    moveBullet: function(pos){
-        var bullets = [];
-        for(var i=7;i<=Objs.numberBullet*2+6;i++){
-            bullets[i-7] = this.getChildByTag(i);
-            bullets[i-7].stopAllActions();
-            if(i<Objs.numberBullet+7)
-                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x-20, pos.y + (i-6)*150)));
-            else
-                bullets[i-7].runAction(cc.Spawn(cc.blink(3,20), cc.moveTo(0.6, pos.x+20, pos.y + (i-6*2)*150)));
-
+    
+    level: function(delta){
+        for(var t =0;t<this._ballEnemies.length;t++){
+            this._ballEnemies[t].moveReverse(score/20+1);
         }
     },
 
-    // moveBullet_Enemy: function(x, y){
-    //     var bullets = [];
-    //     for(var i=19;i<=24+18;i++){
-    //         bullets[i-19] = this.getChildByTag(i);
-    //         bullets[i-19].stopAllActions();
-    //         bullets[i-19].runAction(cc.Spawn(cc.blink(3,20), cc.MoveTo.create(0.6, x+20, y - (i-18)*150)));
+    speed: function(delta){
+        for(var t =0;t<this._balls.length;t++){
+            this._balls[t].move(score/20+4);
+        }
+    },
 
-    //     }
-    // },
 
-    onTouchBegan:function(touch, event) {
-        var pos = touch.getLocation();
-        var id = touch.getID();
-        cc.log("onTouchBegan at: " + pos.x + " " + pos.y + " Id:" + id );
-        // if( pos.x < winSize.width/2) {
-        //     event.getCurrentTarget().new_id(id,pos);
-        //     return true;
-        // }
-        // return false;
+    generateBullet: function(delta){
+        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
+        ball.x = Objs.myPlane.x-25;
+        ball.y = Objs.myPlane.y;
+        ball.setVelocity(this._ballStartingVelocity);   
+        this._balls.push(ball);
+        this.addChild(ball); 
     },
-    onTouchMoved:function(touch, event) {
-        var pos = touch.getLocation();
-        var id = touch.getID();
-        cc.log("onTouchMoved at: " + pos.x + " " + pos.y + " Id:" + id );
-        //event.getCurrentTarget().update_id(id,pos);
+
+    generateBullet_: function(delta){
+        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
+        ball.x = Objs.myPlane.x+25;
+        ball.y = Objs.myPlane.y;
+        ball.setVelocity(this._ballStartingVelocity);   
+        this._balls.push(ball);
+        this.addChild(ball); 
     },
-    onTouchEnded:function(touch, event) {
-        var pos = touch.getLocation();
-        var id = touch.getID();
-        cc.log("onTouchEnded at: " + pos.x + " " + pos.y + " Id:" + id );
-        //event.getCurrentTarget().release_id(id,pos);
+
+    generateBulletEnemy: function(delta){
+        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
+        var tmp = Math.floor(cc.random0To1()*100) % 6;
+        ball.x = Objs.Enemies[tmp].x;
+        ball.y = Objs.Enemies[tmp].y;
+        ball.setVelocity(this._ballStartingVelocity);   
+        this._ballEnemies.push(ball);
+        this.addChild(ball); 
     },
-    onTouchCancelled:function(touch, event) {
-        var pos = touch.getLocation();
-        var id = touch.getID();
-        cc.log("onTouchCancelled at: " + pos.x + " " + pos.y + " Id:" + id );
-        //event.getCurrentTarget().update_id(id,pos);
+
+    doStep:function (delta) {
+        
+
+        for (var i = 0; i < this._paddles.length; i++) {
+            if (!this._paddles[i])
+                break;
+
+            for(var j=0;j<this._balls;j++){
+                this._balls[j].collideWithPaddle(this._paddles[i]);
+                this._balls[j].draw();
+
+            }
+            
+        }
+
+        for(var j=0;j<this._ballEnemies.length;j++){
+                this._ballEnemies[j].collideWithPaddle(Objs.myPlane);
+                this._ballEnemies[j].draw();
+        }
+            
+
+        
+    },
+
+    
+
+    
+    onTouchBegan:function (touch, event) {
+        var target = event.getCurrentTarget();
+        if (target._state != PADDLE_STATE_UNGRABBED) return false;
+        if (!target.containsTouchLocation(touch)) return false;
+
+        target._state = PADDLE_STATE_GRABBED;
+        return true;
+    },
+    onTouchMoved:function (touch, event) {
+        var target = event.getCurrentTarget();
+        
+        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
+
+        var touchPoint = touch.getLocation();
+        //touchPoint = cc.director.convertToGL( touchPoint );
+
+        target.x = touchPoint.x;
+    },
+    onTouchEnded:function (touch, event) {
+        var target = event.getCurrentTarget();
+        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
+        target._state = PADDLE_STATE_UNGRABBED;
     },
     
     
@@ -293,51 +336,171 @@ var ScreenNetwork = cc.Layer.extend({
         }
     },
     
-    update: function(){//update callback, run every frame
-        var score = cc.sys.localStorage.getItem("point")
+    update: function(){
+
+        //var score = cc.sys.localStorage.getItem("point")
+        //var live = cc.sys.localStorage.getItem("live")
+        //cc.log("haha:"+live)
         Objs.gameScore.setString(score)
+        Objs.gameLive.setString(live)
+
         var size = cc.director.getVisibleSize()
-        for(var i=1;i<Objs.numberBullet;i++){
+        for(var i=1;i<this._balls.length;i++){
             for(var j=1;j<Objs.Enemies.length;j++){
-                if(((Objs.Enemies[j].x <= Objs.Bullet[i].x + 20) && (Objs.Enemies[j].x >= Objs.Bullet[i].x - 20))){                   
-                    if(((Objs.Enemies[j].y <= Objs.Bullet[i].y + 20) && (Objs.Enemies[j].y >= Objs.Bullet[i].y - 20))){
-                        var ani  = fr.createAnimationById(resAniId.explosion,this);
-                        this.addChild(ani);
-                        cc.sys.localStorage.setItem("point", parseInt(score)+1)
+                if(((Objs.Enemies[j].x <= this._balls[i].x + 40) && (Objs.Enemies[j].x >= this._balls[i].x - 40))){                   
+                    if(((Objs.Enemies[j].y <= this._balls[i].y + 40) && (Objs.Enemies[j].y >= this._balls[i].y - 40))){
+                        var explode = cc.Sprite.create("res/game/animation/explosion/exp.png")
+                        explode.setAnchorPoint(cc.p(0.5,0.5));
+                        explode.setPosition(cc.p(Objs.Enemies[j].x, Objs.Enemies[j].y));
+                        this.addChild(explode);
+                        explode.runAction(cc.Sequence(
+                            cc.ScaleTo.create(0.5, 1.5, 1.5),
+                            cc.MoveTo.create(0, -100, -100)))
+                        //cc.sys.localStorage.setItem("point", parseInt(score)+1)
+                        score=score+1;
                         Objs.Enemies[j].runAction(cc.Sequence(
                             cc.MoveTo.create(0, size.width+50, size.height+50),
-                            cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*50: Math.random()*50, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
+                            cc.MoveBy.create(0.5, Objs.Enemies[j].x > 0 ? -Math.random()*50: Math.random()*50, Objs.Enemies[j].y > 0 ? -Math.random()*80: Math.random()*80)            
                             .repeatForever()
                             
                        )
                     )   
                     }
                 }
+
                 
             }
         }
-        for(var k=1; k<Objs.Enemies.length;k++){
-            if(Objs.myPlane.x>=Objs.Enemies[k].x-50 && Objs.myPlane.x<=Objs.Enemies[k].x+50){
-                if(Objs.myPlane.y>=Objs.Enemies[k].y-50 && Objs.myPlane.y<=Objs.Enemies[k].y+50){
-                    gameOver = cc.Sprite.create("res/game/animation/game_over/gameOver.png");
-                    gameOver.setAnchorPoint(cc.p(0.5,0.5));
-                    gameOver.setPosition(cc.p(size.width/2, size.height/2));
-                    this.addChild(gameOver);                    
-                    cc.audioEngine.stopAllEffects();
-                    var yourScore = cc.LabelTTF.create("Your Score:", res.TitleFont, 40);
-                    yourScore.setPosition(cc.p(size.width/2-50, size.height/2-150));
-                    yourScore.setColor(cc.color.BLUE);
-                    this.addChild(yourScore);
 
-                    var yourGameScore = cc.LabelTTF.create("000", res.TitleFont, 48);
-                    yourGameScore.setPosition(cc.p(size.width/2+90, size.height/2-150));
-                    yourGameScore.setColor(cc.color.BLUE);
-                    this.addChild(yourGameScore);
-                    yourGameScore.setString(score);
+        
 
+        for(var k=1; k<this._ballEnemies.length;k++){
+            if(Objs.myPlane.x>= this._ballEnemies[k].x-50 && Objs.myPlane.x<=this._ballEnemies[k].x+50){
+                if(Objs.myPlane.y>=this._ballEnemies[k].y-50 && Objs.myPlane.y<=this._ballEnemies[k].y+50){
+                    live=live-1;
+                    if(live==0){
+                        gameOver = cc.Sprite.create("res/game/animation/game_over/gameOver.png");
+                        gameOver.setAnchorPoint(cc.p(0.5,0.5));
+                        gameOver.setPosition(cc.p(size.width/2, size.height/2));
+                        this.addChild(gameOver); 
+                        die = cc.Sprite.create("res/game/animation/explosion/explosion.png");
+                        die.setAnchorPoint(cc.p(0.5,0.5));
+                        die.setPosition(cc.p(Objs.myPlane.x, Objs.myPlane.y));
+                        this.addChild(die); 
+                        die.runAction(cc.Sequence(
+                            cc.ScaleTo.create(3, 3.5, 3.5),
+                            cc.MoveTo.create(0, -100, -100),
+                            cc.DelayTime.create(2)))
+                
+                        cc.audioEngine.stopAllEffects();
+                        var yourScore = cc.LabelTTF.create("Your Score:", res.TitleFont, 40);
+                        yourScore.setPosition(cc.p(size.width/2-50, size.height/2-150));
+                        yourScore.setColor(cc.color.BLUE);
+                        this.addChild(yourScore);
+
+                        var yourGameScore = cc.LabelTTF.create("000", res.TitleFont, 36);
+                        yourGameScore.setPosition(cc.p(size.width/2+90, size.height/2-150));
+                        yourGameScore.setColor(cc.color.BLUE);
+                        this.addChild(yourGameScore);
+                        yourGameScore.setString(score);
+
+                        var backButton = gv.commonButton(200, 64, size.width/2, size.height/2-250);
+                        this.addChild(backButton);
+                        backButton.addClickEventListener(this.onSelectPlayAgain.bind(this));
+
+                        var playAgain = cc.Sprite.create("res/game/animation/game_over/playAgain.png");
+                        playAgain.setAnchorPoint(cc.p(0.5,0.5));
+                        playAgain.setPosition(cc.p(size.width/2, size.height/2-250));
+                        this.addChild(playAgain); 
+
+                    }
+                    else{
+                        Objs.myPlane.runAction(cc.Sequence(
+                            cc.MoveTo.create(0, size.width/2, size.height/12),
+                            cc.blink(1,5)
+                        ))
+                        again = cc.Sprite.create("res/game/animation/explosion/explode.png");
+                        again.setAnchorPoint(cc.p(0.5,0.5));
+                        again.setPosition(cc.p(Objs.myPlane.x, Objs.myPlane.y));
+                        this.addChild(again);
+                        again.runAction(cc.Sequence(
+                            cc.ScaleTo.create(1.5, 2.5, 2.5),
+                            cc.MoveTo.create(0, -100, -100),
+                            cc.DelayTime.create(2)))
+
+                        
+                    }
                 }
             }
         }
+
+            for(var k=1; k<Objs.Enemies.length;k++){
+                if(Objs.myPlane.x>=Objs.Enemies[k].x-50 && Objs.myPlane.x<=Objs.Enemies[k].x+50){
+                    if(Objs.myPlane.y>=Objs.Enemies[k].y-50 && Objs.myPlane.y<=Objs.Enemies[k].y+50){
+
+                        live=live-1;
+                        if(live==0){
+                            gameOver = cc.Sprite.create("res/game/animation/game_over/gameOver.png");
+                            gameOver.setAnchorPoint(cc.p(0.5,0.5));
+                            gameOver.setPosition(cc.p(size.width/2, size.height/2));
+                            this.addChild(gameOver); 
+                            die = cc.Sprite.create("res/game/animation/explosion/explosion.png");
+                            die.setAnchorPoint(cc.p(0.5,0.5));
+                            die.setPosition(cc.p(Objs.myPlane.x, Objs.myPlane.y));
+                            this.addChild(die); 
+                            die.runAction(cc.Sequence(
+                                cc.ScaleTo.create(1, 3.5, 3.5),
+                                cc.MoveTo.create(0, -100, -100),
+                                cc.DelayTime.create(2)))
+                    
+                            cc.audioEngine.stopAllEffects();
+                            var yourScore = cc.LabelTTF.create("Your Score:", res.TitleFont, 40);
+                            yourScore.setPosition(cc.p(size.width/2-50, size.height/2-150));
+                            yourScore.setColor(cc.color.BLUE);
+                            this.addChild(yourScore);
+
+                            var yourGameScore = cc.LabelTTF.create("000", res.TitleFont, 36);
+                            yourGameScore.setPosition(cc.p(size.width/2+90, size.height/2-150));
+                            yourGameScore.setColor(cc.color.BLUE);
+                            this.addChild(yourGameScore);
+                            yourGameScore.setString(score);
+
+                            var backButton = gv.commonButton(200, 64, size.width/2, size.height/2-250);
+                            this.addChild(backButton);
+                            backButton.addClickEventListener(this.onSelectPlayAgain.bind(this));
+
+                            var playAgain = cc.Sprite.create("res/game/animation/game_over/playAgain.png");
+                            playAgain.setAnchorPoint(cc.p(0.5,0.5));
+                            playAgain.setPosition(cc.p(size.width/2, size.height/2-250));
+                            this.addChild(playAgain); 
+                        }
+                        else{
+                            Objs.myPlane.runAction(cc.Sequence(
+                                cc.MoveTo.create(0, size.width/2, size.height/12),
+                                cc.blink(1,5)
+                            ))
+                            again = cc.Sprite.create("res/game/animation/explosion/explode.png");
+                            again.setAnchorPoint(cc.p(0.5,0.5));
+                            again.setPosition(cc.p(Objs.myPlane.x, Objs.myPlane.y));
+                            this.addChild(again);
+                            again.runAction(cc.Sequence(
+                                cc.ScaleTo.create(2, 2.5, 2.5),
+                                cc.MoveTo.create(0, -100, -100),
+                                cc.DelayTime.create(2)))
+
+                            
+                        }
+
+                    }
+                }
+            }
+            for(var p = 0;p<this._balls.length;p++){
+                if(this._balls[p].x>size.width+100 && this._balls[p].y>size.height+100)
+                    this._balls[p].destroy();
+            }
+    
+          
+        
     },
 
 
@@ -348,8 +511,18 @@ var ScreenNetwork = cc.Layer.extend({
 
     onSelectBack:function()
     {
+        score=0;
+        live=4;
         cc.audioEngine.stopAllEffects();
         fr.view(ScreenMenu);
+    },
+
+    onSelectPlayAgain:function()
+    {
+        score=0;
+        live=4;
+        cc.audioEngine.stopAllEffects();
+        fr.view(ScreenNetwork);
     },
 
     explosion:function(x, y)
