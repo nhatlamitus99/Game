@@ -135,17 +135,16 @@ var ScreenNetwork = cc.Layer.extend({
         this.addChild(Objs.gameLive);
 
         for(var i=1;i<=6;i++){
-            Objs.Enemies[i] = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
-            Objs.Enemies[i].setAnchorPoint(cc.p(0.5,0.5));
+            Objs.Enemies[i-1] = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
+            Objs.Enemies[i-1].setAnchorPoint(cc.p(0.5,0.5));
             if(i%2)
-                Objs.Enemies[i].setPosition(cc.p(size.width/2 + Math.random()*100, size.height + 10));
+                Objs.Enemies[i-1].setPosition(cc.p(size.width/2 + Math.random()*100, size.height + 10));
             else
-                Objs.Enemies[i].setPosition(cc.p(size.width/2 - Math.random()*100, size.height + 10));
-            this.addChild(Objs.Enemies[i], i, i);
-            Objs.Enemies[i].runAction(cc.Sequence(
-                cc.MoveBy.create(0.5, Objs.Enemies[i].x > 0 ? -Math.random()*20: Math.random()*20, Objs.Enemies[i].y > 0 ? -Math.random()*80: Math.random()*80)            
+                Objs.Enemies[i-1].setPosition(cc.p(size.width/2 - Math.random()*100, size.height + 10));
+            this.addChild(Objs.Enemies[i-1], i, i);
+            Objs.Enemies[i-1].runAction(cc.Sequence(
+                cc.MoveBy.create(0.5, Objs.Enemies[i-1].x > 0 ? -Math.random()*20: Math.random()*20, Objs.Enemies[i-1].y > 0 ? -Math.random()*80: Math.random()*80)            
                 ).repeatForever())
-            
           
         }
 
@@ -372,12 +371,10 @@ var ScreenNetwork = cc.Layer.extend({
             }
         }
 
-        
-
         for(var k=1; k<this._ballEnemies.length;k++){
-            if(Objs.myPlane.x>= this._ballEnemies[k].x-50 && Objs.myPlane.x<=this._ballEnemies[k].x+50){
-                if(Objs.myPlane.y>=this._ballEnemies[k].y-50 && Objs.myPlane.y<=this._ballEnemies[k].y+50){
-                    live=live-1;
+            if(Objs.myPlane.x >= this._ballEnemies[k].x-50 && Objs.myPlane.x<=this._ballEnemies[k].x+50){
+                if(Objs.myPlane.y >= this._ballEnemies[k].y-50 && Objs.myPlane.y<=this._ballEnemies[k].y+50){
+                    live = live - 1;
                     if(live==0){
                         gameOver = cc.Sprite.create("res/game/animation/game_over/gameOver.png");
                         gameOver.setAnchorPoint(cc.p(0.5,0.5));
@@ -416,8 +413,7 @@ var ScreenNetwork = cc.Layer.extend({
                     }
                     else{
                         Objs.myPlane.runAction(cc.Sequence(
-                            cc.MoveTo.create(0, size.width/2, size.height/12),
-                            cc.blink(1,5)
+                            cc.MoveTo.create(0, size.width/2, size.height/12)
                         ))
                         again = cc.Sprite.create("res/game/animation/explosion/explode.png");
                         again.setAnchorPoint(cc.p(0.5,0.5));
@@ -476,8 +472,7 @@ var ScreenNetwork = cc.Layer.extend({
                         }
                         else{
                             Objs.myPlane.runAction(cc.Sequence(
-                                cc.MoveTo.create(0, size.width/2, size.height/12),
-                                cc.blink(1,5)
+                                cc.MoveTo.create(0, size.width/2, size.height/12)
                             ))
                             again = cc.Sprite.create("res/game/animation/explosion/explode.png");
                             again.setAnchorPoint(cc.p(0.5,0.5));
