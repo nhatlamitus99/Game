@@ -48,6 +48,7 @@ var ScreenNetwork = cc.Layer.extend({
     _paddles:[],
     _ballStartingVelocity:null,
     _winSize:null,
+    _count: 0,
 
     ctor:function() {
         this._super();
@@ -162,7 +163,15 @@ var ScreenNetwork = cc.Layer.extend({
                 
         
 
-
+        var wellcome = cc.Sprite.create("res/game/animation/object_ground/logo.png");
+        wellcome.setAnchorPoint(cc.p(0.5,0.5));
+        wellcome.setPosition(cc.p(size.width/2, size.height/2));
+        this.addChild(wellcome);
+        wellcome.runAction(cc.Sequence(
+            cc.DelayTime.create(5),
+            cc.fadeOut(2.0),
+            cc.moveTo(0, -100, -100)
+        ))
         
 
        
@@ -178,14 +187,13 @@ var ScreenNetwork = cc.Layer.extend({
 
       
 
-        this.schedule(this.generateEnemies, 4);
+        //this.schedule(this.generateEnemies, 4);
         
         this._balls = [];
-        this.schedule(this.generateBullet, 0.3);
-        this.schedule(this.generateBullet_, 0.3);
-
         this._ballEnemies = [];
-        this.schedule(this.generateBulletEnemy, 0.5);
+
+        this.schedule(this.generateBullet, 0.2);
+
 
         
 
@@ -212,10 +220,7 @@ var ScreenNetwork = cc.Layer.extend({
             this.addChild(this._paddles[i]);
         }
 
-        this.schedule(this.doStep);
-        this.schedule(this.level);
-        this.schedule(this.speed);
-
+      
 
 
 
@@ -224,67 +229,87 @@ var ScreenNetwork = cc.Layer.extend({
         
     },
     
-    level: function(delta){
-        for(var t =0;t<this._ballEnemies.length;t++){
-            this._ballEnemies[t].moveReverse(score/20+3);
-        }
-    },
-
-    speed: function(delta){
-        for(var t =0;t<this._balls.length;t++){
-            this._balls[t].move(score/20+4);
-        }
-    },
+    
 
 
     generateBullet: function(delta){
-        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
-        ball.x = Objs.myPlane.x-25;
-        ball.y = Objs.myPlane.y;
-        ball.setVelocity(this._ballStartingVelocity);   
-        this._balls.push(ball);
-        this.addChild(ball); 
+
+        this._count += delta;
+        var count = Math.floor(10*this._count) % 2;
+
+        if(count===0){
+            var ball_left = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
+            ball_left.x = Objs.myPlane.x-25;
+            ball_left.y = Objs.myPlane.y;
+            ball_left.setVelocity(this._ballStartingVelocity);   
+            this._balls.push(ball_left);
+            this.addChild(ball_left); 
+
+            var ball_right = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
+            ball_right.x = Objs.myPlane.x+25;
+            ball_right.y = Objs.myPlane.y;
+            ball_right.setVelocity(this._ballStartingVelocity);   
+            this._balls.push(ball_right);
+            this.addChild(ball_right); 
+
+            var ball_1 = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
+            var tmp = Math.floor(Math.random()*100) % 6;
+            
+            try {
+                ball_1.x = Objs.Enemies[tmp].x;
+                ball_1.y = Objs.Enemies[tmp].y;
+                ball_1.setVelocity(this._ballStartingVelocity);   
+                this._ballEnemies.push(ball_1);
+                this.addChild(ball_1); 
+            }
+            catch (e) {
+                cc.log("warning: " + tmp);
+            }
+
+            var ball_2 = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
+            var tmp = Math.floor(Math.random()*100) % 6;
+            
+            try {
+                ball_2.x = Objs.Enemies[tmp].x;
+                ball_2.y = Objs.Enemies[tmp].y;
+                ball_2.setVelocity(this._ballStartingVelocity);   
+                this._ballEnemies.push(ball_2);
+                this.addChild(ball_2);
+            }
+            catch (e) {
+                cc.log("warning: " + tmp);
+            }
+        }
+
+
+
+        if(this._count-Math.floor(this._count) <= 0.01 && Math.floor(this._count) % (8 - Math.floor(score/40)) == 0) {
+            var size = cc.director.getVisibleSize();
+            for(var i=0;i<6;i++){
+                var enemy = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
+                enemy.setAnchorPoint(cc.p(0.5,0.5));
+                if(i%2==0)
+                    enemy.setPosition(cc.p(size.width/2 + Math.random()*200 + 100, size.height + 10));
+                else
+                    enemy.setPosition(cc.p(size.width/2 - Math.random()*200 - 200, size.height + 10));
+                this.addChild(enemy, i, i);
+                Objs.Enemies.push(enemy);
+                if(i%2==0)
+                    enemy.runAction(cc.Sequence(
+                        cc.MoveBy.create(0.5, -Math.random()*30,-Math.random()*80)            
+                        ).repeatForever())
+                else
+                    enemy.runAction(cc.Sequence(
+                        cc.MoveBy.create(0.5, Math.random()*30, -Math.random()*80)            
+                        ).repeatForever())
+            
+            }
+        }
     },
 
-    generateBullet_: function(delta){
-        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet.png"));
-        ball.x = Objs.myPlane.x+25;
-        ball.y = Objs.myPlane.y;
-        ball.setVelocity(this._ballStartingVelocity);   
-        this._balls.push(ball);
-        this.addChild(ball); 
-    },
+    
 
-    generateBulletEnemy: function(delta){
-        var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
-        var tmp = Math.floor(Math.random()*100) % 6;
-        
-
-        try {
-            ball.x = Objs.Enemies[tmp].x;
-            ball.y = Objs.Enemies[tmp].y;
-            ball.setVelocity(this._ballStartingVelocity);   
-            this._ballEnemies.push(ball);
-            this.addChild(ball); 
-        }
-        catch (e) {
-            cc.log("ERROR " + tmp);
-        }
-
-        var ball_ = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
-        var tmp = Math.floor(Math.random()*100) % 6;
-        
-        try {
-            ball_.x = Objs.Enemies[tmp].x;
-            ball_.y = Objs.Enemies[tmp].y;
-            ball_.setVelocity(this._ballStartingVelocity);   
-            this._ballEnemies.push(ball_);
-            this.addChild(ball_);
-        }
-        catch (e) {
-            cc.log("ERROR " + tmp);
-        }
-    },
+    
 
     generateEnemies: function(delta){
         var size = cc.director.getVisibleSize();
@@ -311,27 +336,7 @@ var ScreenNetwork = cc.Layer.extend({
         
     },
 
-    doStep:function (delta) {
-        
-
-        for (var i = 0; i < this._paddles.length; i++) {
-            if (!this._paddles[i])
-                break;
-
-            for(var j=0;j<this._balls;j++){
-                this._balls[j].draw();
-
-            }
-            
-        }
-
-        for(var j=0;j<this._ballEnemies.length;j++){
-                this._ballEnemies[j].draw();
-        }
-            
-
-        
-    },
+    
 
     
     checkDamage: function() {
@@ -347,13 +352,37 @@ var ScreenNetwork = cc.Layer.extend({
     
     update: function(){
 
-        //var score = cc.sys.localStorage.getItem("point")
-        //var live = cc.sys.localStorage.getItem("live")
-        //cc.log("haha:"+live)
         Objs.gameScore.setString(score)
         Objs.gameLive.setString(live)
 
         var size = cc.director.getVisibleSize()
+
+        // enemy's bullet moving 
+        for(var t =0;t<this._ballEnemies.length;t++){
+            this._ballEnemies[t].moveReverse(score/20+3);
+        }
+
+        // my bullet moving
+        for(var t =0;t<this._balls.length;t++){
+            this._balls[t].move(score/20+4);
+        }
+
+
+        // do Step
+        for (var i = 0; i < this._paddles.length; i++) {
+            if (!this._paddles[i])
+                break;
+
+            for(var j=0;j<this._balls;j++){
+                this._balls[j].draw();
+
+            }
+            
+        }
+
+        for(var j=0;j<this._ballEnemies.length;j++){
+                this._ballEnemies[j].draw();
+        }
 
         for(var i=0; i < this._balls.length; i++) {
             for(var j=0; j < Objs.Enemies.length; j++) {
