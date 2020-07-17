@@ -58,6 +58,8 @@ var ScreenNetwork = cc.Layer.extend({
         
 
         cc.audioEngine.playEffect("res/Music/bgMusic.wav", true)
+
+        cc.log(size.width+" sizeScreen "+size.height)
        
 
         var backGround = cc.Sprite.create("res/game/animation/back_ground/backGround.png");
@@ -134,19 +136,7 @@ var ScreenNetwork = cc.Layer.extend({
         Objs.gameLive.setColor(cc.color.RED);
         this.addChild(Objs.gameLive);
 
-        for(var i=1;i<=6;i++){
-            Objs.Enemies[i-1] = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
-            Objs.Enemies[i-1].setAnchorPoint(cc.p(0.5,0.5));
-            if(i%2)
-                Objs.Enemies[i-1].setPosition(cc.p(size.width/2 + Math.random()*100, size.height + 10));
-            else
-                Objs.Enemies[i-1].setPosition(cc.p(size.width/2 - Math.random()*100, size.height + 10));
-            this.addChild(Objs.Enemies[i-1], i, i);
-            Objs.Enemies[i-1].runAction(cc.Sequence(
-                cc.MoveBy.create(0.5, Objs.Enemies[i-1].x > 0 ? -Math.random()*20: Math.random()*20, Objs.Enemies[i-1].y > 0 ? -Math.random()*80: Math.random()*80)            
-                ).repeatForever())
-          
-        }
+        
 
 
         object_3.runAction(cc.Sequence(
@@ -178,6 +168,7 @@ var ScreenNetwork = cc.Layer.extend({
        
 
         this.scheduleUpdate();
+        
             
        
         
@@ -187,12 +178,14 @@ var ScreenNetwork = cc.Layer.extend({
 
       
 
+        this.schedule(this.generateEnemies, 4);
+        
         this._balls = [];
         this.schedule(this.generateBullet, 0.3);
         this.schedule(this.generateBullet_, 0.3);
 
         this._ballEnemies = [];
-        this.schedule(this.generateBulletEnemy, 0.8);
+        this.schedule(this.generateBulletEnemy, 0.5);
 
         
 
@@ -206,6 +199,8 @@ var ScreenNetwork = cc.Layer.extend({
         Objs.myPlane.runAction(cc.blink(3,10));
         this._paddles.push(Objs.myPlane);
 
+        
+        
         
 
         
@@ -231,7 +226,7 @@ var ScreenNetwork = cc.Layer.extend({
     
     level: function(delta){
         for(var t =0;t<this._ballEnemies.length;t++){
-            this._ballEnemies[t].moveReverse(score/20+1);
+            this._ballEnemies[t].moveReverse(score/20+3);
         }
     },
 
@@ -262,12 +257,58 @@ var ScreenNetwork = cc.Layer.extend({
 
     generateBulletEnemy: function(delta){
         var ball = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
-        var tmp = Math.floor(cc.random0To1()*100) % 6;
-        ball.x = Objs.Enemies[tmp].x;
-        ball.y = Objs.Enemies[tmp].y;
-        ball.setVelocity(this._ballStartingVelocity);   
-        this._ballEnemies.push(ball);
-        this.addChild(ball); 
+        var tmp = Math.floor(Math.random()*100) % 6;
+        
+
+        try {
+            ball.x = Objs.Enemies[tmp].x;
+            ball.y = Objs.Enemies[tmp].y;
+            ball.setVelocity(this._ballStartingVelocity);   
+            this._ballEnemies.push(ball);
+            this.addChild(ball); 
+        }
+        catch (e) {
+            cc.log("ERROR " + tmp);
+        }
+
+        var ball_ = Ball.ballWithTexture(cc.textureCache.addImage("res/game/animation/bullet/bullet_enemy.png"));
+        var tmp = Math.floor(Math.random()*100) % 6;
+        
+        try {
+            ball_.x = Objs.Enemies[tmp].x;
+            ball_.y = Objs.Enemies[tmp].y;
+            ball_.setVelocity(this._ballStartingVelocity);   
+            this._ballEnemies.push(ball_);
+            this.addChild(ball_);
+        }
+        catch (e) {
+            cc.log("ERROR " + tmp);
+        }
+    },
+
+    generateEnemies: function(delta){
+        var size = cc.director.getVisibleSize();
+        for(var i=0;i<6;i++){
+            var enemy = cc.Sprite.create("res/game/animation/character/enemy/enemy_"+i+".png");
+            enemy.setAnchorPoint(cc.p(0.5,0.5));
+            if(i%2==0)
+                enemy.setPosition(cc.p(size.width/2 + Math.random()*200 + 100, size.height + 10));
+            else
+                enemy.setPosition(cc.p(size.width/2 - Math.random()*200 - 200, size.height + 10));
+            this.addChild(enemy, i, i);
+            Objs.Enemies.push(enemy);
+            if(i%2==0)
+                enemy.runAction(cc.Sequence(
+                    cc.MoveBy.create(0.5, -Math.random()*30,-Math.random()*80)            
+                    ).repeatForever())
+            else
+                enemy.runAction(cc.Sequence(
+                    cc.MoveBy.create(0.5, Math.random()*30, -Math.random()*80)            
+                    ).repeatForever())
+          
+        }
+
+        
     },
 
     doStep:function (delta) {
@@ -278,7 +319,6 @@ var ScreenNetwork = cc.Layer.extend({
                 break;
 
             for(var j=0;j<this._balls;j++){
-                this._balls[j].collideWithPaddle(this._paddles[i]);
                 this._balls[j].draw();
 
             }
@@ -286,7 +326,6 @@ var ScreenNetwork = cc.Layer.extend({
         }
 
         for(var j=0;j<this._ballEnemies.length;j++){
-                this._ballEnemies[j].collideWithPaddle(Objs.myPlane);
                 this._ballEnemies[j].draw();
         }
             
@@ -295,35 +334,6 @@ var ScreenNetwork = cc.Layer.extend({
     },
 
     
-
-    
-    onTouchBegan:function (touch, event) {
-        var target = event.getCurrentTarget();
-        if (target._state != PADDLE_STATE_UNGRABBED) return false;
-        if (!target.containsTouchLocation(touch)) return false;
-
-        target._state = PADDLE_STATE_GRABBED;
-        return true;
-    },
-    onTouchMoved:function (touch, event) {
-        var target = event.getCurrentTarget();
-        
-        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
-
-        var touchPoint = touch.getLocation();
-        //touchPoint = cc.director.convertToGL( touchPoint );
-
-        target.x = touchPoint.x;
-    },
-    onTouchEnded:function (touch, event) {
-        var target = event.getCurrentTarget();
-        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
-        target._state = PADDLE_STATE_UNGRABBED;
-    },
-    
-    
-    
-
     checkDamage: function() {
         for(var i=1;i<Objs.numberBullet;i++){
             for(var j=1;j<Objs.Enemies.length;j++){
@@ -344,10 +354,11 @@ var ScreenNetwork = cc.Layer.extend({
         Objs.gameLive.setString(live)
 
         var size = cc.director.getVisibleSize()
-        for(var i=1;i<this._balls.length;i++){
-            for(var j=1;j<Objs.Enemies.length;j++){
-                if(((Objs.Enemies[j].x <= this._balls[i].x + 40) && (Objs.Enemies[j].x >= this._balls[i].x - 40))){                   
-                    if(((Objs.Enemies[j].y <= this._balls[i].y + 40) && (Objs.Enemies[j].y >= this._balls[i].y - 40))){
+
+        for(var i=0; i < this._balls.length; i++) {
+            for(var j=0; j < Objs.Enemies.length; j++) {
+                if(((Objs.Enemies[j].x <= this._balls[i].x + 40) && (Objs.Enemies[j].x >= this._balls[i].x - 40))) {                   
+                    if(((Objs.Enemies[j].y <= this._balls[i].y + 40) && (Objs.Enemies[j].y >= this._balls[i].y - 40))) {
                         var explode = cc.Sprite.create("res/game/animation/explosion/exp.png")
                         explode.setAnchorPoint(cc.p(0.5,0.5));
                         explode.setPosition(cc.p(Objs.Enemies[j].x, Objs.Enemies[j].y));
@@ -355,7 +366,6 @@ var ScreenNetwork = cc.Layer.extend({
                         explode.runAction(cc.Sequence(
                             cc.ScaleTo.create(0.5, 1.5, 1.5),
                             cc.MoveTo.create(0, -100, -100)))
-                        //cc.sys.localStorage.setItem("point", parseInt(score)+1)
                         score=score+1;
                         Objs.Enemies[j].runAction(cc.Sequence(
                             cc.MoveTo.create(0, size.width+50, size.height+50),
@@ -386,7 +396,7 @@ var ScreenNetwork = cc.Layer.extend({
                         this.addChild(die); 
                         die.runAction(cc.Sequence(
                             cc.ScaleTo.create(3, 3.5, 3.5),
-                            cc.MoveTo.create(0, -100, -100),
+                            cc.MoveTo.create(0, -200, -200),
                             cc.DelayTime.create(2)))
                 
                         cc.audioEngine.stopAllEffects();
@@ -446,7 +456,7 @@ var ScreenNetwork = cc.Layer.extend({
                             this.addChild(die); 
                             die.runAction(cc.Sequence(
                                 cc.ScaleTo.create(1, 3.5, 3.5),
-                                cc.MoveTo.create(0, -100, -100),
+                                cc.MoveTo.create(0, -200, -200),
                                 cc.DelayTime.create(2)))
                     
                             cc.audioEngine.stopAllEffects();
@@ -489,10 +499,7 @@ var ScreenNetwork = cc.Layer.extend({
                     }
                 }
             }
-            for(var p = 0;p<this._balls.length;p++){
-                if(this._balls[p].x>size.width+100 && this._balls[p].y>size.height+100)
-                    this._balls[p].destroy();
-            }
+            
     
           
         
@@ -508,6 +515,7 @@ var ScreenNetwork = cc.Layer.extend({
     {
         score=0;
         live=4;
+        Objs.Enemies.length=0;
         cc.audioEngine.stopAllEffects();
         fr.view(ScreenMenu);
     },
@@ -516,6 +524,7 @@ var ScreenNetwork = cc.Layer.extend({
     {
         score=0;
         live=4;
+        Objs.Enemies.length=0;
         cc.audioEngine.stopAllEffects();
         fr.view(ScreenNetwork);
     },
@@ -525,7 +534,7 @@ var ScreenNetwork = cc.Layer.extend({
         var ani  = fr.createAnimationById(resAniId.explosion,this);
         this.addChild(ani);
         ani.setPosition(cc.p(x,y));
-        ani.getAnimation().gotoAndPlay("run",cc.random0To1()*5,-1,1);
+        ani.getAnimation().gotoAndPlay("run",cc.random()*5,-1,1);
         ani.setCompleteListener(this.onFinishEffect.bind(this));
         
     },
@@ -539,8 +548,8 @@ var ScreenNetwork = cc.Layer.extend({
         {
             var ani  = fr.createAnimationById(resAniId.firework_test,this);
             this.addChild(ani);
-            ani.setPosition(cc.random0To1()*cc.winSize.width, cc.random0To1()*cc.winSize.height);
-            ani.getAnimation().gotoAndPlay("run",cc.random0To1()*5,-1,1);
+            ani.setPosition(cc.random()*cc.winSize.width, cc.random()*cc.winSize.height);
+            ani.getAnimation().gotoAndPlay("run",cc.random()*5,-1,1);
             ani.setCompleteListener(this.onFinishEffect.bind(this));
         }
         var end = Date.now();

@@ -73,6 +73,7 @@ var Paddle = cc.Sprite.extend({
         target._state = PADDLE_STATE_GRABBED;
         return true;
     },
+
     onTouchMoved:function (touch, event) {
         var target = event.getCurrentTarget();
         // If it weren't for the TouchDispatcher, you would need to keep a reference
@@ -84,10 +85,19 @@ var Paddle = cc.Sprite.extend({
         cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
 
         var touchPoint = touch.getLocation();
+        //cc.log(touchPoint.x +" touchPoint "+touchPoint.y)
         //touchPoint = cc.director.convertToGL( touchPoint );
 
         target.x = touchPoint.x;
         target.y = touchPoint.y;
+        // cc.log(target.x +" target "+target.y)
+
+        // var nodeAction = new cc.moveTo( 2.0, touchPoint.x, touchPoint.y);
+
+        // // easing action
+        // var easeAction = new cc.EaseCircleActionInOut( nodeAction );
+        // target.runAction( easeAction );
+
     },
     onTouchEnded:function (touch, event) {
         var target = event.getCurrentTarget();

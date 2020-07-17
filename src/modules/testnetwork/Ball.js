@@ -34,11 +34,9 @@ var Ball = cc.Sprite.extend({
     },
     move:function (delta) {
 	    this.y +=   delta;
-        
     },
     moveReverse:function (delta) {
-        this.x -=   delta;
-	    this.y -=   delta;
+        this.y -=   delta;
         
     },
     collideWithPaddle:function (paddle) {
