@@ -38,11 +38,17 @@ cc.game.onStart = function () {
 
         // testing area
 
-        // test Mapdata
+        // test mapData
         //var mapData = new MapData();
         //mapData.customInit();
         //mapData.insertObject2Map(0, 0, 3, 3, 1, 1);
         //cc.log(mapData.checkOverlap(0, 0, 3, 3));
+
+        // test resources
+        //var resources = new ResourcesData([0, 0, 0]);
+        //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
+        //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
+        //cc.log(resources.getResources());
 
     }, this);
 };
