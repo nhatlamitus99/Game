@@ -32,8 +32,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MapView.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/modules/Map/graphics/MapView.js">
+      <file leaf-file-name="MapView.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/modules/map/graphics/MapView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="project.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-15.884615">
+              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -215,6 +235,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HelloJavascript" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="team_4_client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="map" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -688,12 +730,12 @@
       <workItem from="1596177687048" duration="11300000" />
       <workItem from="1596513096013" duration="6664000" />
       <workItem from="1596532904821" duration="31000" />
-      <workItem from="1596533659297" duration="514000" />
+      <workItem from="1596533659297" duration="735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1697322000" />
+    <option name="totallyTimeSpent" value="1697543000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -706,12 +748,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22941822" sideWeight="0.4892704" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38653636" sideWeight="0.8041667" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38653636" sideWeight="0.8041667" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -780,14 +822,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/project.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1065,14 +1099,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Game/graphics/GameView.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/game/graphics/GameView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.024285715">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Game/GameMgr.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/game/GameMgr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.024285715">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
@@ -1086,46 +1120,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Game/data/GameData.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/game/data/GameData.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7094972">
           <caret line="22" column="3" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Map/MapMgr.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/map/MapMgr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Map/data/MapData.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/map/data/MapData.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2849162">
           <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Resources/resourcesMgr.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/resources/ResourcesMgr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.031657357">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Resources/data/resourcesData.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/resources/data/ResourcesData.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.096834265">
           <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2759296">
-          <caret line="50" column="1" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1137,7 +1163,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/modules/Map/graphics/MapView.js">
+    <entry file="file://$PROJECT_DIR$/src/modules/map/graphics/MapView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.884615">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
