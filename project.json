@@ -39,13 +39,13 @@
         "src/base/Resource.js",
         "src/base/UIFactory.js",
 
-        "src/config/Map.js",
+        "src/config/MapConfig.js",
 
-        "src/modules/Game/data/GameData.js",
-        "src/modules/Game/graphics/GameView.js",
+        "src/modules/game/data/GameData.js",
+        "src/modules/game/graphics/GameView.js",
 
-        "src/modules/Map/data/MapData.js",
+        "src/modules/map/data/MapData.js",
 
-        "src/modules/Resources/data/ResourcesData.js"
+        "src/modules/resources/data/ResourcesData.js"
     ]
 }
