@@ -8,7 +8,7 @@ gv.CONTROLLER_ID = {
 
 var GameClient = cc.Class.extend(
     {
-        ctor: function () {
+        ctor: function () {     // constructor
             this.loadConfig();
 
             this._tcpClient = fr.GsnClient.create();
@@ -20,30 +20,29 @@ var GameClient = cc.Class.extend(
 
             return true;
         },
-        loadConfig: function () {
+        loadConfig: function () {       // load config from ipConfig.json
             var fileName = "ipConfig.json";
             var jsonData = cc.loader.getRes(fileName);
             if (jsonData == null) {
-                cc.log("Load ip config errorr");
+                cc.log("Load ip config error");
             }else
             {
                 this._serverName = jsonData.server;
                 this._port = jsonData.port;
             }
         },
-        getNetwork: function () {
+        getNetwork: function () {       // getter
             return this._tcpClient;
         },
-        connect: function () {
+        connect: function () {      // Client connect to Server using serverName & port
             cc.log("Connect to server: " + this._serverName + ":" + this._port);
-            this._tcpClient.connect(this._serverName, this._port);
-
+            this.getNetwork().connect(this._serverName, this._port);
         },
-        sendPacket: function (pk) {
+        sendPacket: function (pk) {     // send packet to Server and push into poolObject
             this.getNetwork().send(pk);
             gv.poolObjects.push(pk);
         },
-        getInPacket: function (cmd, pkg) {
+        getInPacket: function (cmd, pkg) {      // get packet coming from Server
             return this.packetFactory.createPacket(cmd, pkg);
         },
         getOutPacket: function (objClass) {

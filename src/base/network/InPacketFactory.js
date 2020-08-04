@@ -23,6 +23,7 @@ InPacketFactory = cc.Class.extend({
         },
         addPacketMap:function(listPacket){
             this._listPacket = _.extend(this._listPacket, listPacket);
+
         }
     }
 );
