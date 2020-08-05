@@ -14,7 +14,14 @@ var MapObject = cc.Class.extend(
         beginTime: null,
 
 
-        ctor: function() {
+        ctor: function(type, position) {
+            this.type = type;
+            this.position = position;
+            this.loadInfo(type);
+        },
+
+        loadInfo: function (type) {
+            // load infomation's object from excel file via type and level 
         },
 
         onCreate: function() {

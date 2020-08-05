@@ -1,5 +1,6 @@
 
 
+
 var CreatedMapObject = MapObject.extend(
     {
         level: 0,
@@ -10,11 +11,20 @@ var CreatedMapObject = MapObject.extend(
         upgradingTime: 0,
         hp: 0,
 
-        ctor: function() {
+        ctor: function(type, position) {
+            this._super(type, position);
+            this.loadInfo(type, level);
+        },
 
+        loadInfo: function(type, level) {
+            // load infomation's object from excel file via type and level 
         },
 
         create: function() {
+
+        },
+
+        sendMessage: function(message) {
 
         },
 

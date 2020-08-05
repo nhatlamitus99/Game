@@ -1,14 +1,19 @@
 
 
-var HarvestObject = CreatedMapObject.extend(
+var HarvestObject = MapObject.extend(
     {
         valueBeforeUpgrade: 0,
         imagePath: null,
         capacity: 0,
         productivity: 0,
 
-        ctor: function() {
-
+        ctor: function(type, position) {
+            this._super(type, position);
+            this.loadInfo(type, level);
+        },
+    
+        loadInfo: function(type, level) {
+            // load technical info's object from excel file via type object and level 
         },
 
         create: function() {

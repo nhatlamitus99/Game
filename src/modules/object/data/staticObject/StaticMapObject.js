@@ -5,8 +5,13 @@ var StaticMapObject = MapObject.extend(
         cost: 0,
         removedTime: 0,
 
-        ctor: function() {
-            this.getBeginTime()
+        ctor: function(type, position) {
+            this._super(type, position);
+            this.loadInfo(type);
+        },
+
+        loadInfo: function(type) {
+            // load information's object from excel file via type and level 
         },
 
         create: function() {

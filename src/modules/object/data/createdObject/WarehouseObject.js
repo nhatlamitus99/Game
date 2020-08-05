@@ -5,8 +5,13 @@ var WarehouseObject = CreatedMapObject.extend({
     capacity: 0,
     value: 0,
 
-    ctor: function(){
-        this._super();
+    ctor: function(type, position) {
+        this._super(type, position);
+        this.loadInfo(type, level);
+    },
+
+    loadInfo: function(type, level) {
+        // load technical info's object from excel file via type object and level 
     },
 
     getCapacity: function() {

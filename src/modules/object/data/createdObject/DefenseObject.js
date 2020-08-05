@@ -8,8 +8,13 @@ var DefenseObject = CreatedMapObject.extend({
     attackArea: 0,
     attackType: 0,
 
-    ctor: function() {
-        this._super();
+    ctor: function(type, position) {
+        this._super(type, position);
+        this.loadInfo(type, level);
+    },
+
+    loadInfo: function(type, level) {
+        // load technical info's object from excel file via type object and level 
     }
 })
 

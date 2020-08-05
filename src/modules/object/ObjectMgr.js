@@ -16,14 +16,14 @@ var ObjectMgr = cc.Class.extend({
 
     },
 
-    // create: function(type) {
-    //     switch(type) {
-    //         case BUILDING_TYPE.GOLD_MINE:
-    //             GoldMine.create();
-    //         case BUILDING_TYPE.ELIXIR_MINE:
-    //             ElixirMine.create();
-    //     }
-    // },
+    create: function(type) {
+        switch(type) {
+            case BUILDING_TYPE.GOLD_MINE:
+                GoldMine.create();
+            case BUILDING_TYPE.ELIXIR_MINE:
+                ElixirMine.create();
+        }
+    },
 
     addObject: function(object) {
         object.setId(this.listObject[object.getType()].length);

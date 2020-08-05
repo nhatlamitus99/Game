@@ -1,8 +1,9 @@
 
 
-var GoldStorage = CreatedMapObject.extend({
+var GoldStorage = WarehouseObject.extend({
 
-    ctor: function() {
-        this._super();
+    ctor: function(type, position) {
+        this._super(type, position);
+        this.loadInfo(type, level);
     }
 })

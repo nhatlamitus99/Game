@@ -1,8 +1,9 @@
 
 
-var ElixirStorage = CreatedMapObject.extend({
+var ElixirStorage = WarehouseObject.extend({
 
-    ctor: function() {
-        this._super();
+    ctor: function(type, position) {
+        this._super(type, position);
+        this.loadInfo(type, level);
     }
 })
