@@ -1,0 +1,309 @@
+{
+  "ID": "a2ee0952-26b5-49ae-8bf9-4f1d6279b798",
+  "Version": "3.10.0.0",
+  "Name": "MainScene",
+  "Content": {
+    "Content": {
+      "Animation": {
+        "Duration": 0,
+        "Speed": 1.0,
+        "Timelines": [],
+        "ctype": "TimelineActionData"
+      },
+      "AnimationList": [],
+      "ObjectData": {
+        "Children": [
+          {
+            "ClipAble": false,
+            "BackColorAlpha": 102,
+            "ComboBoxIndex": 1,
+            "SingleColor": {
+              "R": 150,
+              "G": 200
+            },
+            "FirstColor": {
+              "R": 150,
+              "G": 200
+            },
+            "EndColor": {},
+            "ColorVector": {
+              "ScaleY": 1.0
+            },
+            "TouchEnable": true,
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1044.5,
+              "Y": 798.5
+            },
+            "Scale": {
+              "ScaleX": 1.0,
+              "ScaleY": 1.0
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.4976,
+              "Y": 0.5
+            },
+            "PreSize": {
+              "X": 0.2859,
+              "Y": 0.3757
+            },
+            "LeftMargin": 744.5,
+            "RightMargin": 754.5,
+            "TopMargin": 498.5,
+            "BottomMargin": 498.5,
+            "Tag": 8,
+            "Children": [
+              {
+                "FileData": {
+                  "Type": "Normal",
+                  "Path": "42x42map.tmx",
+                  "Plist": ""
+                },
+                "AnchorPoint": {},
+                "Position": {
+                  "X": -497.1778,
+                  "Y": -261.1928
+                },
+                "Scale": {
+                  "ScaleX": 0.5,
+                  "ScaleY": 0.5
+                },
+                "CColor": {},
+                "IconVisible": false,
+                "PrePosition": {
+                  "X": -0.8286,
+                  "Y": -0.4353
+                },
+                "PreSize": {
+                  "X": 5.32,
+                  "Y": 3.99
+                },
+                "LeftMargin": -497.1778,
+                "RightMargin": -2094.8223,
+                "TopMargin": -1532.8071,
+                "BottomMargin": -261.1928,
+                "Tag": 5,
+                "ActionTag": 795956530,
+                "Size": {
+                  "X": 3192.0,
+                  "Y": 2394.0
+                },
+                "Name": "Map_1",
+                "ctype": "GameMapObjectData"
+              }
+            ],
+            "ActionTag": -987092367,
+            "Size": {
+              "X": 600.0,
+              "Y": 600.0
+            },
+            "Name": "Panel_1",
+            "ctype": "PanelObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "1_0000_Layer-3.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 527.289,
+              "Y": 1215.6475
+            },
+            "Scale": {
+              "ScaleX": 0.9996,
+              "ScaleY": 0.9996
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.2512,
+              "Y": 0.7612
+            },
+            "PreSize": {
+              "X": 0.5026,
+              "Y": 0.4778
+            },
+            "LeftMargin": -0.211,
+            "RightMargin": 1044.2109,
+            "TopMargin": -0.1475,
+            "BottomMargin": 834.1475,
+            "Tag": 7,
+            "ActionTag": -1138654638,
+            "Size": {
+              "X": 1055.0,
+              "Y": 763.0
+            },
+            "Name": "Sprite_1",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "1_0001_Layer-1.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 527.289,
+              "Y": 418.8324
+            },
+            "Scale": {
+              "ScaleX": 0.9996,
+              "ScaleY": 0.9996
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.2512,
+              "Y": 0.2623
+            },
+            "PreSize": {
+              "X": 0.5026,
+              "Y": 0.5247
+            },
+            "VerticalEdge": "BottomEdge",
+            "LeftMargin": -0.211,
+            "RightMargin": 1044.2109,
+            "TopMargin": 759.1676,
+            "BottomMargin": -0.1676,
+            "Tag": 8,
+            "ActionTag": -1317488522,
+            "Size": {
+              "X": 1055.0,
+              "Y": 838.0
+            },
+            "Name": "Sprite_2",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "1_0002_Layer-4.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1575.791,
+              "Y": 1216.1472
+            },
+            "Scale": {
+              "ScaleX": 0.9996,
+              "ScaleY": 0.9996
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.7507,
+              "Y": 0.7615
+            },
+            "PreSize": {
+              "X": 0.4979,
+              "Y": 0.4784
+            },
+            "LeftMargin": 1053.291,
+            "RightMargin": 0.709,
+            "TopMargin": -1.1472,
+            "BottomMargin": 834.1472,
+            "Tag": 9,
+            "ActionTag": 1232428332,
+            "Size": {
+              "X": 1045.0,
+              "Y": 764.0
+            },
+            "Name": "Sprite_3",
+            "ctype": "SpriteObjectData"
+          },
+          {
+            "FileData": {
+              "Type": "Normal",
+              "Path": "1_0003_Layer-2.png",
+              "Plist": ""
+            },
+            "BlendFunc": {
+              "Src": 1,
+              "Dst": 771
+            },
+            "AnchorPoint": {
+              "ScaleX": 0.5,
+              "ScaleY": 0.5
+            },
+            "Position": {
+              "X": 1575.791,
+              "Y": 417.8328
+            },
+            "Scale": {
+              "ScaleX": 0.9996,
+              "ScaleY": 0.9996
+            },
+            "CColor": {},
+            "IconVisible": false,
+            "PrePosition": {
+              "X": 0.7507,
+              "Y": 0.2616
+            },
+            "PreSize": {
+              "X": 0.4979,
+              "Y": 0.5235
+            },
+            "LeftMargin": 1053.291,
+            "RightMargin": 0.709,
+            "TopMargin": 761.1672,
+            "BottomMargin": -0.1672,
+            "Tag": 10,
+            "ActionTag": 726768586,
+            "Size": {
+              "X": 1045.0,
+              "Y": 836.0
+            },
+            "Name": "Sprite_4",
+            "ctype": "SpriteObjectData"
+          }
+        ],
+        "Size": {
+          "X": 2099.0,
+          "Y": 1597.0
+        },
+        "Name": "Scene",
+        "ctype": "SingleNodeObjectData"
+      },
+      "UsedResources": [
+        "1_0000_Layer-3.png",
+        "1_0001_Layer-1.png",
+        "1_0002_Layer-4.png",
+        "1_0003_Layer-2.png",
+        "42x42map.tmx",
+        "gird.png"
+      ],
+      "ctype": "GameFileData"
+    }
+  },
+  "Type": "Scene"
+}
