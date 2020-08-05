@@ -1,7 +1,3 @@
-/**
- * Created by GSN on 6/2/2015.
- */
-
 
 var res = {
     //font
@@ -20,6 +16,88 @@ var res = {
 
     //images
     Slot1_png : "zcsd/slot1.png"
+};
+
+var resLogin = {
+    BACKGROUND_VER_1: "LoginGui/loading.jpg",
+    BACKGROUND_VER_2: "LoginGui/2.jpg",
+    BACKGROUND_VER_3: "LoginGui/3.jpg",
+    LOGIN_BOX:        "LoginGui/g_background.png",
+    LOADING_BACKGROUND_BAR: "LoginGui/loadingBgBar.png",
+    LOADING_BAR:            "LoginGui/loadingBar.png",
+    LOGO:                   "LoginGui/logo.png",
+    OK_BUTTON:              "LoginGui/btnOk.png"
+};
+
+var lobby_resource = {
+    GUILD: "GUIs/Main_Gui/003left_ic04.png",
+    GUILD_FIGHT: "GUIs/Main_Gui/003left_ic05.png",
+    ADD_BUTTON: "GUIs/Main_Gui/add_button.png",
+    ADD_G_BUTTON: "GUIs/Main_Gui/add_button.png",
+    ARMY_ICON: "GUIs/Main_Gui/army_icon.png",
+    ATTACK: "GUIs/Main_Gui/attack.png",
+    BG_EXP: "GUIs/Main_Gui/bg_exp.png",
+    BG_BAR_1: "GUIs/Main_Gui/bg_bar_1.png",
+    BG_BAR_2: "GUIs/Main_Gui/bg_bar_2.png",
+    BG_BAR_3: "GUIs/Main_Gui/bg_bar_3.png",
+    BG_BAR_4: "GUIs/Main_Gui/bg_bar_4.png",
+    BUILDER_ICON: "GUIs/Main_Gui/builder_icon.png",
+    ELIXIR_BAR: "GUIs/Main_Gui/elixir_bar.png",
+    ELIXIR_ICON: "GUIs/Main_Gui/elixir_icon.png",
+    EXP_BAR: "GUIs/Main_Gui/exp_bar.png",
+    EXP_BG_BAR: "GUIs/Main_Gui/exp_bg_bar.png",
+    EXP_ICON: "GUIs/Main_Gui/exp_icon.png",
+    G_BAR: "GUIs/Main_Gui/g_bar.png",
+    G_ICON: "GUIs/Main_Gui/g_icon.png",
+    GOLD_BAR: "GUIs/Main_Gui/gold_bar.png",
+    GOLD_ICON: "GUIs/Main_Gui/gold_icon.png",
+    HOME: "GUIs/Main_Gui/home.png",
+    KHO: "GUIs/Main_Gui/kho.png",
+    RANKING: "GUIs/Main_Gui/ranking.png",
+    SETTING: "GUIs/Main_Gui/setting.png",
+    SHOP: "GUIs/Main_Gui/shop.png",
+    SHIELD_ICON: "GUIs/Main_Gui/shield.png",
+    RANKING_BAR: "GUIs/Main_Gui/trophy_bg_bar.png"
+};
+
+
+var setting_resource = {
+    BACKGROUND: "GUIs/Main_Gui/login/bg.png"
+};
+
+
+var font_resources = {
+    FISTA_16_NON: "fonts/fista_16_non.fnt",
+    FISTA_20_NON: "fonts/fista_20_non.fnt",
+    FISTA_24_NON: "fonts/fista_24_non.fnt",
+    SOJI_16_NON: "fonts/soji_16.fnt",
+    SOJI_20_NON: "fonts/soji_20.fnt",
+    SOJI_24_NON: "fonts/soji_24.fnt"
+};
+
+var train_troop_resource = {
+    BACK: "train_troop_gui/back.png",
+    BACKGROUND: "train_troop_gui/background.png",
+    BUTTON: "train_troop_gui/button.png",
+    CLOSE: "train_troop_gui/close.png",
+    CANCEL: "train_troop_gui/cancel.png",
+    FORWARD: "train_troop_gui/forward.png",
+    PREVIOUS: "train_troop_gui/previous.png",
+    G_ICON: "train_troop_gui/g_icon.png",
+    ELIXIR_ICON: "train_troop_gui/icon_elixir.png",
+    INFO: "train_troop_gui/info.png",
+    QUEUE: "train_troop_gui/queue.png",
+    SLOT: "train_troop_gui/slot.png",
+    SLOT_RESEARCH: "train_troop_gui/slot_research.png",
+    STAR_TROOP: "train_troop_gui/star_troop.png",
+    START_TROOP_BATTLE: "train_troop_gui/star_troop_battle.png",
+    TIPS: "train_troop_gui/star_troop_battle.png",
+    BG_TRAIN_BAR: "train_troop_gui/bg_train_bar.png",
+    TRAIN_BAR: "train_troop_gui/train_bar.png",
+    BG_COST: "train_troop_gui/bg_cost.png",
+    BG_COST_2: "train_troop_gui/bg_cost_2.png",
+    BG_COST_3: "train_troop_gui/bg_cost_3.png",
+    BG_STAR: "train_troop_gui/bg_star.png"
 };
 
 var g_resources = [

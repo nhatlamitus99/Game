@@ -31,9 +31,9 @@ cc.game.onStart = function () {
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
         //modules
-        testnetwork.connector = new testnetwork.Connector(gv.gameClient);
+        loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
 
-        fr.view(ScreenMenu);
+        fr.view(Lobby);
     }, this);
 };
 cc.game.run();
