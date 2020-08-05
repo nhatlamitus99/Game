@@ -24,16 +24,26 @@ var CreatedMapObject = MapObject.extend(
 
         },
 
-        sendMessage: function(message) {
+        sendMessage: function() {
 
         },
 
-        upgrade: function() {
+        onUpgrade: function() {
+            this.checkResource();
+            this.sendMessage();
+        },
 
+        onFinishUpgrade: function() {
+            this.setLevel(this.getLevel() + 1);
+            this.loadInfo(type, level);
+        },
+
+        checkResource: function() {
+            
         },
 
         move: function() {
-
+        
         },
 
         getLevel: function(){
