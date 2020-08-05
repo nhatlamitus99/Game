@@ -30,12 +30,7 @@ cc.game.onStart = function () {
         //socket
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
-        //modules
-        //testnetwork.connector = new testnetwork.Connector(gv.gameClient);
-
-        // view mainScreen
-        fr.view(GameScreen);
-
+        
         // testing area
 
         // test mapData
@@ -49,6 +44,11 @@ cc.game.onStart = function () {
         //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
         //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
         //cc.log(resources.getResources());
+        loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
+
+        //fr.view(Lobby);
+        // view mainScreen
+         fr.view(GameScreen);
     }, this);
 };
 cc.game.run();
