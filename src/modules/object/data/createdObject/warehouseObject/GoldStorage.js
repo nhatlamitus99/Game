@@ -1,6 +1,6 @@
 
 
-var ElixirStorage = WarehouseObject.extend({
+var GoldStorage = CreatedMapObject.extend({
 
     ctor: function() {
         this._super();

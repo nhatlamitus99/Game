@@ -15,7 +15,6 @@ var MapObject = cc.Class.extend(
 
 
         ctor: function() {
-            this._super()
         },
 
         onCreate: function() {
@@ -23,14 +22,6 @@ var MapObject = cc.Class.extend(
         },
 
         isSelected: function() {
-
-        },
-
-        stopAction: function() {
-
-        },
-
-        executeImmediately: function() {
 
         },
 

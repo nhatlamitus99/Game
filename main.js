@@ -51,5 +51,6 @@ cc.game.onStart = function () {
         // view mainScreen
          fr.view(GameScreen);
     }, this);
+    
 };
 cc.game.run();
