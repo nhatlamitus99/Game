@@ -45,6 +45,7 @@
         "src/modules/game/graphics/GameView.js",
 
         "src/modules/map/data/MapData.js",
+        "src/modules/map/graphics/MapView.js",
 
         "src/modules/resources/data/ResourcesData.js"
     ]

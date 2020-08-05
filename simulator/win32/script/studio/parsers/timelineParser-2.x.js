@@ -1693,6 +1693,7 @@
 
 
     load.registerParser("timeline", "2.*", parser);
+    load.registerParser("timeline", "3.*", parser);
 
 
 })(ccs._load, ccs._parser);

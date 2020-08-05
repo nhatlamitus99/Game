@@ -1,7 +1,7 @@
 
 var gv = gv || {};
 
-var DESIGN_RESOLUTION_WIDTH = 1136;
+var DESIGN_RESOLUTION_WIDTH = 960;
 var DESIGN_RESOLUTION_HEIGHT = 640;
 cc.game.onStart = function () {
     if (!cc.sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
@@ -34,7 +34,7 @@ cc.game.onStart = function () {
         //testnetwork.connector = new testnetwork.Connector(gv.gameClient);
 
         // view mainScreen
-        //fr.view(ScreenMenu);
+        fr.view(GameScreen);
 
         // testing area
 
@@ -45,11 +45,10 @@ cc.game.onStart = function () {
         //cc.log(mapData.checkOverlap(0, 0, 3, 3));
 
         // test resources
-        var resources = new ResourcesData([0, 0, 0]);
-        cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
-        cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
-        cc.log(resources.getResources());
-
+        //var resources = new ResourcesData([0, 0, 0]);
+        //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
+        //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
+        //cc.log(resources.getResources());
     }, this);
 };
 cc.game.run();
