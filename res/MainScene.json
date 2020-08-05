@@ -60,7 +60,7 @@
               {
                 "FileData": {
                   "Type": "Normal",
-                  "Path": "42x42map.tmx",
+                  "Path": "map/42x42map.tmx",
                   "Plist": ""
                 },
                 "AnchorPoint": {},
@@ -107,7 +107,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "1_0000_Layer-3.png",
+              "Path": "map/1_0000_Layer-3.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -152,7 +152,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "1_0001_Layer-1.png",
+              "Path": "map/1_0001_Layer-1.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -198,7 +198,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "1_0002_Layer-4.png",
+              "Path": "map/1_0002_Layer-4.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -243,7 +243,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "1_0003_Layer-2.png",
+              "Path": "map/1_0003_Layer-2.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -294,12 +294,12 @@
         "ctype": "SingleNodeObjectData"
       },
       "UsedResources": [
-        "1_0000_Layer-3.png",
-        "1_0001_Layer-1.png",
-        "1_0002_Layer-4.png",
-        "1_0003_Layer-2.png",
-        "42x42map.tmx",
-        "gird.png"
+        "map/1_0000_Layer-3.png",
+        "map/1_0001_Layer-1.png",
+        "map/1_0002_Layer-4.png",
+        "map/1_0003_Layer-2.png",
+        "map/42x42map.tmx",
+        "map/gird.png"
       ],
       "ctype": "GameFileData"
     }

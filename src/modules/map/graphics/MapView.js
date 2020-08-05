@@ -45,7 +45,7 @@ var MapView = cc.Layer.extend({
                 swallowTouches: true,
                 onMouseScroll: function (event) {
                         var delta = -event.getScrollY()/MapConfig.ZOOM_MAXDELTA;
-                        cc.log("On Mouse Scroll: ", delta);
+                        //cc.log("On Mouse Scroll: ", delta);
                         event.getCurrentTarget().setScaleMap(delta, event.getLocation());
                         return true;
                     }
