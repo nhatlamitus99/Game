@@ -150,12 +150,5 @@ var g_resources = [
     "zcsd/screen_localize.json",
     "zcsd/screen_menu.json",
     "zcsd/screen_network.json",
-    "zcsd/screen_zalo.json",
-
-    'game/map/MainScene.json',
-    'game/map/42x42map.tmx',
-    'game/map/1_0000_Layer-1.png',
-    'game/map/1_0000_Layer-2.png',
-    'game/map/1_0000_Layer-3.png',
-    'game/map/1_0000_Layer-4.png'
+    "zcsd/screen_zalo.json"
 ];
