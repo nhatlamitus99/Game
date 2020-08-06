@@ -1,6 +1,5 @@
 var MapView = cc.Layer.extend({
     _map:null,
-
     // on client
     _scale: null,   // scale of current screen view map
     _mapOriginSize: null,   // size of screen after the first scaling
@@ -8,45 +7,49 @@ var MapView = cc.Layer.extend({
 
     ctor:function() {
         this._super();
+        this.loadMap();
+        this.setUserActions();
+    },
 
+    //onEnter: function() {
+    //},
+    loadMap: function() {
         // load map's sprite from MainScene.json
         var node = ccs.load('content/Art/Map/MainScene.json', '').node;
         ccui.Helper.doLayout(node);
         node.setAnchorPoint(0.5, 0.5);
         node.setPosition(cc.winSize.width/2, cc.winSize.height/2);
-
         // set scale
         MapConfig.MIN_SCALE = Math.max(cc.winSize.width/node.width, cc.winSize.height/node.height);
         this._scale = MapConfig.MIN_SCALE;
         node.setScale(this._scale);
         this.addChild(node);
         this._map = node;
-
         // add save origin size
         this._mapOriginSize = {
             w: this.scale*node.width,
             h: this.scale*node.height
         };
-
-        // get matrixMap
+        // get matrixMap (matrix of cells)
         var panel = ccui.helper.seekWidgetByName(node, "Panel_1");
-        var matrixMap = panel.getChildren()[0];
-        cc.log("Panel1: " + panel.x + " " + panel.y);
-        cc.log("matrixMap: " + matrixMap.x + " " + matrixMap.y);
+        this._matrixMap = panel.getChildren()[0];
+    },
 
+    setUserActions: function() {
         // set Touch
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ALL_AT_ONCE,
             swallowTouches: true,
-            onTouchesMoved: this.onTouchesMoved.bind(this)
+            onTouchesBegan: this.onTouchesBegan.bind(this),
+            onTouchesMoved: this.onTouchesMoved.bind(this),
+            onTouchesEnd: this.onTouchesEnd.bind(this)
         }, this);
-
         // set Mouse Scroll
         if ('mouse' in cc.sys.capabilities) {
             cc.eventManager.addListener({
-                event: cc.EventListener.MOUSE,
-                swallowTouches: true,
-                onMouseScroll: function (event) {
+                    event: cc.EventListener.MOUSE,
+                    swallowTouches: true,
+                    onMouseScroll: function (event) {
                         var delta = -event.getScrollY()/MapConfig.ZOOM_MAXDELTA;
                         //cc.log("On Mouse Scroll: ", delta);
                         event.getCurrentTarget().setScaleMap(delta, event.getLocation());
@@ -64,32 +67,26 @@ var MapView = cc.Layer.extend({
         if (this._scale + delta < MapConfig.MIN_SCALE)
             delta = 0;
         this._scale += delta;
-
-        var scale = this._scale;
-        var map = this._map;
-        var originSize= this._mapOriginSize;
         // calculate newPoint (touchPoint after scaling)
         // Algorithm: transform the point, which is touched by mouse, from Screen's coordinate to Map's coordinate
         // then, we scale screen and set the newPoint at position of our mouse.
+        var scale = this._scale;
+        var map = this._map;
+        var originSize= this._mapOriginSize;
         var newPoint = {
             x: (touch.x - map.x + originSize.w*(scale-delta)/2)/(scale-delta)*(scale) - originSize.w*(scale)/2 + map.x,
             y: (touch.y - map.y + originSize.h*(scale-delta)/2)/(scale-delta)*(scale) - originSize.h*(scale)/2 + map.y
         };
-
         // scale map and move map in screen
         map.setScale(scale);
         if (map.x + map.width/2*scale < cc.winSize.width)
             map.x = cc.winSize.width - map.width/2*scale;
-
         if (map.x - map.width/2*scale > 0)
             map.x = map.width/2*scale;
-
         if (map.y + map.height/2*scale < cc.winSize.height)
             map.y = cc.winSize.height - map.height/2*scale;
-
         if (map.y - map.height/2*scale > 0)
             map.y = map.height/2*scale;
-
         // move to newPoint
         var distance = {
             x: -newPoint.x + touch.x,
@@ -97,10 +94,23 @@ var MapView = cc.Layer.extend({
         };
         this.moveMap(distance);
     },
+    
+    onTouchesBegan: function (touches) {
+        var touchLocation = touches[0].getLocation();
+        // get cell in matrixMap
+        var idOfCell = this.getCellInMatrixMap(touchLocation);
+        cc.log("Cell: " + idOfCell.i + " " + idOfCell.j);
+        return true;
+    },
 
-    onTouchesMoved: function(touches, event) {
+    onTouchesMoved: function(touches) {
         var touch = touches[0];
         this.moveMap(touch.getDelta());
+        return true;
+    },
+
+    onTouchesEnd: function(touches) {
+        return true;
     },
 
     moveMap: function(delta) {
@@ -118,5 +128,42 @@ var MapView = cc.Layer.extend({
         //cc.log("winsize", cc.winSize.height);
         map.x += delta.x;
         map.y += delta.y;
+    },
+
+    getCellInMatrixMap: function(location) {
+        //var titleH = this._matrixMap.height*this._scale/MapConfig.MAP_SIZE.h;
+        //var titleW = this._matrixMap.width*this._scale/MapConfig.MAP_SIZE.w;
+        var titleH = MapConfig.getCellSize().h*this._scale;
+        var titleW = MapConfig.getCellSize().w*this._scale;
+        //cc.log("title " + titleW + " " + titleW);
+        //cc.log("cell " + MapConfig.getCellSize().w + " " + MapConfig.getCellSize().h);
+        // convert coordinate of touch to matrixMap's coordinate
+        var t = this.transformLocationScreenToMatrixMap(location);
+        //cc.log("matrixMap pos " + this._matrixMap.x + " " + this._matrixMap.y);
+        //cc.log("T point " + t.x + " " + t.y);
+        var result = {
+            i: Math.floor(((t.x-titleW*42/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
+            j: Math.floor((-(t.x-titleW*42/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
+        };
+        //if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
+        //    return null;
+        //if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
+        //    return null;
+        return result;
+    },
+
+    transformLocationScreenToMatrixMap: function(location) {
+        var result = {};
+        var map = this._map;
+        var mapSize = this._mapOriginSize;
+        var matrixMap = this._matrixMap;
+        var scale = this._scale;
+        // from screen to map
+        result.x = location.x - map.x + mapSize.w*scale/2;
+        result.y = location.y - map.y + mapSize.h*scale/2;
+        // from map to matrixMap
+        result.x -= matrixMap.x*scale;
+        result.y -= matrixMap.y*scale;
+        return result;
     }
 });
