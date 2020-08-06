@@ -4,12 +4,6 @@
 var MapData = cc.Class.extend({
     // data in both server & client
     _map: [],
-    // data in client
-    _scale: null,
-    _screenPos: null,
-
-    // config data
-    _mapSize: null,
 
     ctor: function(map){
         //if (map == null)
@@ -47,3 +41,11 @@ var MapData = cc.Class.extend({
         //cc.log(this._map);
     }
 });
+
+var MAP_DATA_ONLY_ONE = null;
+MapData.getInstance = function () {
+    if (MAP_DATA_ONLY_ONE === null) {
+        MAP_DATA_ONLY_ONE = new MapData();
+    }
+    return MAP_DATA_ONLY_ONE;
+}

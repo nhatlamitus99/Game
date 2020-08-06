@@ -55,6 +55,7 @@
         "src/config/TroopConfig.js",
         "src/config/LobbyConfig.js",
         "src/config/GameConfig.js",
+        "src/config/ResourcesConfig.js",
 
         "src/modules/LogIn/ScreenLogin.js",
         "src/modules/LogIn/network/Network.js",

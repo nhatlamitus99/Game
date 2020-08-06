@@ -31,8 +31,7 @@ cc.game.onStart = function () {
         //socket
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
-        
-        // testing area
+
 
         // test mapData
         //var mapData = new MapData();
@@ -45,12 +44,24 @@ cc.game.onStart = function () {
         //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
         //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
         //cc.log(resources.getResources());
+
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
 
-        //fr.view(Lobby);
+        // create new GameClass
+        var gameData = GameData.getInstance();
+        // load data from server and add it to game Data
+        var user = User.getInstance();
+        var mapData = MapData.getInstance();
+        mapData.customInit();
+        var resourcesData = ResourcesData.getInstance();
+        resourcesData.setAttributes([0,0,0]);
+        var objectMgr = ObjectMgr.getInstance();
+        gameData.setAttributes(user, resourcesData, mapData, objectMgr, null, null);
+
         // view mainScreen
          fr.view(GameScreen);
     }, this);
    
 };
+
 cc.game.run();

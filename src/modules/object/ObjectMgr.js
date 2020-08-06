@@ -7,11 +7,11 @@ var BUILDING_TYPE = {
 var ObjectMgr = cc.Class.extend({
 
     numTypeObject: 11,  // number of type of building objects
-    listObject: new Array(),  // list of building objects in current map
+    listObject: [],  // list of building objects in current map
 
     ctor: function(){
         for(var i=0; i <= this.numTypeObject; ++i) {
-            this.listObject[i] = new Array();
+            this.listObject[i] = [];
         }
 
     },
@@ -47,13 +47,15 @@ var ObjectMgr = cc.Class.extend({
         return this.listObject[type][id];
     },
 
-
-
     sendMessage: function (message) {
 
     }
+});
 
-
-
-})
-
+var OBJECT_MGR_ONLY_ONE = null;
+ObjectMgr.getInstance = function () {
+    if (OBJECT_MGR_ONLY_ONE === null) {
+        OBJECT_MGR_ONLY_ONE = new ObjectMgr();
+    }
+    return OBJECT_MGR_ONLY_ONE;
+};
