@@ -61,11 +61,6 @@ var lobby_resource = {
 };
 
 
-var setting_resource = {
-    BACKGROUND: "GUIs/Main_Gui/login/bg.png"
-};
-
-
 var font_resources = {
     FISTA_16_NON: "fonts/fista_16_non.fnt",
     FISTA_20_NON: "fonts/fista_20_non.fnt",
@@ -97,7 +92,37 @@ var train_troop_resource = {
     BG_COST: "train_troop_gui/bg_cost.png",
     BG_COST_2: "train_troop_gui/bg_cost_2.png",
     BG_COST_3: "train_troop_gui/bg_cost_3.png",
-    BG_STAR: "train_troop_gui/bg_star.png"
+    BG_STAR: "train_troop_gui/bg_star.png",
+    TEXT: "GUIs/Main_Gui/login/bg.png",
+    CHARACTERS: [
+        "train_troop_gui/icon/ARM_1.png",
+        "train_troop_gui/icon/ARM_2.png",
+        "train_troop_gui/icon/ARM_3.png",
+        "train_troop_gui/icon/ARM_4.png",
+        "train_troop_gui/icon/ARM_5.png",
+        "train_troop_gui/icon/ARM_6.png",
+        "train_troop_gui/icon/ARM_7.png",
+        "train_troop_gui/icon/ARM_8.png",
+        "train_troop_gui/icon/ARM_9.png",
+        "train_troop_gui/icon/ARM_10.png",
+        "train_troop_gui/icon/ARM_16.png",
+        "train_troop_gui/icon/ARM_17.png"
+    ],
+    SMALL_SLOT: "train_troop_gui/small_icon/slot.png",
+    CHARACTERS_MINI: [
+        "train_troop_gui/small_icon/ARM_1.png",
+        "train_troop_gui/small_icon/ARM_2.png",
+        "train_troop_gui/small_icon/ARM_3.png",
+        "train_troop_gui/small_icon/ARM_4.png",
+        "train_troop_gui/small_icon/ARM_5.png",
+        "train_troop_gui/small_icon/ARM_6.png",
+        "train_troop_gui/small_icon/ARM_7.png",
+        "train_troop_gui/small_icon/ARM_8.png",
+        "train_troop_gui/small_icon/ARM_9.png",
+        "train_troop_gui/small_icon/ARM_10.png",
+        "train_troop_gui/small_icon/ARM_16.png",
+        "train_troop_gui/small_icon/ARM_17.png"
+    ]
 };
 
 var g_resources = [

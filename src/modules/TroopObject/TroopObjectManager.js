@@ -1,5 +1,7 @@
 var TroopManager = cc.Class.extend({
-
+    ctor:function(){
+        this._super();
+    }
 
 });
 
@@ -22,4 +24,16 @@ TroopManager.addTroop = function(troop){
 // tìm đường đi của lính về trại lính
 TroopManager.findPath = function(){
 
+};
+
+// find troopMiniObj in list by id
+TroopManager.getIndexById = function(list, id){
+    for(var i = 0; i < list.length; i++){
+        if(list[i].id === id){
+            return i;
+        }
+    }
+
+    return -1;
 }
+

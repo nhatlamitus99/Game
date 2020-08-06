@@ -9,22 +9,29 @@ var Lobby  = cc.Layer.extend({
     gold:null,
     elixir:null,
     g:null,
+    // button
     letter:null,
     kho:null,
     bag:null,
     setting:null,
     shop:null,
+    // info
     friend:null,
     army:null,
     builder:null,
     shield:null,
+    // resources
     maxGold:null,
     currGold:null,
     maxElixir:null,
     currElixir:null,
     currG:null,
+    // size
     _height:null,
     _width:null,
+    // shop ui
+    shopUI:null,
+
 
     ctor:function(){
         this._super();
@@ -277,11 +284,30 @@ var Lobby  = cc.Layer.extend({
     },
 
     // event handler
-    onShopClick:function(){
-        var train_troop_ui = TrainTroopUI.getInstance(1);
-        this.addChild(train_troop_ui, train_troop_ui.zOrder);
-        train_troop_ui.x = this._width/2;
-        train_troop_ui.y = this._height/2;
+    onShopClick:function()
+    {
+        var ratio =  cc.view.getFrameSize().width/ cc.view.getFrameSize().height;
+        // ui
+        if(!this.shopUI)
+        {
+            this.shopUI = TrainTroopUI.getInstance(1);
+            this.addChild(this.shopUI, this.shopUI.zOrder);
+           // this.shopUI.x =  this._width/2;
+           // this.shopUI.y =  this._height/2;
+           // this.shopUI.setScaleX(cc.view.getFrameSize().width /1136);
+           // this.shopUI.setScaleY(cc.view.getFrameSize().height/640);
+           //
+           // var surplus_x = cc.view.getFrameSize().width/1136*this.shopUI.width - this.shopUI.width;
+           // this.shopUI.x = this.shopUI.x + surplus_x/2;
+           //
+           //var surplus_y = cc.view.getFrameSize().height/640*this.shopUI.height - this.shopUI.height;
+           //this.shopUI.y = this.shopUI.y + surplus_y/2;
+
+        }
+        else
+        {
+            this.shopUI.visible = true;
+        }
     }
 });
 

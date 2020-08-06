@@ -64,8 +64,12 @@
         "src/modules/TroopObject/graphics/TroopObjectView.js",
         "src/modules/TroopObject/TroopObjectManager.js",
         "src/modules/TroopObject/TrainTroopUI.js",
+        "src/modules/TroopObject/TrainTroopObj.js",
+        "src/modules/TroopObject/TrainTroopMiniObject.js",
 
         "src/modules/Lobby/Lobby.js",
-        "src/modules/Lobby/Setting.js"
+        "src/modules/Lobby/Setting.js",
+
+        "src/modules/a.js"
     ]
 }
