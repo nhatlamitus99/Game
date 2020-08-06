@@ -1,7 +1,7 @@
 var MapConfig = {
     MAP_SIZE: {
-        h: 40,
-        w: 40
+        h: 42,
+        w: 42
     },
 
     // using for scale screen in Client
@@ -22,7 +22,7 @@ var MapConfig = {
     CELL_SIZE: null,
     getCellSize: function() {
         if (this.CELL_SIZE == null) {
-                var cell = cc.Sprite("content/Art/Map/gird.png");
+                var cell = cc.Sprite(res.map.img_cell);
                 this.CELL_SIZE = {
                     h: cell.height/2,   // because gird.png has 2 cells
                     w: cell.width

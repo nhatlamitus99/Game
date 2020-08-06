@@ -15,7 +15,7 @@ var MapView = cc.Layer.extend({
     //},
     loadMap: function() {
         // load map's sprite from MainScene.json
-        var node = ccs.load('content/Art/Map/MainScene.json', '').node;
+        var node = ccs.load(res.map.tmx_map, '').node;
         ccui.Helper.doLayout(node);
         node.setAnchorPoint(0.5, 0.5);
         node.setPosition(cc.winSize.width/2, cc.winSize.height/2);
@@ -31,7 +31,7 @@ var MapView = cc.Layer.extend({
             h: this.scale*node.height
         };
         // get matrixMap (matrix of cells)
-        var panel = ccui.helper.seekWidgetByName(node, "Panel_1");
+        var panel = ccui.helper.seekWidgetByName(node, res.map.name_node_has_matrix_map);
         this._matrixMap = panel.getChildren()[0];
     },
 
@@ -99,7 +99,10 @@ var MapView = cc.Layer.extend({
         var touchLocation = touches[0].getLocation();
         // get cell in matrixMap
         var idOfCell = this.getCellInMatrixMap(touchLocation);
-        cc.log("Cell: " + idOfCell.i + " " + idOfCell.j);
+        if (idOfCell != null)
+            cc.log("Cell: (i,j)= " + idOfCell.i + " " + idOfCell.j);
+        else
+            cc.log("No cell in this position");
         return true;
     },
 
@@ -131,24 +134,23 @@ var MapView = cc.Layer.extend({
     },
 
     getCellInMatrixMap: function(location) {
-        //var titleH = this._matrixMap.height*this._scale/MapConfig.MAP_SIZE.h;
-        //var titleW = this._matrixMap.width*this._scale/MapConfig.MAP_SIZE.w;
         var titleH = MapConfig.getCellSize().h*this._scale;
         var titleW = MapConfig.getCellSize().w*this._scale;
-        //cc.log("title " + titleW + " " + titleW);
-        //cc.log("cell " + MapConfig.getCellSize().w + " " + MapConfig.getCellSize().h);
         // convert coordinate of touch to matrixMap's coordinate
         var t = this.transformLocationScreenToMatrixMap(location);
         //cc.log("matrixMap pos " + this._matrixMap.x + " " + this._matrixMap.y);
         //cc.log("T point " + t.x + " " + t.y);
+
+        // the formula here: https://stackoverflow.com/questions/39729815/converting-screen-coordinates-to-isometric-map-coordinates
+        // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
         var result = {
-            i: Math.floor(((t.x-titleW*42/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
-            j: Math.floor((-(t.x-titleW*42/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
+            i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.h/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
+            j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.h/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
         };
-        //if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
-        //    return null;
-        //if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
-        //    return null;
+        if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
+            return null;
+        if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
+            return null;
         return result;
     },
 
