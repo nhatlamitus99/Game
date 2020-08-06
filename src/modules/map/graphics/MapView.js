@@ -3,13 +3,14 @@ var MapView = cc.Layer.extend({
 
     // on client
     _scale: null,   // scale of current screen view map
-    _mapOriginSize: null,
+    _mapOriginSize: null,   // size of screen after the first scaling
+    _matrixMap: null,   // matrixMap (matrix of cell)
 
     ctor:function() {
         this._super();
 
         // load map's sprite from MainScene.json
-        var node = ccs.load('MainScene.json', '').node;
+        var node = ccs.load('content/Art/Map/MainScene.json', '').node;
         ccui.Helper.doLayout(node);
         node.setAnchorPoint(0.5, 0.5);
         node.setPosition(cc.winSize.width/2, cc.winSize.height/2);
@@ -27,9 +28,11 @@ var MapView = cc.Layer.extend({
             h: this.scale*node.height
         };
 
-        //var panel = ccui.helper.seekWidgetByName(node, "Panel_1");
-        //var map = panel.getChildren()[0];
-        //map.setPosition(500, 500);
+        // get matrixMap
+        var panel = ccui.helper.seekWidgetByName(node, "Panel_1");
+        var matrixMap = panel.getChildren()[0];
+        cc.log("Panel1: " + panel.x + " " + panel.y);
+        cc.log("matrixMap: " + matrixMap.x + " " + matrixMap.y);
 
         // set Touch
         cc.eventManager.addListener({
@@ -116,5 +119,4 @@ var MapView = cc.Layer.extend({
         map.x += delta.x;
         map.y += delta.y;
     }
-
 });

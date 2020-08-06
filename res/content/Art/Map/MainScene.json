@@ -29,13 +29,12 @@
             "ColorVector": {
               "ScaleY": 1.0
             },
-            "AnchorPoint": {
-              "ScaleX": 0.5,
-              "ScaleY": 0.5
-            },
+            "Scale9Width": 1,
+            "Scale9Height": 1,
+            "AnchorPoint": {},
             "Position": {
-              "X": 1044.5,
-              "Y": 798.5
+              "X": 0.0,
+              "Y": 0.0
             },
             "Scale": {
               "ScaleX": 1.0,
@@ -44,29 +43,27 @@
             "CColor": {},
             "IconVisible": false,
             "PrePosition": {
-              "X": 0.4976,
-              "Y": 0.5
+              "X": 0.0,
+              "Y": 0.0
             },
             "PreSize": {
               "X": 0.2859,
               "Y": 0.3757
             },
-            "LeftMargin": 744.5,
-            "RightMargin": 754.5,
-            "TopMargin": 498.5,
-            "BottomMargin": 498.5,
+            "RightMargin": 1499.0,
+            "TopMargin": 997.0,
             "Tag": 8,
             "Children": [
               {
                 "FileData": {
                   "Type": "Normal",
-                  "Path": "map/42x42map.tmx",
+                  "Path": "content/Art/Map/42x42map.tmx",
                   "Plist": ""
                 },
                 "AnchorPoint": {},
                 "Position": {
-                  "X": -497.1778,
-                  "Y": -261.1928
+                  "X": 254.2838,
+                  "Y": 232.9708
                 },
                 "Scale": {
                   "ScaleX": 0.5,
@@ -75,17 +72,17 @@
                 "CColor": {},
                 "IconVisible": false,
                 "PrePosition": {
-                  "X": -0.8286,
-                  "Y": -0.4353
+                  "X": 0.4238,
+                  "Y": 0.3883
                 },
                 "PreSize": {
                   "X": 5.32,
                   "Y": 3.99
                 },
-                "LeftMargin": -497.1778,
-                "RightMargin": -2094.8223,
-                "TopMargin": -1532.8071,
-                "BottomMargin": -261.1928,
+                "LeftMargin": 254.2838,
+                "RightMargin": -2846.2839,
+                "TopMargin": -2026.9707,
+                "BottomMargin": 232.9708,
                 "Tag": 5,
                 "ActionTag": 795956530,
                 "Size": {
@@ -107,7 +104,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "map/1_0000_Layer-3.png",
+              "Path": "content/Art/Map/1_0000_Layer-3.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -152,7 +149,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "map/1_0001_Layer-1.png",
+              "Path": "content/Art/Map/1_0001_Layer-1.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -198,7 +195,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "map/1_0002_Layer-4.png",
+              "Path": "content/Art/Map/1_0002_Layer-4.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -243,7 +240,7 @@
           {
             "FileData": {
               "Type": "Normal",
-              "Path": "map/1_0003_Layer-2.png",
+              "Path": "content/Art/Map/1_0003_Layer-2.png",
               "Plist": ""
             },
             "BlendFunc": {
@@ -294,12 +291,12 @@
         "ctype": "SingleNodeObjectData"
       },
       "UsedResources": [
-        "map/1_0000_Layer-3.png",
-        "map/1_0001_Layer-1.png",
-        "map/1_0002_Layer-4.png",
-        "map/1_0003_Layer-2.png",
-        "map/42x42map.tmx",
-        "map/gird.png"
+        "1_0000_Layer-3.png",
+        "1_0001_Layer-1.png",
+        "1_0002_Layer-4.png",
+        "1_0003_Layer-2.png",
+        "42x42map.tmx",
+        "gird.png"
       ],
       "ctype": "GameFileData"
     }
