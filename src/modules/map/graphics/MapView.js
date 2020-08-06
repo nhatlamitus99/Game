@@ -9,6 +9,7 @@ var MapView = cc.Layer.extend({
         this._super();
         this.loadMap();
         this.setUserActions();
+        //this.testGetCellAndGetLocationFunctions(); // this function is used for testing
     },
 
     //onEnter: function() {
@@ -138,19 +139,44 @@ var MapView = cc.Layer.extend({
         var titleW = MapConfig.getCellSize().w*this._scale;
         // convert coordinate of touch to matrixMap's coordinate
         var t = this.transformLocationScreenToMatrixMap(location);
-        //cc.log("matrixMap pos " + this._matrixMap.x + " " + this._matrixMap.y);
-        //cc.log("T point " + t.x + " " + t.y);
-
+        //cc.log(" getCellInMatrixMap, point= " + t.x + " " + t.y);
         // the formula here: https://stackoverflow.com/questions/39729815/converting-screen-coordinates-to-isometric-map-coordinates
         // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
         var result = {
-            i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.h/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
-            j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.h/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
+            i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
+            j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
         };
         if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
             return null;
         if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
             return null;
+        return result;
+    },
+
+    getPosOfCell: function(cell) {
+        var titleH = MapConfig.getCellSize().h*this._scale;
+        var titleW = MapConfig.getCellSize().w*this._scale;
+        var location = {
+            x: (cell.i - cell.j)/2*titleW + titleW*MapConfig.MAP_SIZE.w/4,
+            y: (cell.i + cell.j)/2*titleH // because of a column is overlap 50% with another column (2 side: left and right)
+        };
+        // convert coordinate of touch to matrixMap's coordinate
+        // cc.log("test getPosOfCell - matrixMap", location.x + " " + location.y);
+        return this.transformLocationMatrixMapToScreen(location);
+    },
+
+    transformLocationMatrixMapToScreen: function(location) {
+        var result = {};
+        var map = this._map;
+        var mapSize = this._mapOriginSize;
+        var matrixMap = this._matrixMap;
+        var scale = this._scale;
+        // from matrixMap to map
+        result.x = location.x + matrixMap.x*scale;
+        result.y = location.y + matrixMap.y*scale;
+        // from map to Screen
+        result.x += map.x - mapSize.w*scale/2;
+        result.y += map.y - mapSize.h*scale/2;
         return result;
     },
 
@@ -167,5 +193,23 @@ var MapView = cc.Layer.extend({
         result.x -= matrixMap.x*scale;
         result.y -= matrixMap.y*scale;
         return result;
+    }
+
+    ,testGetCellAndGetLocationFunctions: function(){
+        for (var i = 0; i < MapConfig.MAP_SIZE.w; ++i)
+            for (var j = 1; j < MapConfig.MAP_SIZE.h; ++j) {
+                var inputCell = {i: i, j: j};
+
+                cc.log("inputCell: ", inputCell.i + " " + inputCell.j);
+                var location = this.getPosOfCell(inputCell);
+                cc.log("output Location", location.x + " " + location.y);
+                var outputCell = this.getCellInMatrixMap(location);
+                cc.log("outputCell: ", outputCell.i + " " + outputCell.j);
+
+                if (inputCell.i != outputCell.i || inputCell.j != outputCell.j) {
+                    return false;
+                }
+            }
+        return true;
     }
 });
