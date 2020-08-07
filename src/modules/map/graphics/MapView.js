@@ -40,17 +40,15 @@ var MapView = cc.Layer.extend({
         this.zoomMapPerFrame();
     },
     moveMapPerFrame: function() {
-        if (!this._flagOfEditMovingSpeed) {
+        if (!this._flagOfEditMovingSpeed && !this._flagOfMovingScreen) {
             if (Math.abs(this._movingSpeed.x) > Math.abs(this._movingSpeed.unitX)*MapConfig.MOVING_ACCELERATION_ALPHA)
                 this._movingSpeed.x -= this._movingSpeed.unitX;
             else
                 this._movingSpeed.x = 0;
-
             if (Math.abs(this._movingSpeed.y) > Math.abs(this._movingSpeed.unitY)*MapConfig.MOVING_ACCELERATION_ALPHA)
                 this._movingSpeed.y -= this._movingSpeed.unitY;
             else
                 this._movingSpeed.y = 0;
-
             this.moveMap(this._movingSpeed);
         }
     },
