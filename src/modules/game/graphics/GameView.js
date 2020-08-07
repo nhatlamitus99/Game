@@ -15,7 +15,6 @@ var GameScreen = cc.Layer.extend({
         this.addChild(this._lobby, GameConfig.ZORDER_LOBBY);
     }
 
-
 });
 
 //

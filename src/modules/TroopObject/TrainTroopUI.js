@@ -1,12 +1,13 @@
 
 var TrainTroopUI = cc.Layer.extend({
     id:null,
-    zOrder:1000,
+    zOrder:20,
     background:null,
     shader:null,
     previous:null,
     text:null,
     arrow:null,
+    panel:null,
     listTroop:[],
     queueTroop:[],
 
@@ -15,39 +16,70 @@ var TrainTroopUI = cc.Layer.extend({
         this._super();
         this.id = id;
         this.init();
+
+        //this._listener = cc.EventListener.create({
+        //    event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        //    swallowTouches: true,
+        //    onTouchBegan: function(touch,event){
+        //        return true;
+        //    },
+        //    onTouchMoved: function(touch,event){},
+        //    onTouchEnded: function(touch,event){}
+        //});
+        //
+        //this._listener2 = cc.EventListener.create({
+        //    event: cc.EventListener.MOUSE,
+        //    swallowTouches: true,
+        //    onMouseMove:function(event){return true;},
+        //    onMouseScroll: function(event) {
+        //        cc.log("TOUCH BEGAN ");
+        //        return true;
+        //    }
+        //});
+
+       // cc.eventManager.addListener(this._listener, this);
+       // cc.eventManager.addListener(this._listener2, this);
     },
     init:function(){
         var size = cc.winSize;
         // background
         this.background = new cc.Scale9Sprite(train_troop_resource.BACKGROUND);
         this.addChild(this.background,this.zOrder);
-        var rate1 = this.background.getContentSize().width / this.background.getContentSize().height;
-        var rate2 = size.width / size.height;
-       // var ratio
-        if (rate1 < rate2) {
-            this.background.width = this.background.getContentSize().width * rate2 * 1.5;
-            this.background.height = this.background.getContentSize().height * rate2 * 1.2;
+        var rateStandard = 4.5 / 3;
+
+        var width;
+        var height;
+        var rate = cc.winSize.width / cc.winSize.height;
+
+        if (rateStandard < rate) {
+            height = cc.winSize.height * 0.9;
+            width = height * rateStandard;
         }
         else {
-            this.background.width = this.background.getContentSize().width * rate1 * 1.2;
-            this.background.height = this.background.getContentSize().height * rate1;
+            width = cc.winSize.width * 0.9;
+            height = width / rateStandard;
         }
 
 
+        this.background.width = width;
+        this.background.height = height;
 
         this.background.setPositionX(cc.winSize.width * 0.5);
         this.background.setPositionY(cc.winSize.height * 0.5);
 
         // name barrack
         var barrack_name = gv.lobbyLabel("Barrack "+ this.id.toString(),this.background.x ,this.background.height - 25);
-        barrack_name.x = this.background.x - barrack_name.getContentSize().width/2;
+        barrack_name.x = this.background.width/2;
+        barrack_name.y = this.background.height * 0.95;
         this.background.addChild(barrack_name,this.zOrder+1);
 
         // text
         this.text = new cc.Scale9Sprite(train_troop_resource.TEXT);
-        this.addChild(this.text,this.zOrder+1);
-        this.text.scaleX = this.background.width/(480); this.text.scaleY = 1.2;
-        this.text.x = this.background.x; this.text.y = this.background.y + 135;
+        this.background.addChild(this.text,this.zOrder+1);
+        this.text.width = this.background.width*0.9; this.text.height = this.background.height * 0.3;
+        this.text.x = this.background.width/2; this.text.y =  this.background.height*3/4;
+
+
 
         // previous
         this.previous = gv.lobbyButton(train_troop_resource.PREVIOUS,0, this.background.height/2);
@@ -69,23 +101,31 @@ var TrainTroopUI = cc.Layer.extend({
         this.shader.y = -cc.winSize.height;
 
         // list troop
+        this.panel = new cc.LayerColor(cc.color(0, 0, 0, 0), this.background.width * 0.92, this.background.height* 1/2);
+        this.background.addChild(this.panel,this.zOrder + 1);
+        this.panel.x = this.background.width * 0.04;
+        this.panel.y = this.background.height * 0.07;
+
         for(var i = 0; i <= 11; i++){
             var troop = new TrainTroopObj(train_troop_resource.CHARACTERS[i],0, 0, i);
             troop.addClickEventListener(this.onSelectTroop.bind(this,i));
-            this.background.addChild(troop,this.zOrder+2);
+            troop.updateSize(this.panel.height/2.3);
+            this.panel.addChild(troop,this.zOrder+2);
             this.listTroop.push(troop);
         }
 
-        var padding_x = this.background.width/30 + this.listTroop[0].width * 0.5;
-        var pad_x = (this.background.width - 6 * this.listTroop[0].width - 2*padding_x ) / 5;
-        var pad_y = (this.background.height*3/5 - 2*this.listTroop[0].height)/4;
+
+        var padding_x = this.panel.width * 0.03;
+        var pad_x = (this.panel.width - 6 * this.listTroop[0].width - 2*padding_x ) / 5;
+        var pad_y = (this.panel.height - 2*this.listTroop[0].height)/3;
         var sWidth = this.listTroop[0].width;
         var sHeight = this.listTroop[0].height;
         for(var i = 0; i <= 11; i++){
             var i_y = i >= 6 ? 0 : 1;
             var i_x = i % 6;
-            this.listTroop[i].setPosition(padding_x + sWidth * (i_x + 0.5) + (i_x) * pad_x, sHeight*(i_y+0.8) +(i_y + 1) * pad_y );
+            this.listTroop[i].setPosition(padding_x + sWidth * (i_x + 0.5) + (i_x) * pad_x, sHeight*(i_y + 0.5) +i_y * pad_y );
         }
+
     },
     // event handler
     onClose:function(){
@@ -95,8 +135,10 @@ var TrainTroopUI = cc.Layer.extend({
         // set arrow
         if(!this.arrow){
             this.arrow = new cc.Scale9Sprite(train_troop_resource.QUEUE);
-            this.arrow.x = this.background.x - 50; this.arrow.y = this.background.y + 140;
-            this.addChild(this.arrow,this.zOrder+1);
+            this.text.addChild(this.arrow,this.zOrder+12);
+            this.arrow.x = this.text.width * 0.35; this.arrow.y = this.text.height/2;
+            this.arrow.width = this.text.width * 0.6;
+            this.arrow.height = this.text.height * 0.3;
         }
         else{
             this.arrow.visible = true;
@@ -117,7 +159,10 @@ var TrainTroopUI = cc.Layer.extend({
         if(isExisted) return;
         else{
             var troop = new TrainTroopMiniObj(train_troop_resource.CHARACTERS_MINI[id],0,0,id);
-            this.addChild(troop, this.zOrder + 2);
+            this.text.addChild(troop, 3000);
+            //troop.width = this.text.height*0.4;
+            //troop.height = this.text.height*0.4;
+            troop.updateSize(this.text.height*0.4, this.text.height*0.4);
             troop.visible = false;
             troop.addClickEventListener(this.onDecreaseAmountTroop.bind(this,troop.id));
             this.queueTroop.push(troop);
@@ -150,6 +195,9 @@ var TrainTroopUI = cc.Layer.extend({
     },
     // ----------------
     updateShowTrainTroop:function(){
+        var size_obj = this.text.height*0.4;
+        var startX = this.text.width/2;
+        var pad_x = (this.text.width/2  - 5 * size_obj) / 6;
         if(this.queueTroop.length > 0){
             var count = 0;
             var j = -1;
@@ -159,10 +207,10 @@ var TrainTroopUI = cc.Layer.extend({
                     if(j>=5) break;
                     if(!this.queueTroop[k].visible) this.queueTroop[k].visible = true;
                     if(j == -1){
-                        this.queueTroop[k].x = this.background.x + 200; this.queueTroop[k].y = this.background.y + 140;
+                        this.queueTroop[k].x = this.text.width*0.7; this.queueTroop[k].y = this.text.height/2;
                     }
                     else{
-                        this.queueTroop[k].x = this.background.x - j*70; this.queueTroop[k].y = this.background.y + 140;
+                        this.queueTroop[k].x = startX  - (pad_x*j) - (size_obj)*(j); this.queueTroop[k].y = this.text.height/2;
                     }
                     j++;
                 }
@@ -171,7 +219,7 @@ var TrainTroopUI = cc.Layer.extend({
 
             if(count == 0) this.arrow.visible = false;
         }
-    }
+    },
 });
 
 var TRAIN_TROOP_1 = null;

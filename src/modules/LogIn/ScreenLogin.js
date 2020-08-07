@@ -1,7 +1,3 @@
-/**
- * Created by GSN on 7/6/2015.
- */
-
 var ScreenLogin = cc.Layer.extend({
     background:null,
     loginBox:null,

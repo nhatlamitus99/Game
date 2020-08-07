@@ -10,21 +10,18 @@ var TroopObjectGraphic = cc.Sprite.extend({
     ctor:function(arg, type){
         this._super(arg.LEVEL_1[type].textureIdle[0]);
 
-        var game = fr.getCurrentScreen();
-        var mapView = game._map;
-        this.appearPosition = mapView.getPosOfCell(0, 0);
-
         this.x = this.appearPosition.x;
         this.y = this.appearPosition.y;
 
         var idleFrames = [];
         for(var i = 0; i < arg.LEVEL_1[type].textureIdle.length; i++){
-            idleFrames.push(arg.LEVEL_1[type].textureIdle[i]);
+            idleFrames.push(cc.spriteFrameCache.getSpriteFrame(arg.LEVEL_1[type].textureIdle[i]));
         }
 
-        var animation = new cc.Animation(idleFrames, 0.1);
-        var animate = cc.animate(animation);
-        this.runAction(animate.repeatForever());
+        var animation = cc.Animation.create(idleFrames, 0.1);
+        this.runAction(
+            cc.Animate.create(animation).repeatForever()
+        );
     },
     update:function (dt){
         var x = this.x, y = this.y;

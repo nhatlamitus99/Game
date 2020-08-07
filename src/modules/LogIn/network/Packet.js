@@ -100,10 +100,6 @@ loginNetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            //  this.token = this.getInt();
-            // this.name = this.getString();
-            //this.x = this.getInt();
-            //this.y = this.getInt();
             this.username = this.getString();
         }
     }

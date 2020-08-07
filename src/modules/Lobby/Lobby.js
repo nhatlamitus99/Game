@@ -277,6 +277,7 @@ var Lobby  = cc.Layer.extend({
         // kho
         this.kho = gv.lobbyButton(lobby_resource.KHO, this._width - 50, 200);
         this.addChild(this.kho,1);
+        this.kho.addClickEventListener(this.onKhoClick.bind(this));
 
         // friend
         this.friend = gv.lobbyButton(lobby_resource.SETTING, this._width - 150, 45);
@@ -292,22 +293,18 @@ var Lobby  = cc.Layer.extend({
         {
             this.shopUI = TrainTroopUI.getInstance(1);
             this.addChild(this.shopUI, this.shopUI.zOrder);
-           // this.shopUI.x =  this._width/2;
-           // this.shopUI.y =  this._height/2;
-           // this.shopUI.setScaleX(cc.view.getFrameSize().width /1136);
-           // this.shopUI.setScaleY(cc.view.getFrameSize().height/640);
-           //
-           // var surplus_x = cc.view.getFrameSize().width/1136*this.shopUI.width - this.shopUI.width;
-           // this.shopUI.x = this.shopUI.x + surplus_x/2;
-           //
-           //var surplus_y = cc.view.getFrameSize().height/640*this.shopUI.height - this.shopUI.height;
-           //this.shopUI.y = this.shopUI.y + surplus_y/2;
-
         }
         else
         {
             this.shopUI.visible = true;
         }
+    },
+    onKhoClick: function(){
+        var game = fr.getCurrentScreen();
+        var map = game._map;
+
+        var troop = TroopObjectGraphic.create(TroopType,TC.TROOP_TYPE.COMBATANT);
+        map.addChild(troop,15);
     }
 });
 
