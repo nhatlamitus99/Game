@@ -1,15 +1,29 @@
 var MapView = cc.Layer.extend({
     _map:null,
+
     // on client
     _scale: null,   // scale of current screen view map
     _mapOriginSize: null,   // size of screen after the first scaling
     _matrixMap: null,   // matrixMap (matrix of cell)
 
+    // using for smoothly action
+    _movingSpeed: {    // acceleration of Moving screen
+        x: 0,
+        y: 0,
+        unitX: 0,   // x -= unitX each frame
+        unitY: 0    // y -= unitY each frame
+    },
+    _scalingSpeed: 0,   // acceleration of Zoom screen
+
+    // Using for synchronize
+    _flagOfEditMovingSpeed: false,   // boolean value: true-touching, false- no touch
+    _flagOfMovingScreen: false, // boolean value: true-screen was moving, false-screen was not moving
+
     ctor:function() {
         this._super();
         this.loadMapGUI();
         this.setUserActions();
-        //this.testGetCellAndGetLocationFunctions(); // this function is used for testing
+        this.schedule(this.updatePerFrame);
     },
 
     //onEnter: function() {
@@ -21,7 +35,28 @@ var MapView = cc.Layer.extend({
         this.loadBuilding();
         this.loadTroops();
     },
+    updatePerFrame: function() {
+        this.moveMapPerFrame();
+        this.zoomMapPerFrame();
+    },
+    moveMapPerFrame: function() {
+        if (!this._flagOfEditMovingSpeed) {
+            if (Math.abs(this._movingSpeed.x) > Math.abs(this._movingSpeed.unitX)*MapConfig.MOVING_ACCELERATION_ALPHA)
+                this._movingSpeed.x -= this._movingSpeed.unitX;
+            else
+                this._movingSpeed.x = 0;
 
+            if (Math.abs(this._movingSpeed.y) > Math.abs(this._movingSpeed.unitY)*MapConfig.MOVING_ACCELERATION_ALPHA)
+                this._movingSpeed.y -= this._movingSpeed.unitY;
+            else
+                this._movingSpeed.y = 0;
+
+            this.moveMap(this._movingSpeed);
+        }
+    },
+    zoomMapPerFrame: function() {
+
+    },
     loadMapAndMatrixMap: function() {
         var node = ccs.load(res.map.tmx_map, '').node;
         ccui.Helper.doLayout(node);
@@ -45,30 +80,31 @@ var MapView = cc.Layer.extend({
 
     loadBuilding: function() {
         // gia lap du lieu lay tu objectView
-        var object = {
+        var object1 = {
             sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_3_Island.png'),
             i: 8,
             j: 2,
             h: 3,
             w: 3
         };
-        var listObject = [object];
+        var object2 = {
+            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_4_Island.png'),
+            i: 15,
+            j: 15,
+            h: 4,
+            w: 4
+        };
+        var listObject = [object1, object2];
         // add object to map
         for (var i = 0; i < listObject.length; ++i) {
             var posBot = this.getPosOfCell(listObject[i]);
-            var posTop = this.getPosOfCell(
-                {
-                    i:listObject[i].i+listObject[i].w,
-                    j:listObject[i].j+listObject[i].h
-                });
-            var resPos = {
-                x: (posBot.x + posTop.x)/2,
-                y: (posBot.y + posTop.y)/2
-            };
+            var posTop = this.getPosOfCell({
+                i:listObject[i].i+listObject[i].w,
+                j:listObject[i].j+listObject[i].h
+            });
             this._map.addChild(listObject[i].sprite, 15);
-            listObject[i].sprite.x = resPos.x;
-            listObject[i].sprite.y = resPos.y;
-
+            listObject[i].sprite.x = (posBot.x + posTop.x)/2;
+            listObject[i].sprite.y = (posBot.y + posTop.y)/2;
         }
     },
 
@@ -83,7 +119,7 @@ var MapView = cc.Layer.extend({
             swallowTouches: true,
             onTouchesBegan: this.onTouchesBegan.bind(this),
             onTouchesMoved: this.onTouchesMoved.bind(this),
-            onTouchesEnd: this.onTouchesEnd.bind(this)
+            onTouchesEnded: this.onTouchesEnded.bind(this)
         }, this);
         // set Mouse Scroll
         if ('mouse' in cc.sys.capabilities) {
@@ -137,27 +173,59 @@ var MapView = cc.Layer.extend({
     },
     
     onTouchesBegan: function (touches) {
-        var touchLocation = touches[0].getLocation();
-        // get cell in matrixMap
-        var idOfCell = this.getCellInMatrixMap(touchLocation);
-        if (idOfCell != null)
-            cc.log("Cell: (i,j)= " + idOfCell.i + " " + idOfCell.j);
-        else
-            cc.log("No cell in this position");
+        this._flagOfEditMovingSpeed = true;
+        this._map.stopAllActions();
+        this._movingSpeed.x = 0;
+        this._movingSpeed.y = 0;
+        this._flagOfEditMovingSpeed = false;
         return true;
     },
 
     onTouchesMoved: function(touches) {
+        this._flagOfMovingScreen = true;
+        this._flagOfEditMovingSpeed = true;
         var touch = touches[0];
-        this.moveMap(touch.getDelta());
+        var delta = touch.getDelta();
+        this.moveMap(delta);
+        // copy accelerationMoving
+        this._movingSpeed.x = delta.x;
+        this._movingSpeed.y = delta.y;
+        this._movingSpeed.unitX = delta.x * MapConfig.MOVING_ACCELERATION;
+        this._movingSpeed.unitY = delta.y * MapConfig.MOVING_ACCELERATION;
+        this._flagOfEditMovingSpeed = false;
         return true;
     },
 
-    onTouchesEnd: function(touches) {
+    onTouchesEnded: function(touches) {
+        // if screen moving -> no select object;
+        if (this._flagOfMovingScreen == true) {
+            this._flagOfMovingScreen = false;
+        } else { // else select object at touch's position
+            var touchLocation = touches[0].getLocation();
+            // get cell in matrixMap
+            var cell = this.getCellInMatrixMap(touchLocation);
+            if (cell != null) {
+                // get object's type-id from MapLogic
+                var mapData = MapData.getInstance();
+                var typeID = mapData.getTypeIDFromCell(cell);
+                cc.log("Cell: (i,j)= " + cell.i + " " + cell.j + " ; type-id: " + typeID.type + " " + typeID.id);
+                // get objectView from ObjectMgr
+                // ...
+            } else {
+                cc.log("No cell in this position");
+            }
+        }
         return true;
     },
 
     moveMap: function(delta) {
+        var map = this._map;
+        delta = this.getDeltaMovingMap(delta);
+        map.x += delta.x;
+        map.y += delta.y;
+    },
+
+    getDeltaMovingMap: function(delta) {
         var map = this._map;
         var scale = this._scale;
         if (map.x + map.width/2*scale + delta.x <= cc.winSize.width)
@@ -168,10 +236,7 @@ var MapView = cc.Layer.extend({
             delta.y = 0;
         if (map.y - map.height/2*scale + delta.y >= 0)
             delta.y = 0;
-        //cc.log("sum", map.y + map.height/2*scale + delta.y);
-        //cc.log("winsize", cc.winSize.height);
-        map.x += delta.x;
-        map.y += delta.y;
+        return delta;
     },
 
     getCellInMatrixMap: function(location) {

@@ -35,7 +35,7 @@ cc.game.onStart = function () {
         gv.poolObjects = new PoolObject();
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
 
-        // create new GameClass
+        // create new GameClass and class Logic
         var gameData = GameData.getInstance();
         // load data from server and add it to game Data
         var user = User.getInstance();

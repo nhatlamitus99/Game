@@ -16,7 +16,7 @@ var MapData = cc.Class.extend({
         for (var i = x; i < x+w; ++i)
         for (var j = y; j < y+h; ++j)
             for (var t = 0; t < MapConfig.NULL_CELL.length; ++t)
-                if (this._map[i][j][t] != MapConfig.NULL_CELL[t])
+                if (this._map[i][j] != MapConfig.NULL_CELL)
                     return true;
         return false;
     },
@@ -24,8 +24,10 @@ var MapData = cc.Class.extend({
     insertObject2Map: function(x, y, w, h, type, id) {
         for (var i = x; i < x + w; ++i)
             for (var j = y; j < y + h; ++j) {
-                this._map[i][j][0] = type;
-                this._map[i][j][1] = id;
+                this._map[i][j] = {
+                    type: type,
+                    id: id
+                };
             }
     },
 
@@ -38,7 +40,13 @@ var MapData = cc.Class.extend({
                 this._map[i].push(MapConfig.getNullCell());
             }
         }
-        //cc.log(this._map);
+    },
+
+    getTypeIDFromCell: function(cell){
+        return {
+            type: this._map[cell.i][cell.j].type,
+            id: this._map[cell.i][cell.j].id
+        };
     }
 });
 
@@ -48,4 +56,4 @@ MapData.getInstance = function () {
         MAP_DATA_ONLY_ONE = new MapData();
     }
     return MAP_DATA_ONLY_ONE;
-}
+};
