@@ -13,7 +13,6 @@ var ObjectMgr = cc.Class.extend({
         for(var i=0; i <= this.numTypeObject; ++i) {
             this.listObject[i] = [];
         }
-
     },
 
     create: function(type) {

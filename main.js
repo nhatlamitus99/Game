@@ -28,44 +28,31 @@ cc.game.onStart = function () {
             cc.view.setDesignResolutionSize(DESIGN_RESOLUTION_WIDTH,DESIGN_RESOLUTION_WIDTH/2, cc.ResolutionPolicy.SHOW_ALL);
         }
 
-
-
         // The game will be resized when browser size change
         cc.view.resizeWithBrowserSize(true);
         //socket
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
-
-
-        // test mapData
-        //var mapData = new MapData();
-        //mapData.customInit();
-        //mapData.insertObject2Map(0, 0, 3, 3, 1, 1);
-        //cc.log(mapData.checkOverlap(0, 0, 3, 3));
-
-        // test resources
-        //var resources = new ResourcesData([0, 0, 0]);
-        //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
-        //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
-        //cc.log(resources.getResources());
-
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
 
         // create new GameClass
         var gameData = GameData.getInstance();
         // load data from server and add it to game Data
         var user = User.getInstance();
+
         var mapData = MapData.getInstance();
         mapData.customInit();
+
         var resourcesData = ResourcesData.getInstance();
         resourcesData.setAttributes([0,0,0]);
+
         var objectMgr = ObjectMgr.getInstance();
+
         gameData.setAttributes(user, resourcesData, mapData, objectMgr, null, null);
 
         // view mainScreen
          fr.view(GameScreen);
     }, this);
-   
 };
 
 cc.game.run();
