@@ -3,16 +3,16 @@
  */
 
 var GameScreen = cc.Layer.extend({
-    _map:null,
-    _lobby: null,
+    _mapLayer:null,
+    _lobbyLayer: null,
 
     ctor:function() {
         this._super();
         //loadSpriteFrame();
-        this._map = new MapView();
-        this._lobby = new Lobby();
-        this.addChild(this._map, GameConfig.ZORDER_MAP);
-        this.addChild(this._lobby, GameConfig.ZORDER_LOBBY);
+        this._mapLayer = new MapView();
+        this._lobbyLayer = new Lobby();
+        this.addChild(this._mapLayer, GameConfig.ZORDER_MAP);
+        this.addChild(this._lobbyLayer, GameConfig.ZORDER_LOBBY);
     }
 
 });
