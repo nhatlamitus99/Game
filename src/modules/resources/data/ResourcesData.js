@@ -3,12 +3,20 @@
  */
 
 var ResourcesData = cc.Class.extend({
-    _resources: null, //[Vang , Dau, G]
+    _resources: [], //[Vang , Dau, G]
 
-    ctor: function(resources){
-        if (resources == null)
+    ctor: function(){
+    },
+
+    setAttributes: function(data) {
+        // data.length must equal DATA_SIZE and data[i] >= 0
+        if (data.length != ResourcesConfig.DATA_SIZE)
             return false;
-        this._resources = resources;
+        for (var i = 0; i < ResourcesData.DATA_SIZE; ++i)
+            if (data[i] < 0)
+                return false;
+        for (i = 0; i < ResourcesData.DATA_SIZE; ++i)
+            this._resources[i] = data[i];
         return true;
     },
 
@@ -37,3 +45,11 @@ var ResourcesData = cc.Class.extend({
         return res;
     }
 });
+
+var RESOURCES_DATA_ONLY_ONE = null;
+ResourcesData.getInstance = function () {
+    if (RESOURCES_DATA_ONLY_ONE === null) {
+        RESOURCES_DATA_ONLY_ONE = new ResourcesData();
+    }
+    return RESOURCES_DATA_ONLY_ONE;
+};

@@ -9,10 +9,10 @@ TC.LEVEL = {
 };
 
 TC.TROOP_TYPE = {
-    COMBATANT:      1,
-    ARCHER:         2,
-    HULK:           3,
-    FLYING_BOMB:    4,
+    COMBATANT:      0,
+    ARCHER:         1,
+    HULK:           2,
+    FLYING_BOMB:    3,
 }
 
 TC.CONTAINER = {

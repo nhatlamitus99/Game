@@ -1,16 +1,30 @@
 var TroopObjectGraphic = cc.Sprite.extend({
     active:true,    // sống / chết
     velocity:0,     // vector x
-    zOrder:10,      // hiển thị
+    zOrder:15,      // hiển thị
     type:1,         // kiểu lính
+    appearPosition: cc.p(800, 300),
     rect:null,     // lấy size hình ảnh
 
 
-    ctor:function(troopSpeed, troopType){
-        this._super();
+    ctor:function(arg, type){
+        this._super(arg.LEVEL_1[type].textureIdle[0]);
 
-        this.velocity = troopSpeed;
-        this.type = troopType;
+        var game = fr.getCurrentScreen();
+        var mapView = game._map;
+        this.appearPosition = mapView.getPosOfCell(0, 0);
+
+        this.x = this.appearPosition.x;
+        this.y = this.appearPosition.y;
+
+        var idleFrames = [];
+        for(var i = 0; i < arg.LEVEL_1[type].textureIdle.length; i++){
+            idleFrames.push(arg.LEVEL_1[type].textureIdle[i]);
+        }
+
+        var animation = new cc.Animation(idleFrames, 0.1);
+        var animate = cc.animate(animation);
+        this.runAction(animate.repeatForever());
     },
     update:function (dt){
         var x = this.x, y = this.y;
@@ -45,6 +59,13 @@ var TroopObjectGraphic = cc.Sprite.extend({
     },
 })
 
+// create
+TroopObjectGraphic.create = function(arg, type){
+    var troop = new TroopObjectGraphic(arg, type);
+    MW.CONTAINER.TROOPS.push(troop);
+    return troop;
+};
+
 // properties
 TroopObjectGraphic.troopWithTexture = function (aTexture, troopType, troopSpeed) {
     var troop = new TroopObjectGraphic(troopType, troopSpeed);
@@ -57,7 +78,7 @@ TroopObjectGraphic.troopWithSpriteFrame = function(spriteFrame,troopType, troopS
     var troop = new TroopObjectGraphic(troopType,troopSpeed);
     troop.initWithSpriteFrame(spriteFrame);
     return troop;
-}
+};
 
 TroopObjectGraphic.preset = function(){
 

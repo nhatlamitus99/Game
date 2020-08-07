@@ -18,13 +18,11 @@ var TrainTroopUI = cc.Layer.extend({
     },
     init:function(){
         var size = cc.winSize;
-        cc.log(size.width + " " + size.height);
         // background
         this.background = new cc.Scale9Sprite(train_troop_resource.BACKGROUND);
         this.addChild(this.background,this.zOrder);
         var rate1 = this.background.getContentSize().width / this.background.getContentSize().height;
         var rate2 = size.width / size.height;
-        cc.log("RATE1 " + rate1 + " RATE2 " + rate2);
        // var ratio
         if (rate1 < rate2) {
             this.background.width = this.background.getContentSize().width * rate2 * 1.5;
@@ -35,9 +33,7 @@ var TrainTroopUI = cc.Layer.extend({
             this.background.height = this.background.getContentSize().height * rate1;
         }
 
-        ////if (this.background)
-        //this.background.width = 900;
-        //this.background.height = 550;
+
 
         this.background.setPositionX(cc.winSize.width * 0.5);
         this.background.setPositionY(cc.winSize.height * 0.5);

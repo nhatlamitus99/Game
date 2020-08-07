@@ -21,6 +21,7 @@ cc.game.onStart = function () {
         // Setup the resolution policy and design resolution size
         var frameSize = cc.view.getFrameSize();
         var ratio = frameSize.width/frameSize.height;
+
         if(ratio < 2){
             cc.view.setDesignResolutionSize(DESIGN_RESOLUTION_WIDTH,DESIGN_RESOLUTION_HEIGHT, cc.ResolutionPolicy.FIXED_HEIGHT);
         }else{
@@ -28,13 +29,13 @@ cc.game.onStart = function () {
         }
 
 
+
         // The game will be resized when browser size change
         cc.view.resizeWithBrowserSize(true);
         //socket
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
-        
-        // testing area
+
 
         // test mapData
         //var mapData = new MapData();
@@ -47,10 +48,24 @@ cc.game.onStart = function () {
         //cc.log("increase Resources", resources.increaseResources([100, 100, 100]));
         //cc.log("decrease Resources", resources.decreaseResources([101, 100, 100]));
         //cc.log(resources.getResources());
+
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
+
+        // create new GameClass
+        var gameData = GameData.getInstance();
+        // load data from server and add it to game Data
+        var user = User.getInstance();
+        var mapData = MapData.getInstance();
+        mapData.customInit();
+        var resourcesData = ResourcesData.getInstance();
+        resourcesData.setAttributes([0,0,0]);
+        var objectMgr = ObjectMgr.getInstance();
+        gameData.setAttributes(user, resourcesData, mapData, objectMgr, null, null);
 
         // view mainScreen
          fr.view(GameScreen);
     }, this);
+   
 };
+
 cc.game.run();

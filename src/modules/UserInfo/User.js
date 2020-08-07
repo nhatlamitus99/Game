@@ -56,4 +56,4 @@ User.getInstance = function(){
     }
 
     return CURR_USER;
-}
+};

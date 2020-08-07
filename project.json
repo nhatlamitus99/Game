@@ -55,6 +55,8 @@
         "src/config/TroopConfig.js",
         "src/config/LobbyConfig.js",
         "src/config/GameConfig.js",
+        "src/config/ResourcesConfig.js",
+        "src/config/TroopType.js",
 
         "src/modules/LogIn/ScreenLogin.js",
         "src/modules/LogIn/network/Network.js",
@@ -70,6 +72,21 @@
         "src/modules/Lobby/Lobby.js",
         "src/modules/Lobby/Setting.js",
 
-        "src/modules/a.js"
+        "src/modules/object/ObjectMgr.js",
+        "src/modules/object/data/MapObject.js",
+        "src/modules/object/data/staticObject/StaticMapObject.js",
+        "src/modules/object/data/createdObject/CreatedMapObject.js",
+        "src/modules/object/data/createdObject/DefenseObject.js",
+        "src/modules/object/data/createdObject/HarvestObject.js",
+        "src/modules/object/data/createdObject/WarehouseObject.js",
+        "src/modules/object/data/createdObject/armyObject/ArmyCamp.js",
+        "src/modules/object/data/createdObject/armyObject/Barrack.js",
+        "src/modules/object/data/createdObject/defenseObject/AnchorTown.js",
+        "src/modules/object/data/createdObject/defenseObject/Canon.js",
+        "src/modules/object/data/createdObject/defenseObject/Trebuchet.js",
+        "src/modules/object/data/createdObject/harvestObject/ElixirMine.js",
+        "src/modules/object/data/createdObject/harvestObject/GoldMine.js",
+        "src/modules/object/data/createdObject/warehouseObject/ElixirStorage.js",
+        "src/modules/object/data/createdObject/warehouseObject/GoldStorage.js"
     ]
 }
