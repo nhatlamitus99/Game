@@ -3,28 +3,38 @@ var TroopObjectGraphic = cc.Sprite.extend({
     velocity:0,     // vector x
     zOrder:15,      // hiển thị
     type:1,         // kiểu lính
+    state:TC.TROOP_STATE.IDLE,        // hành động
     appearPosition: cc.p(800, 300),
     rect:null,     // lấy size hình ảnh
 
 
-    ctor:function(arg, type){
-        this._super(arg.LEVEL_1[type].textureIdle[0]);
+    ctor:function(type){
+        this._super(cc.spriteFrameCache.getSpriteFrame(TC.ARM[type].LEVEL_1 + TC.idle_url + "/image0000.png"));
 
-        var game = fr.getCurrentScreen();
-        var mapView = game._map;
-        this.appearPosition = mapView.getPosOfCell(0, 0);
+        var i = Math.floor(Math.random() *43);
+        var j = Math.floor(Math.random() *43);
+        var pos = fr.getCurrentScreen()._map.getPosOfCell({i:i, j:j});
+        this.x = pos.x;
+        this.y = pos.y;
 
-        this.x = this.appearPosition.x;
-        this.y = this.appearPosition.y;
+        this.scaleX = 1/2;
+        this.scaleY = 1/2;
 
         var idleFrames = [];
-        for(var i = 0; i < arg.LEVEL_1[type].textureIdle.length; i++){
-            idleFrames.push(arg.LEVEL_1[type].textureIdle[i]);
+
+        for(var i = 0; i <= 29; i++){
+            var name = "";
+            if(i<10) name = "/image000" + i + ".png";
+            else name = "/image00" + i + ".png";
+            idleFrames.push(cc.spriteFrameCache.getSpriteFrame(TC.ARM[type].LEVEL_1 + TC.idle_url + name));
         }
 
-        var animation = new cc.Animation(idleFrames, 0.1);
-        var animate = cc.animate(animation);
-        this.runAction(animate.repeatForever());
+        var animation = cc.Animation.create(idleFrames, 0.1);
+;
+        this.runAction(
+            cc.Animate.create(animation).repeatForever()
+        );
+
     },
     update:function (dt){
         var x = this.x, y = this.y;
@@ -41,7 +51,7 @@ var TroopObjectGraphic = cc.Sprite.extend({
     },
     initWithTexture:function (aTexture) {
         if (this._super(aTexture)) {
-            this._state = BULLET_STATE_UNGRABBED;
+            this._state = 1;
         }
         if (aTexture instanceof cc.Texture2D) {
             this._rect = cc.rect(0, 0, aTexture.width, aTexture.height);
@@ -52,7 +62,7 @@ var TroopObjectGraphic = cc.Sprite.extend({
     },
     initWithSpriteFrame:function(spriteFrame){
         if(this._super(spriteFrame)){
-            this._state = BULLET_STATE_UNGRABBED;
+            this._state = 1;
         }
         this._rect = spriteFrame.getRect();
         return true;
@@ -60,8 +70,8 @@ var TroopObjectGraphic = cc.Sprite.extend({
 })
 
 // create
-TroopObjectGraphic.create = function(arg, type){
-    var troop = new TroopObjectGraphic(arg, type);
+TroopObjectGraphic.create = function(type){
+    var troop = new TroopObjectGraphic(type);
     MW.CONTAINER.TROOPS.push(troop);
     return troop;
 };

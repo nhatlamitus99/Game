@@ -1,7 +1,3 @@
-/**
- * Created by GSN on 7/6/2015.
- */
-
 var ScreenLogin = cc.Layer.extend({
     background:null,
     loginBox:null,
@@ -95,7 +91,7 @@ var ScreenLogin = cc.Layer.extend({
         this.loading2.setPercent(percent);
         if(percent >= 100){
             this.unschedule(this.doLoadingBar);
-            fr.view(Lobby);
+            fr.view(GameScreen);
         }
     }
 

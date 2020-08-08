@@ -310,3 +310,14 @@ var MapView = cc.Layer.extend({
         return result;
     }
 });
+
+
+var MAP_ONLY_ONE = null;
+
+MapView.getInstance = function(){
+    if(MAP_ONLY_ONE == null){
+        MAP_ONLY_ONE = new MapView();
+    }
+
+    return MAP_ONLY_ONE;
+}

@@ -29,35 +29,35 @@ var resLogin = {
     OK_BUTTON:              "LoginGui/btnOk.png"
 };
 
-var lobby_resource = {
-    GUILD: "GUIs/Main_Gui/003left_ic04.png",
-    GUILD_FIGHT: "GUIs/Main_Gui/003left_ic05.png",
-    ADD_BUTTON: "GUIs/Main_Gui/add_button.png",
-    ADD_G_BUTTON: "GUIs/Main_Gui/add_button.png",
-    ARMY_ICON: "GUIs/Main_Gui/army_icon.png",
-    ATTACK: "GUIs/Main_Gui/attack.png",
-    BG_EXP: "GUIs/Main_Gui/bg_exp.png",
-    BG_BAR_1: "GUIs/Main_Gui/bg_bar_1.png",
-    BG_BAR_2: "GUIs/Main_Gui/bg_bar_2.png",
-    BG_BAR_3: "GUIs/Main_Gui/bg_bar_3.png",
-    BG_BAR_4: "GUIs/Main_Gui/bg_bar_4.png",
-    BUILDER_ICON: "GUIs/Main_Gui/builder_icon.png",
-    ELIXIR_BAR: "GUIs/Main_Gui/elixir_bar.png",
-    ELIXIR_ICON: "GUIs/Main_Gui/elixir_icon.png",
-    EXP_BAR: "GUIs/Main_Gui/exp_bar.png",
-    EXP_BG_BAR: "GUIs/Main_Gui/exp_bg_bar.png",
-    EXP_ICON: "GUIs/Main_Gui/exp_icon.png",
-    G_BAR: "GUIs/Main_Gui/g_bar.png",
-    G_ICON: "GUIs/Main_Gui/g_icon.png",
-    GOLD_BAR: "GUIs/Main_Gui/gold_bar.png",
-    GOLD_ICON: "GUIs/Main_Gui/gold_icon.png",
-    HOME: "GUIs/Main_Gui/home.png",
-    KHO: "GUIs/Main_Gui/kho.png",
-    RANKING: "GUIs/Main_Gui/ranking.png",
-    SETTING: "GUIs/Main_Gui/setting.png",
-    SHOP: "GUIs/Main_Gui/shop.png",
-    SHIELD_ICON: "GUIs/Main_Gui/shield.png",
-    RANKING_BAR: "GUIs/Main_Gui/trophy_bg_bar.png"
+var lobby_resources = {
+    GUILD: "003left_ic04.png",
+    GUILD_FIGHT: "003left_ic05.png",
+    ADD_BUTTON: "add_button.png",
+    ADD_G_BUTTON: "add_button.png",
+    ARMY_ICON: "army_icon.png",
+    ATTACK: "attack.png",
+    BG_EXP: "bg_exp.png",
+    BG_BAR_1: "bg_bar_1.png",
+    BG_BAR_2: "bg_bar_2.png",
+    BG_BAR_3: "bg_bar_3.png",
+    BG_BAR_4: "bg_bar_4.png",
+    BUILDER_ICON: "builder_icon.png",
+    ELIXIR_BAR: "elixir_bar.png",
+    ELIXIR_ICON: "elixir_icon.png",
+    EXP_BAR: "exp_bar.png",
+    EXP_BG_BAR: "exp_bg_bar.png",
+    EXP_ICON: "exp_icon.png",
+    G_BAR: "g_bar.png",
+    G_ICON: "g_icon.png",
+    GOLD_BAR: "/gold_bar.png",
+    GOLD_ICON: "gold_icon.png",
+    HOME: "home.png",
+    KHO: "kho.png",
+    RANKING: "ranking.png",
+    SETTING: "setting.png",
+    SHOP: "shop.png",
+    SHIELD_ICON: "shield.png",
+    RANKING_BAR: "trophy_bg_bar.png"
 };
 
 
@@ -125,6 +125,33 @@ var train_troop_resource = {
     ]
 };
 
+var shop_resources = {
+    SLOT_CATALOGY: "content/Art/GUIs/shop_gui/slot_catalogy.png",
+    CATALOY_BG: "content/Art/GUIs/shop_gui/catalogy_bg.png",
+    TITLE_BACKGROUND: "content/Art/GUIs/shop_gui/title_background.png",
+    NEN: "content/Art/GUIs/shop_gui/nen2.png",
+    TYPE_BUY_RES: "content/Art/GUIs/shop_gui/type_buy_res.png",
+    TYPE_RES: "content/Art/GUIs/shop_gui/type_res.png",
+    TYPE_DC: "content/Art/GUIs/shop_gui/type_dc.png",
+    TYPE_ARMY: "content/Art/GUIs/shop_gui/type_army.png",
+    TYPE_DEFENSE: "content/Art/GUIs/shop_gui/type_defense.png",
+    TYPE_SHIELD: "content/Art/GUIs/shop_gui/type_sheild.png",
+    CLOSE_BTN: "content/Art/GUIs/shop_gui/close.png",
+    SLOT: "content/Art/GUIs/shop_gui/slot.png",
+    ITEM_BACKGROUND: "content/Art/GUIs/shop_gui/item_background.png",
+    TIME_ICON: "content/Art/GUIs/shop_gui/time.png",
+    ICON_GOLD_BAR: "content/Art/GUIs/shop_gui/icon_gold_bar.png",
+    ICON_ELIXIR_BAR: "content/Art/GUIs/shop_gui/icon_elixir_bar.png",
+    ICON_G_BAR: "content/Art/GUIs/shop_gui/icon_g_bar.png",
+    RES_INFO: "content/Art/GUIs/shop_gui/res_info.png",
+    RES_BAR: "content/Art/GUIs/shop_gui/res_bar.png",
+    BACK_BTN: "content/Art/GUIs/shop_gui/back.png"
+
+
+
+
+};
+
 var g_resources = [
     "CloseNormal.png",
     "CloseSelected.png",
@@ -179,133 +206,88 @@ var g_resources = [
 ];
 
 // troop
-var TROOP_IDLE = {
-    ARM_1_1: [
-        "Troops/ARM_1_1/idle/image0000.png",
-        "Troops/ARM_1_1/idle/image0001.png",
-        "Troops/ARM_1_1/idle/image0002.png",
-        "Troops/ARM_1_1/idle/image0003.png",
-        "Troops/ARM_1_1/idle/image0004.png",
-        "Troops/ARM_1_1/idle/image0005.png",
-        "Troops/ARM_1_1/idle/image0006.png",
-        "Troops/ARM_1_1/idle/image0007.png",
-        "Troops/ARM_1_1/idle/image0008.png",
-        "Troops/ARM_1_1/idle/image0009.png",
-        "Troops/ARM_1_1/idle/image0010.png",
-        "Troops/ARM_1_1/idle/image0011.png",
-        "Troops/ARM_1_1/idle/image0012.png",
-        "Troops/ARM_1_1/idle/image0013.png",
-        "Troops/ARM_1_1/idle/image0014.png",
-        "Troops/ARM_1_1/idle/image0015.png",
-        "Troops/ARM_1_1/idle/image0016.png",
-        "Troops/ARM_1_1/idle/image0017.png",
-        "Troops/ARM_1_1/idle/image0018.png",
-        "Troops/ARM_1_1/idle/image0019.png",
-        "Troops/ARM_1_1/idle/image0020.png",
-        "Troops/ARM_1_1/idle/image0021.png",
-        "Troops/ARM_1_1/idle/image0022.png",
-        "Troops/ARM_1_1/idle/image0023.png",
-        "Troops/ARM_1_1/idle/image0024.png",
-        "Troops/ARM_1_1/idle/image0025.png",
-        "Troops/ARM_1_1/idle/image0026.png",
-        "Troops/ARM_1_1/idle/image0027.png",
-        "Troops/ARM_1_1/idle/image0028.png",
-        "Troops/ARM_1_1/idle/image0029.png"
-    ],
-    ARM_1_2: [
-        "Troops/ARM_1_2/idle/image0000.png",
-        "Troops/ARM_1_2/idle/image0001.png",
-        "Troops/ARM_1_2/idle/image0002.png",
-        "Troops/ARM_1_2/idle/image0003.png",
-        "Troops/ARM_1_2/idle/image0004.png",
-        "Troops/ARM_1_2/idle/image0005.png",
-        "Troops/ARM_1_2/idle/image0006.png",
-        "Troops/ARM_1_2/idle/image0007.png",
-        "Troops/ARM_1_2/idle/image0008.png",
-        "Troops/ARM_1_2/idle/image0009.png",
-        "Troops/ARM_1_2/idle/image0010.png",
-        "Troops/ARM_1_2/idle/image0011.png",
-        "Troops/ARM_1_2/idle/image0012.png",
-        "Troops/ARM_1_2/idle/image0013.png",
-        "Troops/ARM_1_2/idle/image0014.png",
-        "Troops/ARM_1_2/idle/image0015.png",
-        "Troops/ARM_1_2/idle/image0016.png",
-        "Troops/ARM_1_2/idle/image0017.png",
-        "Troops/ARM_1_2/idle/image0018.png",
-        "Troops/ARM_1_2/idle/image0019.png",
-        "Troops/ARM_1_2/idle/image0020.png",
-        "Troops/ARM_1_2/idle/image0021.png",
-        "Troops/ARM_1_2/idle/image0022.png",
-        "Troops/ARM_1_2/idle/image0023.png",
-        "Troops/ARM_1_2/idle/image0024.png",
-        "Troops/ARM_1_2/idle/image0025.png",
-        "Troops/ARM_1_2/idle/image0026.png",
-        "Troops/ARM_1_2/idle/image0027.png",
-        "Troops/ARM_1_2/idle/image0028.png",
-        "Troops/ARM_1_2/idle/image0029.png"
-    ],
-    ARM_1_3: [
-        "Troops/ARM_1_3/idle/image0000.png",
-        "Troops/ARM_1_3/idle/image0001.png",
-        "Troops/ARM_1_3/idle/image0002.png",
-        "Troops/ARM_1_3/idle/image0003.png",
-        "Troops/ARM_1_3/idle/image0004.png",
-        "Troops/ARM_1_3/idle/image0005.png",
-        "Troops/ARM_1_3/idle/image0006.png",
-        "Troops/ARM_1_3/idle/image0007.png",
-        "Troops/ARM_1_3/idle/image0008.png",
-        "Troops/ARM_1_3/idle/image0009.png",
-        "Troops/ARM_1_3/idle/image0010.png",
-        "Troops/ARM_1_3/idle/image0011.png",
-        "Troops/ARM_1_3/idle/image0012.png",
-        "Troops/ARM_1_3/idle/image0013.png",
-        "Troops/ARM_1_3/idle/image0014.png",
-        "Troops/ARM_1_3/idle/image0015.png",
-        "Troops/ARM_1_3/idle/image0016.png",
-        "Troops/ARM_1_3/idle/image0017.png",
-        "Troops/ARM_1_3/idle/image0018.png",
-        "Troops/ARM_1_3/idle/image0019.png",
-        "Troops/ARM_1_3/idle/image0020.png",
-        "Troops/ARM_1_3/idle/image0021.png",
-        "Troops/ARM_1_3/idle/image0022.png",
-        "Troops/ARM_1_3/idle/image0023.png",
-        "Troops/ARM_1_3/idle/image0024.png",
-        "Troops/ARM_1_3/idle/image0025.png",
-        "Troops/ARM_1_3/idle/image0026.png",
-        "Troops/ARM_1_3/idle/image0027.png",
-        "Troops/ARM_1_3/idle/image0028.png",
-        "Troops/ARM_1_3/idle/image0029.png"
-    ],
-    ARM_1_4: [
-        "Troops/ARM_1_4/idle/image0000.png",
-        "Troops/ARM_1_4/idle/image0001.png",
-        "Troops/ARM_1_4/idle/image0002.png",
-        "Troops/ARM_1_4/idle/image0003.png",
-        "Troops/ARM_1_4/idle/image0004.png",
-        "Troops/ARM_1_4/idle/image0005.png",
-        "Troops/ARM_1_4/idle/image0006.png",
-        "Troops/ARM_1_4/idle/image0007.png",
-        "Troops/ARM_1_4/idle/image0008.png",
-        "Troops/ARM_1_4/idle/image0009.png",
-        "Troops/ARM_1_4/idle/image0010.png",
-        "Troops/ARM_1_4/idle/image0011.png",
-        "Troops/ARM_1_4/idle/image0012.png",
-        "Troops/ARM_1_4/idle/image0013.png",
-        "Troops/ARM_1_4/idle/image0014.png",
-        "Troops/ARM_1_4/idle/image0015.png",
-        "Troops/ARM_1_4/idle/image0016.png",
-        "Troops/ARM_1_4/idle/image0017.png",
-        "Troops/ARM_1_4/idle/image0018.png",
-        "Troops/ARM_1_4/idle/image0019.png",
-        "Troops/ARM_1_4/idle/image0020.png",
-        "Troops/ARM_1_4/idle/image0021.png",
-        "Troops/ARM_1_4/idle/image0022.png",
-        "Troops/ARM_1_4/idle/image0023.png",
-        "Troops/ARM_1_4/idle/image0024.png",
-        "Troops/ARM_1_4/idle/image0025.png",
-        "Troops/ARM_1_4/idle/image0026.png",
-        "Troops/ARM_1_4/idle/image0027.png",
-        "Troops/ARM_1_4/idle/image0028.png",
-        "Troops/ARM_1_4/idle/image0029.png"
-    ]
-};
+var TROOP_RESOURCES = [
+    //ARM_1_1:
+    {
+        plist: "Troops/ARM_1_1/ARM_1_1/arm_1_1.plist",
+        png: "Troops/ARM_1_1/ARM_1_1/arm_1_1.png"
+    },
+   // ARM_1_2:
+    {
+        plist: "Troops/ARM_1_2/ARM_1_2/arm_1_2.plist",
+        png: "Troops/ARM_1_2/ARM_1_2/arm_1_2.png"
+    }
+    ,
+    //ARM_1_3:
+    {
+        plist: "Troops/ARM_1_3/ARM_1_3/arm_1_3.plist",
+        png: "Troops/ARM_1_3/ARM_1_3/arm_1_3.png"
+    },
+    //ARM_1_4:
+    {
+        plist: "Troops/ARM_1_4/ARM_1_4/arm_1_4.plist",
+        png: "Troops/ARM_1_4/ARM_1_4/arm_1_4.png"
+    },
+    //ARM_2_1:
+    {
+        plist: "Troops/ARM_2_1/ARM_2_1/arm_2_1.plist",
+        png: "Troops/ARM_2_1/ARM_2_1/arm_2_1.png"
+    },
+    //ARM_2_2:
+    {
+        plist: "Troops/ARM_2_2/ARM_2_2/arm_2_2.plist",
+        png: "Troops/ARM_2_2/ARM_2_2/arm_2_2.png"
+    },
+    //RM_2_3:
+    {
+        plist: "Troops/ARM_2_3/ARM_2_3/arm_2_3.plist",
+        png: "Troops/ARM_2_3/ARM_2_3/arm_2_3.png"
+    },
+   // ARM_2_4:
+   {
+        plist: "Troops/ARM_2_4/ARM_2_4/arm_2_4.plist",
+        png: "Troops/ARM_2_4/ARM_2_4/arm_2_4.png"
+    },
+    //ARM_3_1:
+    {
+        plist: "Troops/ARM_4_1/ARM_4_1/arm_4_1.plist",
+        png: "Troops/ARM_4_1/ARM_4_1/arm_4_1.png"
+    },
+    //ARM_3_2:
+    {
+        plist: "Troops/ARM_4_2/ARM_4_2/arm_4_2.plist",
+        png: "Troops/ARM_4_2/ARM_4_2/arm_4_2.png"
+    },
+    //ARM_3_3:
+    {
+        plist: "Troops/ARM_4_3/ARM_4_3/arm_4_3.plist",
+        png: "Troops/ARM_4_3/ARM_4_3/arm_4_3.png"
+    },
+    //ARM_3_4
+    {
+        plist: "Troops/ARM_4_4/ARM_4_4/arm_4_4.plist",
+        png: "Troops/ARM_4_4/ARM_4_4/arm_4_4.png"
+    },
+    //ARM_4_1:
+    {
+        plist: "Troops/ARM_6_1/ARM_6_1/arm_6_1.plist",
+        png: "Troops/ARM_6_1/ARM_6_1/arm_6_1.png"
+    },
+    //ARM_4_2:
+    {
+        plist: "Troops/ARM_6_2/ARM_6_2/arm_6_2.plist",
+        png: "Troops/ARM_6_2/ARM_6_2/arm_6_2.png"
+    },
+    //ARM_4_3:
+    {
+        plist: "Troops/ARM_6_3/ARM_6_3/arm_6_3.plist",
+        png: "Troops/ARM_6_3/ARM_6_3/arm_6_3.png"
+    }
+];
+
+var LOBBY_RESOURCES = [
+    {
+        plist: "GUIs/Main_Gui/main_guild.plist",
+        png: "GUIs/Main_Gui/main_guild.png"
+    }
+]
