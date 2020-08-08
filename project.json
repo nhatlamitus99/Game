@@ -41,6 +41,8 @@
 
         "src/config/MapConfig.js",
 
+        "src/modules/FrameCache/FrameCache.js",
+
         "src/modules/game/data/GameData.js",
         "src/modules/game/graphics/GameView.js",
 

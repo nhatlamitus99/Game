@@ -7,15 +7,22 @@ var MapView = cc.Layer.extend({
 
     ctor:function() {
         this._super();
-        this.loadMap();
+        this.loadMapGUI();
         this.setUserActions();
         //this.testGetCellAndGetLocationFunctions(); // this function is used for testing
     },
 
     //onEnter: function() {
     //},
-    loadMap: function() {
+    loadMapGUI: function() {
         // load map's sprite from MainScene.json
+        this.loadMapAndMatrixMap();
+        // load building & troop to map
+        this.loadBuilding();
+        this.loadTroops();
+    },
+
+    loadMapAndMatrixMap: function() {
         var node = ccs.load(res.map.tmx_map, '').node;
         ccui.Helper.doLayout(node);
         node.setAnchorPoint(0.5, 0.5);
@@ -34,6 +41,39 @@ var MapView = cc.Layer.extend({
         // get matrixMap (matrix of cells)
         var panel = ccui.helper.seekWidgetByName(node, res.map.name_node_has_matrix_map);
         this._matrixMap = panel.getChildren()[0];
+    },
+
+    loadBuilding: function() {
+        // gia lap du lieu lay tu objectView
+        var object = {
+            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_3_Island.png'),
+            i: 8,
+            j: 2,
+            h: 3,
+            w: 3
+        };
+        var listObject = [object];
+        // add object to map
+        for (var i = 0; i < listObject.length; ++i) {
+            var posBot = this.getPosOfCell(listObject[i]);
+            var posTop = this.getPosOfCell(
+                {
+                    i:listObject[i].i+listObject[i].w,
+                    j:listObject[i].j+listObject[i].h
+                });
+            var resPos = {
+                x: (posBot.x + posTop.x)/2,
+                y: (posBot.y + posTop.y)/2
+            };
+            this._map.addChild(listObject[i].sprite, 15);
+            listObject[i].sprite.x = resPos.x;
+            listObject[i].sprite.y = resPos.y;
+
+        }
+    },
+
+    loadTroops: function(){
+        return true;
     },
 
     setUserActions: function() {
@@ -154,15 +194,15 @@ var MapView = cc.Layer.extend({
     },
 
     getPosOfCell: function(cell) {
-        var titleH = MapConfig.getCellSize().h*this._scale;
-        var titleW = MapConfig.getCellSize().w*this._scale;
+        var titleH = MapConfig.getCellSize().h;
+        var titleW = MapConfig.getCellSize().w;
         var location = {
-            x: (cell.i - cell.j)/2*titleW + titleW*MapConfig.MAP_SIZE.w/4,
-            y: (cell.i + cell.j)/2*titleH // because of a column is overlap 50% with another column (2 side: left and right)
+            x: (cell.i - cell.j)*titleW/4 + titleW*MapConfig.MAP_SIZE.w/4,// because of a column is overlap 50% with another column (2 side: left and right)
+            y: (cell.i + cell.j)*titleH/4
         };
         // convert coordinate of touch to matrixMap's coordinate
         // cc.log("test getPosOfCell - matrixMap", location.x + " " + location.y);
-        return this.transformLocationMatrixMapToScreen(location);
+        return this.transformLocationMatrixMapToMap(location);
     },
 
     transformLocationMatrixMapToScreen: function(location) {
@@ -180,6 +220,15 @@ var MapView = cc.Layer.extend({
         return result;
     },
 
+    transformLocationMatrixMapToMap: function(location) {
+        var result = {};
+        var matrixMap = this._matrixMap;
+        // from matrixMap to map
+        result.x = location.x + matrixMap.x;
+        result.y = location.y + matrixMap.y;
+        return result;
+    },
+
     transformLocationScreenToMatrixMap: function(location) {
         var result = {};
         var map = this._map;
@@ -193,23 +242,16 @@ var MapView = cc.Layer.extend({
         result.x -= matrixMap.x*scale;
         result.y -= matrixMap.y*scale;
         return result;
-    },
-
-    testGetCellAndGetLocationFunctions: function(){
-        for (var i = 0; i < MapConfig.MAP_SIZE.w; ++i)
-            for (var j = 1; j < MapConfig.MAP_SIZE.h; ++j) {
-                var inputCell = {i: i, j: j};
-
-                cc.log("inputCell: ", inputCell.i + " " + inputCell.j);
-                var location = this.getPosOfCell(inputCell);
-                cc.log("output Location", location.x + " " + location.y);
-                var outputCell = this.getCellInMatrixMap(location);
-                cc.log("outputCell: ", outputCell.i + " " + outputCell.j);
-
-                if (inputCell.i != outputCell.i || inputCell.j != outputCell.j) {
-                    return false;
-                }
-            }
-        return true;
     }
 });
+
+
+var MAP_ONLY_ONE = null;
+
+MapView.getInstance = function(){
+    if(MAP_ONLY_ONE == null){
+        MAP_ONLY_ONE = new MapView();
+    }
+
+    return MAP_ONLY_ONE;
+}

@@ -36,6 +36,13 @@ var Lobby  = cc.Layer.extend({
     ctor:function(){
         this._super();
         this.init();
+
+        for(var i = 0; i < TROOP_RESOURCES.length; i++){
+            cc.SpriteFrameCache.getInstance().addSpriteFrames(
+                TROOP_RESOURCES[i].plist,
+                TROOP_RESOURCES[i].png
+            );
+        }
     },
     init:function(){
         this._width = cc.winSize.width;
@@ -300,11 +307,11 @@ var Lobby  = cc.Layer.extend({
         }
     },
     onKhoClick: function(){
-        var game = fr.getCurrentScreen();
-        var map = game._map;
-
-        var troop = TroopObjectGraphic.create(TroopType,TC.TROOP_TYPE.COMBATANT);
-        map.addChild(troop,15);
+        var i = Math.floor(Math.random() * 4);     // returns a random integer from 0 to 9
+        var troop = TroopObjectGraphic.create(i);
+        fr.getCurrentScreen()._map._map.addChild(troop,15);
     }
 });
+
+
 
