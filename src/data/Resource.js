@@ -125,6 +125,33 @@ var train_troop_resource = {
     ]
 };
 
+var shop_resources = {
+    SLOT_CATALOGY: "content/Art/GUIs/shop_gui/slot_catalogy.png",
+    CATALOY_BG: "content/Art/GUIs/shop_gui/catalogy_bg.png",
+    TITLE_BACKGROUND: "content/Art/GUIs/shop_gui/title_background.png",
+    NEN: "content/Art/GUIs/shop_gui/nen2.png",
+    TYPE_BUY_RES: "content/Art/GUIs/shop_gui/type_buy_res.png",
+    TYPE_RES: "content/Art/GUIs/shop_gui/type_res.png",
+    TYPE_DC: "content/Art/GUIs/shop_gui/type_dc.png",
+    TYPE_ARMY: "content/Art/GUIs/shop_gui/type_army.png",
+    TYPE_DEFENSE: "content/Art/GUIs/shop_gui/type_defense.png",
+    TYPE_SHIELD: "content/Art/GUIs/shop_gui/type_sheild.png",
+    CLOSE_BTN: "content/Art/GUIs/shop_gui/close.png",
+    SLOT: "content/Art/GUIs/shop_gui/slot.png",
+    ITEM_BACKGROUND: "content/Art/GUIs/shop_gui/item_background.png",
+    TIME_ICON: "content/Art/GUIs/shop_gui/time.png",
+    ICON_GOLD_BAR: "content/Art/GUIs/shop_gui/icon_gold_bar.png",
+    ICON_ELIXIR_BAR: "content/Art/GUIs/shop_gui/icon_elixir_bar.png",
+    ICON_G_BAR: "content/Art/GUIs/shop_gui/icon_g_bar.png",
+    RES_INFO: "content/Art/GUIs/shop_gui/res_info.png",
+    RES_BAR: "content/Art/GUIs/shop_gui/res_bar.png",
+    BACK_BTN: "content/Art/GUIs/shop_gui/back.png"
+
+
+
+
+};
+
 var g_resources = [
     "CloseNormal.png",
     "CloseSelected.png",

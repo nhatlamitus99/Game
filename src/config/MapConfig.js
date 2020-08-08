@@ -4,19 +4,21 @@ var MapConfig = {
         w: 42
     },
 
+    MOVING_ACCELERATION: 0.03,
+    MOVING_ACCELERATION_ALPHA: 2,  // minimum speed = movingAccleration*movingAcclerationApha+maxspeeds
+
     // using for scale screen in Client
     MAX_SCALE: 2.1,
     MIN_SCALE: 0.5,
     ZOOM_MAXDELTA: 20,
 
     // when a cell is not overided by building
-    NULL_CELL: [-1, -1],
+    NULL_CELL: {type: -1, id: -1},
     getNullCell: function (){
-        var array = [];
-        for (var i = 0; i < this.NULL_CELL.length; i++) {
-            array[i] = this.NULL_CELL[i];
-        }
-        return array;
+        return {
+            type: this.NULL_CELL.type,
+            id: this.NULL_CELL.id
+        };
     },
 
     CELL_SIZE: null,

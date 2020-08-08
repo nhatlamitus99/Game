@@ -294,12 +294,13 @@ var Lobby  = cc.Layer.extend({
     // event handler
     onShopClick:function()
     {
-        var ratio =  cc.view.getFrameSize().width/ cc.view.getFrameSize().height;
         // ui
         if(!this.shopUI)
         {
-            this.shopUI = TrainTroopUI.getInstance(1);
-            this.addChild(this.shopUI, this.shopUI.zOrder);
+            //this.shopUI = TrainTroopUI.getInstance(1);
+            //this.addChild(this.shopUI, this.shopUI.zOrder);
+            this.shopUI = new ScreenShop();
+            this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
         }
         else
         {
