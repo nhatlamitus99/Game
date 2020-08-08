@@ -290,8 +290,10 @@ var Lobby  = cc.Layer.extend({
         // ui
         if(!this.shopUI)
         {
-            this.shopUI = TrainTroopUI.getInstance(1);
-            this.addChild(this.shopUI, this.shopUI.zOrder);
+            this.shopUI = new ScreenShop();
+            this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
+            //this.shopUI = TrainTroopUI.getInstance(1);
+            //this.addChild(this.shopUI, this.shopUI.zOrder);
            // this.shopUI.x =  this._width/2;
            // this.shopUI.y =  this._height/2;
            // this.shopUI.setScaleX(cc.view.getFrameSize().width /1136);
