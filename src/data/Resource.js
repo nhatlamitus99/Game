@@ -29,35 +29,35 @@ var resLogin = {
     OK_BUTTON:              "LoginGui/btnOk.png"
 };
 
-var lobby_resource = {
-    GUILD: "GUIs/Main_Gui/003left_ic04.png",
-    GUILD_FIGHT: "GUIs/Main_Gui/003left_ic05.png",
-    ADD_BUTTON: "GUIs/Main_Gui/add_button.png",
-    ADD_G_BUTTON: "GUIs/Main_Gui/add_button.png",
-    ARMY_ICON: "GUIs/Main_Gui/army_icon.png",
-    ATTACK: "GUIs/Main_Gui/attack.png",
-    BG_EXP: "GUIs/Main_Gui/bg_exp.png",
-    BG_BAR_1: "GUIs/Main_Gui/bg_bar_1.png",
-    BG_BAR_2: "GUIs/Main_Gui/bg_bar_2.png",
-    BG_BAR_3: "GUIs/Main_Gui/bg_bar_3.png",
-    BG_BAR_4: "GUIs/Main_Gui/bg_bar_4.png",
-    BUILDER_ICON: "GUIs/Main_Gui/builder_icon.png",
-    ELIXIR_BAR: "GUIs/Main_Gui/elixir_bar.png",
-    ELIXIR_ICON: "GUIs/Main_Gui/elixir_icon.png",
-    EXP_BAR: "GUIs/Main_Gui/exp_bar.png",
-    EXP_BG_BAR: "GUIs/Main_Gui/exp_bg_bar.png",
-    EXP_ICON: "GUIs/Main_Gui/exp_icon.png",
-    G_BAR: "GUIs/Main_Gui/g_bar.png",
-    G_ICON: "GUIs/Main_Gui/g_icon.png",
-    GOLD_BAR: "GUIs/Main_Gui/gold_bar.png",
-    GOLD_ICON: "GUIs/Main_Gui/gold_icon.png",
-    HOME: "GUIs/Main_Gui/home.png",
-    KHO: "GUIs/Main_Gui/kho.png",
-    RANKING: "GUIs/Main_Gui/ranking.png",
-    SETTING: "GUIs/Main_Gui/setting.png",
-    SHOP: "GUIs/Main_Gui/shop.png",
-    SHIELD_ICON: "GUIs/Main_Gui/shield.png",
-    RANKING_BAR: "GUIs/Main_Gui/trophy_bg_bar.png"
+var lobby_resources = {
+    GUILD: "003left_ic04.png",
+    GUILD_FIGHT: "003left_ic05.png",
+    ADD_BUTTON: "add_button.png",
+    ADD_G_BUTTON: "add_button.png",
+    ARMY_ICON: "army_icon.png",
+    ATTACK: "attack.png",
+    BG_EXP: "bg_exp.png",
+    BG_BAR_1: "bg_bar_1.png",
+    BG_BAR_2: "bg_bar_2.png",
+    BG_BAR_3: "bg_bar_3.png",
+    BG_BAR_4: "bg_bar_4.png",
+    BUILDER_ICON: "builder_icon.png",
+    ELIXIR_BAR: "elixir_bar.png",
+    ELIXIR_ICON: "elixir_icon.png",
+    EXP_BAR: "exp_bar.png",
+    EXP_BG_BAR: "exp_bg_bar.png",
+    EXP_ICON: "exp_icon.png",
+    G_BAR: "g_bar.png",
+    G_ICON: "g_icon.png",
+    GOLD_BAR: "/gold_bar.png",
+    GOLD_ICON: "gold_icon.png",
+    HOME: "home.png",
+    KHO: "kho.png",
+    RANKING: "ranking.png",
+    SETTING: "setting.png",
+    SHOP: "shop.png",
+    SHIELD_ICON: "shield.png",
+    RANKING_BAR: "trophy_bg_bar.png"
 };
 
 
@@ -284,3 +284,10 @@ var TROOP_RESOURCES = [
         png: "Troops/ARM_6_3/ARM_6_3/arm_6_3.png"
     }
 ];
+
+var LOBBY_RESOURCES = [
+    {
+        plist: "GUIs/Main_Gui/main_guild.plist",
+        png: "GUIs/Main_Gui/main_guild.png"
+    }
+]

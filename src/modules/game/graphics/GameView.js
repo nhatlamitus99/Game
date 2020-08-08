@@ -8,6 +8,8 @@ var GameScreen = cc.Layer.extend({
 
     ctor:function() {
         this._super();
+        this.initCacheFrames();
+
         //loadSpriteFrame();
         this._map = new MapView();
         this._lobby = new Lobby();
@@ -15,8 +17,25 @@ var GameScreen = cc.Layer.extend({
         this.addChild(this._lobby, GameConfig.ZORDER_LOBBY);
 
         GAME_SCREEN_ONLY_ONE = this;
-    }
 
+    },
+    initCacheFrames:function(){
+        // troop resources
+        for(var i = 0; i < TROOP_RESOURCES.length; i++){
+            cc.SpriteFrameCache.getInstance().addSpriteFrames(
+                TROOP_RESOURCES[i].plist,
+                TROOP_RESOURCES[i].png
+            );
+        }
+
+        // lobby resources
+        for(var ii = 0; ii < LOBBY_RESOURCES.length; ii++){
+            cc.SpriteFrameCache.getInstance().addSpriteFrames(
+                LOBBY_RESOURCES[ii].plist,
+                LOBBY_RESOURCES[ii].png
+            );
+        }
+    }
 });
 
 

@@ -3,7 +3,7 @@ var TroopObjectGraphic = cc.Sprite.extend({
     velocity:0,     // vector x
     zOrder:15,      // hiển thị
     type:1,         // kiểu lính
-    state:0,        // hành động
+    state:TC.TROOP_STATE.IDLE,        // hành động
     appearPosition: cc.p(800, 300),
     rect:null,     // lấy size hình ảnh
 
@@ -26,7 +26,6 @@ var TroopObjectGraphic = cc.Sprite.extend({
             var name = "";
             if(i<10) name = "/image000" + i + ".png";
             else name = "/image00" + i + ".png";
-            cc.log(TC.ARM[type].LEVEL_1 + TC.idle_url + name);
             idleFrames.push(cc.spriteFrameCache.getSpriteFrame(TC.ARM[type].LEVEL_1 + TC.idle_url + name));
         }
 
