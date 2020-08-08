@@ -57,6 +57,7 @@
         "src/config/GameConfig.js",
         "src/config/ResourcesConfig.js",
         "src/config/TroopType.js",
+        "src/config/ObjectMgrConfig.js",
 
         "src/modules/LogIn/ScreenLogin.js",
         "src/modules/LogIn/network/Network.js",
@@ -72,7 +73,10 @@
         "src/modules/Lobby/Lobby.js",
         "src/modules/Lobby/Setting.js",
 
-        "src/modules/object/ObjectMgr.js",
+        "src/modules/object/ObjectMgrView.js",
+        "src/modules/object/graphics/MapObjectView.js",
+
+        "src/modules/object/ObjectMgrData.js",
         "src/modules/object/data/MapObject.js",
         "src/modules/object/data/staticObject/StaticMapObject.js",
         "src/modules/object/data/createdObject/CreatedMapObject.js",

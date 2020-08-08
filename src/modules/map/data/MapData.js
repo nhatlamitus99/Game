@@ -4,31 +4,44 @@
 var MapData = cc.Class.extend({
     // data in both server & client
     _map: [],
+    _objectMgrData: null,   // manager of object
+    _troopMgrData: null, // troop manager
 
-    ctor: function(map){
+    ctor: function(map, objectMgrData, troopMgrData){
         //if (map == null)
         //    return false;
         this._map = map;
-        return true;
+        this._objectMgrData = objectMgrData;
+        this._troopMgrData = troopMgrData;
     },
 
-    checkOverlap: function(x, y, w, h){
+    checkOverlap: function(attributes){
+        var x = attributes.position.i;
+        var y = attributes.position.j;
+        var w = attributes.size.w;
+        var h = attributes.size.h;
+        cc.log("xyhw " + x + " " + y + " " + h + " " + w);
         for (var i = x; i < x+w; ++i)
         for (var j = y; j < y+h; ++j)
-            for (var t = 0; t < MapConfig.NULL_CELL.length; ++t)
-                if (this._map[i][j] != MapConfig.NULL_CELL)
-                    return true;
+            if (this._map[i][j].type != MapConfig.NULL_CELL.type || this._map[i][j].id != MapConfig.NULL_CELL.id)
+                return true;
         return false;
     },
 
-    insertObject2Map: function(x, y, w, h, type, id) {
-        for (var i = x; i < x + w; ++i)
-            for (var j = y; j < y + h; ++j) {
+    insertObject2Map: function(attributes) {
+        if (this.checkOverlap(attributes))
+            return false;
+        attributes.id = this._objectMgrData.getNextIdOfType(attributes.type);
+        for (var i = attributes.position.i; i < attributes.position.i + attributes.size.w; ++i)
+            for (var j = attributes.position.j; j < attributes.position.j + attributes.size.h; ++j) {
                 this._map[i][j] = {
-                    type: type,
-                    id: id
+                    type: attributes.type,
+                    id: attributes.id
                 };
             }
+        this._objectMgrData.createItemToList(attributes);
+        cc.log("adding object type-id" + attributes.type + " " + attributes.id);
+        return true;
     },
 
     // using for fake data and testing

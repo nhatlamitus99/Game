@@ -44,9 +44,9 @@ var StaticMapObject = MapObject.extend(
 
         setRemovedTime: function(time) {
             this.removedTime = time;
-        },
+        }
     }
-)
+);
 
 
 

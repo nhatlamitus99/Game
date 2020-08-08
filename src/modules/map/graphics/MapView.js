@@ -5,6 +5,8 @@ var MapView = cc.Layer.extend({
     _scale: null,   // scale of current screen view map
     _mapOriginSize: null,   // size of screen after the first scaling
     _matrixMap: null,   // matrixMap (matrix of cell)
+    _objectMgrView: null,   // manager of object
+    _troopMgrView: null, // troop manager
 
     // using for smoothly action
     _movingSpeed: {    // acceleration of Moving screen
@@ -21,6 +23,9 @@ var MapView = cc.Layer.extend({
 
     ctor:function() {
         this._super();
+        //this.giaLapLoadListObject();
+        this._objectMgrView = new ObjectMgrView();
+        //this._troopMgr = new ..
         this.loadMapGUI();
         this.setUserActions();
         this.schedule(this.updatePerFrame);
@@ -77,33 +82,31 @@ var MapView = cc.Layer.extend({
     },
 
     loadBuilding: function() {
-        // gia lap du lieu lay tu objectView
-        var object1 = {
-            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_3_Island.png'),
-            i: 8,
-            j: 2,
-            h: 3,
-            w: 3
-        };
-        var object2 = {
-            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_4_Island.png'),
-            i: 15,
-            j: 15,
-            h: 4,
-            w: 4
-        };
-        var listObject = [object1, object2];
+        var objectMgrData = this.getObjectMgrData();
+        var listObject = this.getListObjectView();
         // add object to map
         for (var i = 0; i < listObject.length; ++i) {
-            var posBot = this.getPosOfCell(listObject[i]);
-            var posTop = this.getPosOfCell({
-                i:listObject[i].i+listObject[i].w,
-                j:listObject[i].j+listObject[i].h
-            });
-            this._map.addChild(listObject[i].sprite, 15);
-            listObject[i].sprite.x = (posBot.x + posTop.x)/2;
-            listObject[i].sprite.y = (posBot.y + posTop.y)/2;
+            for (var j = 0; j < listObject[i].length; ++j) {
+                var cell = objectMgrData.getCellOfObject(listObject[i][j].getType(), listObject[i][j].getID());
+                cc.log("loadBuilding, type - id = " + listObject[i][j].getType() + listObject[i][j].getID());
+                var posBot = this.getPosOfCell(cell);
+                var posTop = this.getPosOfCell({
+                    i: cell.i + cell.w,
+                    j: cell.j + cell.h
+                });
+                listObject[i][j].scale = this._scale;
+                this._map.addChild(listObject[i][j], 15);
+                listObject[i][j].x = (posBot.x + posTop.x) / 2;
+                listObject[i][j].y = (posBot.y + posTop.y) / 2;
+            }
         }
+    },
+    getListObjectView: function() {
+        return this._objectMgrView.getListObject();
+    },
+
+    getObjectMgrData: function() {
+        return ObjectMgrData.getInstance();
     },
 
     loadTroops: function(){

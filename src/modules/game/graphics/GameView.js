@@ -9,10 +9,15 @@ var GameScreen = cc.Layer.extend({
     ctor:function() {
         this._super();
         //loadSpriteFrame();
-        this._mapLayer = new MapView();
         this._lobbyLayer = new Lobby();
+        this._mapLayer = new MapView();
         this.addChild(this._mapLayer, GameConfig.ZORDER_MAP);
         this.addChild(this._lobbyLayer, GameConfig.ZORDER_LOBBY);
-    }
 
+        this.initCacheFrames();
+    },
+
+    initCacheFrames: function() {
+
+    }
 });
