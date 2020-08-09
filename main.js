@@ -46,13 +46,18 @@ cc.game.onStart = function () {
         mapData._objectMgrData = objectMgrData;
         if (mapData.insertObject2Map({
             type: OBJECT_MGR_CONFIG.buildingType.mapObject,
-            position: {i: 15, j: 15},
-            size: {h: 4, w: 4}}) == false
+            position: {i: 0, j: 0},
+            size: {h: 2, w: 2}}) == false
         ) cc.log("adding object 1 to mapData false");
         if (mapData.insertObject2Map({
             type: OBJECT_MGR_CONFIG.buildingType.mapObject,
-            position: {i: 11, j: 11},
+            position: {i: 4, j: 0},
             size: {h: 4, w: 4}}) == false
+        ) cc.log("adding object 2 to mapData false");
+        if (mapData.insertObject2Map({
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 0, j: 4},
+                size: {h: 3, w: 3}}) == false
         ) cc.log("adding object 2 to mapData false");
 
         var resourcesData = ResourcesData.getInstance();

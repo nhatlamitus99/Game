@@ -13,7 +13,8 @@ var ObjectMgrView = cc.Class.extend({
             for (var j = 0; j < listObject[i].length; ++j) {
                 var attributes = {
                     type: listObject[i][j].type,
-                    id: listObject[i][j].id
+                    id: listObject[i][j].id,
+                    size: listObject[i][j].size
                 };
                 this.createItemListObject(attributes);
                 this.createItemListSubs(attributes);

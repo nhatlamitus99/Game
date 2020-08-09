@@ -330,13 +330,12 @@ var MapView = cc.Layer.extend({
     }
 });
 
-
-var MAP_ONLY_ONE = null;
+var MAP_VIEW_ONLY_ONE = null;
 
 MapView.getInstance = function(){
-    if(MAP_ONLY_ONE == null){
-        MAP_ONLY_ONE = new MapView();
+    if(MAP_VIEW_ONLY_ONE == null){
+        MAP_VIEW_ONLY_ONE = new MapView();
     }
 
-    return MAP_ONLY_ONE;
+    return MAP_VIEW_ONLY_ONE;
 };
