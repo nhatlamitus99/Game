@@ -9,6 +9,7 @@ var MapObjectView = cc.Sprite.extend({
         this.initWithFile("content/Art/Buildings/townhall/TOW_1_1/idle/image0000.png");
         this._type = attributes.type;
         this._id = attributes.id;
+        this.scale = OBJECT_MGR_CONFIG.SCALE_BUILDING;
     },
     getType: function(){
         return this._type;

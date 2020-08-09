@@ -73,6 +73,7 @@
 
     "src/modules/object/ObjectMgrView.js",
     "src/modules/object/graphics/MapObjectView.js",
+    "src/modules/object/graphics/Substructure.js",
 
     "src/modules/object/ObjectMgrData.js",
     "src/modules/object/data/MapObject.js",

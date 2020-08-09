@@ -36,7 +36,7 @@ var MapView = cc.Layer.extend({
     loadMapGUI: function() {
         // load map's sprite from MainScene.json
         this.loadMapAndMatrixMap();
-        // load building & troop to map
+        // load buildings, substructures & troop to map
         this.loadBuilding();
         this.loadTroops();
     },
@@ -84,25 +84,40 @@ var MapView = cc.Layer.extend({
     loadBuilding: function() {
         var objectMgrData = this.getObjectMgrData();
         var listObject = this.getListObjectView();
+        var listSubs = this.getListObjectSubs();
         // add object to map
         for (var i = 0; i < listObject.length; ++i) {
             for (var j = 0; j < listObject[i].length; ++j) {
+                // calculate Position
                 var cell = objectMgrData.getCellOfObject(listObject[i][j].getType(), listObject[i][j].getID());
                 cc.log("loadBuilding, type - id = " + listObject[i][j].getType() + listObject[i][j].getID());
                 var posBot = this.getPosOfCell(cell);
-                var posTop = this.getPosOfCell({
-                    i: cell.i + cell.w,
-                    j: cell.j + cell.h
-                });
-                listObject[i][j].scale = this._scale;
-                this._map.addChild(listObject[i][j], 15);
-                listObject[i][j].x = (posBot.x + posTop.x) / 2;
-                listObject[i][j].y = (posBot.y + posTop.y) / 2;
+                var posTop = this.getPosOfCell({i: cell.i + cell.w, j: cell.j + cell.h});
+                // addChild and set ZOrder
+                var zOrder = this.calculateZOrderOfCell(cell);
+                this._map.addChild(listObject[i][j], zOrder);
+                this._map.addChild(listSubs[i][j], MapConfig.Z_ORDER_SUBSTRUCTURE);
+                // set position
+                var posCenter = {x: (posBot.x + posTop.x)/2, y: (posBot.y + posTop.y)/2};
+                listObject[i][j].x = posCenter.x;
+                listObject[i][j].y = posCenter.y;
+                cc.log("listSubs type " + listSubs[i][j].getType());
+                listSubs[i][j].x = posCenter.x;
+                listSubs[i][j].y = posCenter.y;
             }
         }
     },
+
+    calculateZOrderOfCell: function(cell) {
+        return MapConfig.MAX_Z_ORDER_OBJECT - cell.i*2 - cell.j*2 - cell.w - cell.h;
+    },
+
     getListObjectView: function() {
         return this._objectMgrView.getListObject();
+    },
+
+    getListObjectSubs: function () {
+        return this._objectMgrView.getListSubs();
     },
 
     getObjectMgrData: function() {
@@ -128,7 +143,7 @@ var MapView = cc.Layer.extend({
                     event: cc.EventListener.MOUSE,
                     swallowTouches: true,
                     onMouseScroll: function (event) {
-                        var delta = -event.getScrollY()/MapConfig.ZOOM_MAXDELTA;
+                        var delta = -event.getScrollY()/MapConfig.ZOOM_MAX_DELTA;
                         //cc.log("On Mouse Scroll: ", delta);
                         event.getCurrentTarget().setScaleMap(delta, event.getLocation());
                         return true;
@@ -175,7 +190,6 @@ var MapView = cc.Layer.extend({
     
     onTouchesBegan: function (touches) {
         this._flagOfEditMovingSpeed = true;
-        this._map.stopAllActions();
         this._movingSpeed.x = 0;
         this._movingSpeed.y = 0;
         this._flagOfEditMovingSpeed = false;
@@ -241,13 +255,14 @@ var MapView = cc.Layer.extend({
     },
 
     getCellInMatrixMap: function(location) {
-        var titleH = MapConfig.getCellSize().h*this._scale;
-        var titleW = MapConfig.getCellSize().w*this._scale;
         // convert coordinate of touch to matrixMap's coordinate
-        var t = this.transformLocationScreenToMatrixMap(location);
+        var tmp = this.transformScreenToMap(location);
+        var t = this.transformMapToMMap(tmp);
         //cc.log(" getCellInMatrixMap, point= " + t.x + " " + t.y);
         // the formula here: https://stackoverflow.com/questions/39729815/converting-screen-coordinates-to-isometric-map-coordinates
         // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
+        var titleH = MapConfig.getCellSize().h*this._scale;
+        var titleW = MapConfig.getCellSize().w*this._scale;
         var result = {
             i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
             j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
@@ -270,8 +285,8 @@ var MapView = cc.Layer.extend({
         // cc.log("test getPosOfCell - matrixMap", location.x + " " + location.y);
         return this.transformLocationMatrixMapToMap(location);
     },
-
-    transformLocationMatrixMapToScreen: function(location) {
+    // location: matrix map -> screen
+    transformMMapToScreen: function(location) {
         var result = {};
         var map = this._map;
         var mapSize = this._mapOriginSize;
@@ -285,7 +300,7 @@ var MapView = cc.Layer.extend({
         result.y += map.y - mapSize.h*scale/2;
         return result;
     },
-
+    // location: MatrixMap -> map
     transformLocationMatrixMapToMap: function(location) {
         var result = {};
         var matrixMap = this._matrixMap;
@@ -294,19 +309,23 @@ var MapView = cc.Layer.extend({
         result.y = location.y + matrixMap.y;
         return result;
     },
-
-    transformLocationScreenToMatrixMap: function(location) {
+    // location: screen->Map
+    transformScreenToMap: function(location) {
         var result = {};
         var map = this._map;
         var mapSize = this._mapOriginSize;
-        var matrixMap = this._matrixMap;
         var scale = this._scale;
-        // from screen to map
         result.x = location.x - map.x + mapSize.w*scale/2;
         result.y = location.y - map.y + mapSize.h*scale/2;
-        // from map to matrixMap
-        result.x -= matrixMap.x*scale;
-        result.y -= matrixMap.y*scale;
+        return result;
+    },
+    // location: Map->MatrixMap
+    transformMapToMMap: function(location){
+        var result = {};
+        var matrixMap = this._matrixMap;
+        var scale = this._scale;
+        result.x = location.x - matrixMap.x*scale;
+        result.y = location.y - matrixMap.y*scale;
         return result;
     }
 });
@@ -320,4 +339,4 @@ MapView.getInstance = function(){
     }
 
     return MAP_ONLY_ONE;
-}
+};

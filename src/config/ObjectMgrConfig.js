@@ -9,3 +9,5 @@ OBJECT_MGR_CONFIG.buildingType = {
     goldMine: 1,
     elixirMine: 2
 };
+
+OBJECT_MGR_CONFIG.SCALE_BUILDING = 0.485;

@@ -10,7 +10,13 @@ var MapConfig = {
     // using for scale screen in Client
     MAX_SCALE: 2.1,
     MIN_SCALE: 0.5,
-    ZOOM_MAXDELTA: 20,
+    ZOOM_MAX_DELTA: 20,
+
+    // using for calculate zOrder of object in map
+    MAX_Z_ORDER_OBJECT: 200,    // minZorder of cell is 200 - 42*2*2 = 32
+
+    // zOrder of substructure
+    Z_ORDER_SUBSTRUCTURE: 10,
 
     // when a cell is not overided by building
     NULL_CELL: {type: -1, id: -1},

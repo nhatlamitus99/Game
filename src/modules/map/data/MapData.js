@@ -20,11 +20,10 @@ var MapData = cc.Class.extend({
         var y = attributes.position.j;
         var w = attributes.size.w;
         var h = attributes.size.h;
-        cc.log("xyhw " + x + " " + y + " " + h + " " + w);
         for (var i = x; i < x+w; ++i)
-        for (var j = y; j < y+h; ++j)
-            if (this._map[i][j].type != MapConfig.NULL_CELL.type || this._map[i][j].id != MapConfig.NULL_CELL.id)
-                return true;
+            for (var j = y; j < y+h; ++j)
+                if (this._map[i][j].type != MapConfig.NULL_CELL.type || this._map[i][j].id != MapConfig.NULL_CELL.id)
+                    return true;
         return false;
     },
 
@@ -32,15 +31,19 @@ var MapData = cc.Class.extend({
         if (this.checkOverlap(attributes))
             return false;
         attributes.id = this._objectMgrData.getNextIdOfType(attributes.type);
-        for (var i = attributes.position.i; i < attributes.position.i + attributes.size.w; ++i)
-            for (var j = attributes.position.j; j < attributes.position.j + attributes.size.h; ++j) {
+        var x = attributes.position.i;
+        var y = attributes.position.j;
+        var w = attributes.size.w;
+        var h = attributes.size.h;
+        for (var i = x; i < x+w; ++i)
+            for (var j = y; j < y+h; ++j) {
                 this._map[i][j] = {
                     type: attributes.type,
                     id: attributes.id
                 };
             }
         this._objectMgrData.createItemToList(attributes);
-        cc.log("adding object type-id" + attributes.type + " " + attributes.id);
+        //cc.log("adding object type-id" + attributes.type + " " + attributes.id);
         return true;
     },
 
