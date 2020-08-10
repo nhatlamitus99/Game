@@ -124,6 +124,12 @@ var Lobby  = cc.Layer.extend({
         this.user.panel.addChild(this.user.rank_icon,2);
         this.user.rank = gv.lobbyLabel("257",this.user.panel.width*0.5,this.user.panel.height*0.4);
         this.user.panel.addChild(this.user.rank,2);
+
+
+        var sprite = new cc.Sprite("GUIs/Main_Gui/" + lobby_resources.ATTACK);
+       // this.addChild(sprite);
+       // sprite.setPosition(300, 300);
+        //sprite.setScale(-1, 1);
     },
     setBattle:function(){
         // set panel
@@ -313,23 +319,21 @@ var Lobby  = cc.Layer.extend({
     onShopClick:function()
     {
         // ui
-        //if(!this.shopUI)
-        //{
-        //    //this.shopUI = TrainTroopUI.getInstance(1);
-        //    //this.addChild(this.shopUI, this.shopUI.zOrder);
-        //    this.shopUI = new ScreenShop();
-        //    this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
-        //}
-        //else
-        //{
-        //    this.shopUI.visible = true;
-        //}
-        var troop = TroopObjectGraphic.create(3);
-        fr.getCurrentScreen()._mapLayer.addTroop(3, troop,15);
+        if(!this.shopUI)
+        {
+            //this.shopUI = TrainTroopUI.getInstance(1);
+            //this.addChild(this.shopUI, this.shopUI.zOrder);
+            this.shopUI = new ScreenShop();
+            this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
+        }
+        else
+        {
+            this.shopUI.visible = true;
+        }
     },
     onKhoClick: function(){
         var i = Math.floor(Math.random() * 4);     // returns a random integer from 0 to 9
-        var troop = TroopObjectGraphic.create(2);
-        fr.getCurrentScreen()._mapLayer.addTroop(2, troop, 15);
+        var troop = TroopObjectGraphic.create(i);
+        fr.getCurrentScreen()._mapLayer.addTroop(i, troop, MapConfig.MAX_Z_ORDER_TROOP);
     }
 });

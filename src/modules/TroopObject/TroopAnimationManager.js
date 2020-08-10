@@ -1,24 +1,56 @@
 var TroopAnimationManager = cc.Class.extend({
     idle_animations:[],
+    run_animations:[],
 
     ctor:function(){
         this.addAnimations();
     },
-    addAnimations:function(){
+    addAnimations:function() {
         // idle
-        for(var i = 0; i < TROOP_ANIMATION.IDLE.length; i++){
+        for (var i = 0; i < TROOP_ANIMATION.IDLE.length; i++) {
             cc.animationCache.addAnimations(TROOP_ANIMATION.IDLE[i]);
-            var list = [];
-            list[1] = cc.animationCache.getAnimation("idle_1"); list[1].retain();
-            list[2] = cc.animationCache.getAnimation("idle_7"); list[2].retain();
-            list[3] = cc.animationCache.getAnimation("idle_6"); list[3].retain();
-            list[4] = cc.animationCache.getAnimation("idle_5"); list[4].retain();
-            list[5] = cc.animationCache.getAnimation("idle_5"); list[5].retain();
-            list[6] = cc.animationCache.getAnimation("idle_6"); list[6].retain();
-            list[7] = cc.animationCache.getAnimation("idle_7"); list[7].retain();
-            list[8] = cc.animationCache.getAnimation("idle_8"); list[8].retain();
-            this.idle_animations.push(list);
+
+            // idle
+            var list_idle = [];
+            list_idle[1] = cc.animationCache.getAnimation("idle_1");
+            list_idle[1].retain();
+            list_idle[2] = cc.animationCache.getAnimation("idle_7");
+            list_idle[2].retain();
+            list_idle[3] = cc.animationCache.getAnimation("idle_6");
+            list_idle[3].retain();
+            list_idle[4] = cc.animationCache.getAnimation("idle_5");
+            list_idle[4].retain();
+            list_idle[5] = cc.animationCache.getAnimation("idle_5");
+            list_idle[5].retain();
+            list_idle[6] = cc.animationCache.getAnimation("idle_6");
+            list_idle[6].retain();
+            list_idle[7] = cc.animationCache.getAnimation("idle_7");
+            list_idle[7].retain();
+            list_idle[8] = cc.animationCache.getAnimation("idle_8");
+            list_idle[8].retain();
+            this.idle_animations.push(list_idle);
+
+            // run
+            var list_run = [];
+            list_run[1] = cc.animationCache.getAnimation("run_1");
+            list_run[1].retain();
+            list_run[2] = cc.animationCache.getAnimation("run_7");
+            list_run[2].retain();
+            list_run[3] = cc.animationCache.getAnimation("run_6");
+            list_run[3].retain();
+            list_run[4] = cc.animationCache.getAnimation("run_5");
+            list_run[4].retain();
+            list_run[5] = cc.animationCache.getAnimation("run_5");
+            list_run[5].retain();
+            list_run[6] = cc.animationCache.getAnimation("run_6");
+            list_run[6].retain();
+            list_run[7] = cc.animationCache.getAnimation("run_7");
+            list_run[7].retain();
+            list_run[8] = cc.animationCache.getAnimation("run_8");
+            list_run[8].retain();
+            this.run_animations.push(list_run);
         }
+
     }
 });
 
