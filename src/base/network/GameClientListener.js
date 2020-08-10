@@ -68,6 +68,9 @@ var GameClientListener = cc.Class.extend(
                 case gv.CMD.HAND_SHAKE:
                     gv.gameClient.sendLoginRequest();
                     break;
+                case gv.CMD.INIT_GAME:
+                    gv.gameClient.sendInitGameRequest();
+                    break;
                 case gv.CMD.USER_LOGIN:
                     fr.getCurrentScreen().onFinishLogin();
                     break;

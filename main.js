@@ -75,7 +75,7 @@ cc.game.onStart = function () {
 
         gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
         // view mainScreen
-        fr.view(GameScreen);
+        fr.view(ScreenLogin);
     }, this);
 };
 

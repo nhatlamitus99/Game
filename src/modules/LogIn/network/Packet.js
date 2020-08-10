@@ -5,6 +5,7 @@
 gv.CMD = gv.CMD ||{};
 gv.CMD.HAND_SHAKE = 0;
 gv.CMD.USER_LOGIN = 1;
+gv.CMD.INIT_GAME = 2;
 
 gv.CMD.USER_INFO = 1001;
 
@@ -63,6 +64,23 @@ CmdSendLogin = fr.OutPacket.extend(
     }
 )
 
+CmdSendInitGame = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.INIT_GAME);
+        },
+        pack:function(user, id){
+            this.packHeader();
+            this.putString(user);
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+)
+
 
 /**
  * InPacket
@@ -92,6 +110,20 @@ loginNetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
     }
 );
 
+loginNetwork.packetMap[gv.CMD.INIT_GAME] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.data = this.getString();
+            cc.log(this.data);
+        }
+    }
+);
+
+
 
 loginNetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
     {
@@ -100,7 +132,10 @@ loginNetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            this.username = this.getString();
+            this.initGame = this.getString();
+            var data = JSON.parse(this.initGame);
+            //this.username = data.playerInfo.name;
+            this.username = this.initGame;
         }
     }
 );
