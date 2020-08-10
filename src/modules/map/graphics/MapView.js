@@ -8,6 +8,7 @@ var MapView = cc.Layer.extend({
     _objectMgrView: null,   // manager of object
     _troopMgrView: null, // troop manager
     _arrowMove: null, // arrow Moving which are used for moving
+    _lastSelectedTypeID: null, // using for moving object
 
     // using for smoothly action
     _movingSpeed: {    // acceleration of Moving screen
@@ -198,6 +199,16 @@ var MapView = cc.Layer.extend({
         this._flagOfEditMovingSpeed = true;
         this._movingSpeed.x = 0;
         this._movingSpeed.y = 0;
+        if (this._lastSelectedTypeID != null) {
+            var mapData = MapData.getInstance();
+            var touchLocation = touches[0].getLocation();
+            var cell = this.getCellInMatrixMap(touchLocation);
+            var typeID = mapData.getTypeIDFromCell(cell);
+            if (typeID.type == this._lastSelectedTypeID.type && typeID.id == this._lastSelectedTypeID.id) {
+                var objectMgrView = this._objectMgrView;
+                objectMgrView.setGreenState(typeID.type, typeID.id);
+            }
+        }
         this._flagOfEditMovingSpeed = false;
         return true;
     },
@@ -229,11 +240,17 @@ var MapView = cc.Layer.extend({
                 // get object's type-id from MapLogic
                 var mapData = MapData.getInstance();
                 var typeID = mapData.getTypeIDFromCell(cell);
+                if (this._lastSelectedTypeID != null) {
+                    var objectMgrView = this._objectMgrView;
+                    objectMgrView.setNormalState(this._lastSelectedTypeID.type, this._lastSelectedTypeID.id);
+                }
                 if (typeID.type == -1 || typeID.id == -1) {
+                    this._lastSelectedTypeID = null;
                     this._arrowMove.setSizeArrow(0);
                     return true;
                 }
                 var object = mapData.getObjectFromTypeID(typeID.type, typeID.id);
+                this._lastSelectedTypeID = typeID;
                 // show Arrow
                 cc.log("ARROW SIZE " + this._arrowMove._arrowSprites.length);
                 this._arrowMove.setSizeArrow(object.size);
