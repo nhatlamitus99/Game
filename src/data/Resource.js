@@ -291,3 +291,12 @@ var LOBBY_RESOURCES = [
         png: "GUIs/Main_Gui/main_guild.png"
     }
 ]
+
+var TROOP_ANIMATION = {
+    IDLE:[
+        "Troops/ARM_1_1/ARM_1_1/arm_1_1_animation.plist",
+        "Troops/ARM_2_1/ARM_2_1/arm_2_1_animation.plist",
+        "Troops/ARM_4_1/ARM_4_1/arm_4_1_animation.plist",
+        "Troops/ARM_6_1/ARM_6_1/arm_6_1_animation.plist"
+    ]
+};

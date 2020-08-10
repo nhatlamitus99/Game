@@ -1,290 +1,315 @@
+var width =  cc.view.getFrameSize().width;
+var height = cc.view.getFrameSize().height;
+
+
+
 var Lobby  = cc.Layer.extend({
-    attack:null,
-    guild:null,
-    guildFight:null,
-    speaker:null,
-    avatar:null,
-    exp:null,
-    username:null,
-    gold:null,
-    elixir:null,
-    g:null,
-    // button
-    letter:null,
-    kho:null,
-    bag:null,
-    setting:null,
-    shop:null,
-    // info
-    friend:null,
-    army:null,
-    builder:null,
-    shield:null,
-    // resources
-    maxGold:null,
-    currGold:null,
-    maxElixir:null,
-    currElixir:null,
-    currG:null,
-    // size
-    _height:null,
-    _width:null,
-    // shop ui
-    shopUI:null,
-
-
+    user:{
+        panel:null,
+        username: null,
+        avatar:null,
+        bg_exp_bar:null,
+        exp_bar:null,
+        icon_exp:null,
+        exp:null,
+        level:null,
+        rank_bar:null,
+        rank_icon:null,
+        rank:null
+    },
+    battle:{
+        panel:null,
+        attack:null,
+        guild:null,
+        guild_battle:null
+    },
+    utils:{
+        panel:null,
+        shop:null,
+        friends:null,
+        setting:null,
+        kho:null
+    },
+    resources:{
+        bg_gold_bar:null,
+        gold_bar:null,
+        gold_icon:null,
+        curr_gold:null,
+        max_gold:null,
+        bg_elixir_bar:null,
+        elixir_bar:null,
+        elixir_icon:null,
+        curr_elixir:null,
+        max_elixir:null,
+        bg_g_bar:null,
+        g_bar:null,
+        g_icon:null,
+        curr_g:null,
+        add_g:null
+    },
+    info_game:{
+        army_label:null,
+        army_bg_bar:null,
+        army_icon:null,
+        army_add:null,
+        army_info:null,
+        builder_label:null,
+        builder_bg_bar:null,
+        builder_icon:null,
+        builder_add:null,
+        builder_info:null,
+        shield_label:null,
+        shield_bg_bar:null,
+        shield_icon:null,
+        shield_add:null,
+        shield_info:null
+    },
     ctor:function(){
         this._super();
         this.init();
     },
     init:function(){
-        this._width = cc.winSize.width;
-        this._height = cc.winSize.height;
-
-        // gold bar
-        this.showGold();
-        // elixir bar
-        this.showElixir();
-        // g bar
-        this.showG();
-        // builder
-        this.showBuilder();
-        // army
-        this.showArmy();
-        // defense
-        this.showDefense();
-        // user
-        this.showUser();
-        // other UI
-         this.showOtherUI();
+        cc.log(width + " : " + height);
+        this.setUser();
+        this.setBattle();
+        this.setUtils();
+        this.setResources();
+        this.setGameInfo();
     },
-    // on shows lobby
-    showGold:function(){
-        var gold_bar = new cc.Sprite(); gold_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_2));
-        gold_bar.x = this._width - 130;
-        gold_bar.y = this._height - 43;
-        gold_bar.scaleX = 1.5;
-        this.addChild(gold_bar,1);
-        this.gold = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.GOLD_BAR, 50);
-        this.gold.setDirection(ccui.LoadingBar.TYPE_RIGHT);
-        this.gold.x = this._width - 132;
-        this.gold.y = this._height - 40;
-        this.gold.scaleX = 1.5;
-        this.addChild(this.gold,2);
-
-        var gold_icon = new cc.Sprite(); gold_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.GOLD_ICON));
-        gold_icon.x = this._width - 20;
-        gold_icon.y = this._height - 40;
-        this.addChild(gold_icon, 2);
-
-        this.maxGold = gv.lobbyLabel("Max: 2.500.000",this._width-130, this._height-20);
-        this.addChild(this.maxGold,1);
-        this.currGold = gv.lobbyLabel("1,250,000", this._width - 100, this._height - 42);
-        this.addChild(this.currGold,3);
-    },
-    showElixir:function(){
-        var elixir_bar = new cc.Sprite(); elixir_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_2));
-        elixir_bar.x = this._width - 130;
-        elixir_bar.y = this._height - 88;
-        elixir_bar.scaleX = 1.5;
-        this.addChild(elixir_bar,1);
-        this.elixir = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.ELIXIR_BAR, 50);
-        this.elixir.setDirection(ccui.LoadingBar.TYPE_RIGHT);
-        this.elixir.x = this._width - 132;
-        this.elixir.y = this._height - 85;
-        this.elixir.scaleX = 1.5;
-        this.addChild(this.elixir,2);
-
-        var elixir_icon = new cc.Sprite(); elixir_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.ELIXIR_ICON));
-        elixir_icon.x = this._width - 20;
-        elixir_icon.y = this._height - 85;
-        this.addChild(elixir_icon, 2);
-
-        this.maxElixir = gv.lobbyLabel("Max: 2.500.000",this._width-130,this._height - 65);
-        this.addChild(this.maxElixir,1);
-        this.currElixir = gv.lobbyLabel("1,250,000", this._width - 100, this._height - 87);
-        this.addChild(this.currElixir,3);
-    },
-    showG:function(){
-        var g_bar = new cc.Sprite(); g_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_4));
-        g_bar.x = this._width - 130;
-        g_bar.y = this._height - 125;
-        g_bar.scaleX = 1.5;
-        g_bar.scaleY = 0.9;
-        this.addChild(g_bar);
-
-        this.g = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.G_BAR, 50);
-        this.g.setDirection(ccui.LoadingBar.TYPE_RIGHT);
-        this.g.x = this._width - 133;
-        this.g.y = this._height - 124;
-        this.g.scaleX = 1.5;
-        this.g.scaleY = 0.9;
-        this.addChild(this.g,2);
-
-        var g_icon = new cc.Sprite(); g_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.G_ICON));
-        g_icon.x = this._width - 20;
-        g_icon.y = this._height - 125;
-        this.addChild(g_icon, 2);
-
-        var add_g = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON, this._width - 210, this._height - 124);
-        add_g.scaleX = 1.1;
-        add_g.scaleY = 1.1;
-        this.addChild(add_g,2);
-
-        var g = gv.lobbyLabel("10,000",this._width - 95,this._height - 125);
-        this.addChild(g,3);
-    },
-    showBuilder:function(){
-        var bg_builder = new cc.Sprite(); bg_builder.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
-        bg_builder.x = this._width/2;
-        bg_builder.y = this._height - 40;
-        this.addChild(bg_builder,1);
-        var add_builder = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this._width/2 + 40, this._height - 40);
-        this.addChild(add_builder,2);
-        this.builder = new cc.Sprite(); this.builder.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BUILDER_ICON));
-        this.builder.x = this._width/2 - 40;
-        this.builder.y = this._height - 40;
-        this.addChild(this.builder, 2);
-
-        // text builder
-        var builder_text = gv.lobbyLabel("Builder",this._width/2,this._height - 15);
-        this.addChild(builder_text,1);
-
-        // amount builder
-        var amount_builder = gv.lobbyLabel("2/2",this._width/2,this._height - 40);
-        this.addChild(amount_builder,3);
-    },
-    showArmy:function(){
-        var bg_army = new cc.Sprite(); bg_army.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
-        bg_army.x = this._width/2 - 150;
-        bg_army.scaleX = 1.3;
-        bg_army.y = this._height - 40;
-        this.addChild(bg_army,1);
-        var add_army = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this._width/2 - 130 + 40, this._height - 40);
-        this.addChild(add_army,2);
-
-        this.army = new cc.Sprite(); this.army.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.ARMY_ICON));
-        this.army.x = this._width/2 - 170 - 40;
-        this.army.y = this._height - 40;
-        this.addChild(this.army, 2);
-
-        // text builder
-        var army_text = gv.lobbyLabel("Army",this._width/2 - 150,this._height - 15);
-        this.addChild(army_text,1);
-
-        // amount troop
-        var amount_troop = gv.lobbyLabel("20/20",this._width/2 - 150,this._height - 40);
-        this.addChild(amount_troop,3);
-    },
-    showDefense:function(){
-        var bg_defense = new cc.Sprite(); bg_defense.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
-        bg_defense.x = this._width/2 + 150;
-        bg_defense.scaleX = 1.3;
-        bg_defense.y = this._height - 40;
-        this.addChild(bg_defense,1);
-        var add_shield = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this._width/2 + 210, this._height - 40);
-        this.addChild(add_shield,2);
-
-        this.shield = new cc.Sprite(); this.shield.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.SHIELD_ICON));
-        this.shield.x = this._width/2 + 130 - 40;
-        this.shield.y = this._height - 40;
-        this.addChild(this.shield, 2);
-
-        var shield_text = gv.lobbyLabel("Shield",this._width/2 + 150,this._height - 15);
-        this.addChild(shield_text,1);
-
-        // info defense
-        var info_defense = gv.lobbyLabel("NONE",this._width/2 + 150,this._height - 40);
-        this.addChild(info_defense,3);
-    },
-    showUser:function(){
+    setUser:function(){
+        // set panel
+        this.user.panel = new cc.LayerColor(cc.color(0,0,0,0),width*0.3, height/3);
+        this.addChild(this.user.panel,0);
+        this.user.panel.x = 0;
+        this.user.panel.y = height*2/3;
         // username
-        var username = gv.lobbyLabel("Username",140,this._height - 30);
-        this.addChild(username,3);
-
+        this.user.username = gv.lobbyLabel("Username",this.user.panel.width*0.55,this.user.panel.height*0.8);
+        this.user.panel.addChild(this.user.username,3);
         // avatar
-        this.avatar = new cc.Sprite(); this.avatar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_EXP));
-        this.avatar.x = 60;
-        this.avatar.y = this._height - 90;
-        this.avatar.scaleX = 1.3;
-        this.avatar.scaleY = 1.3;
-        this.addChild(this.avatar,1);
-
+        this.user.avatar = new cc.Sprite(); this.user.avatar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_EXP));
+        this.user.panel.addChild(this.user.avatar,5);
+        this.user.avatar.x = this.user.panel.width/5;
+        this.user.avatar.y = this.user.panel.height/2;
+        this.user.avatar.scaleX = 1.3;
+        this.user.avatar.scaleY = 1.3;
         // exp bar
-        var bg_exp_bar = new cc.Sprite(); bg_exp_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.EXP_BG_BAR));
-        bg_exp_bar.x = 140;
-        bg_exp_bar.y = this._height - 70;
-        bg_exp_bar.scaleX = 1.5;
-        this.addChild(bg_exp_bar,-1);
-        this.exp = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.EXP_BAR, 50);
-        this.exp.setDirection(ccui.LoadingBar.TYPE_LEFT);
-        this.exp.x = 140;
-        this.exp.y = this._height - 70;
-        this.exp.scaleX = 1.5;
-        this.addChild(this.exp,0);
-
-        var exp_icon = new cc.Sprite(); exp_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.EXP_ICON));
-        exp_icon.x = 210;
-        exp_icon.y = this._height - 65;
-        this.addChild(exp_icon,2);
-
-        var amount_exp = gv.lobbyLabel("1412",145,this._height - 70);
-        this.addChild(amount_exp,3);
-
-        var level = gv.lobbyLabel("9",210,this._height - 67);
-        this.addChild(level,3);
-
+        this.user.bg_exp_bar = new cc.Sprite(); this.user.bg_exp_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.EXP_BG_BAR));
+        this.user.bg_exp_bar.x = this.user.panel.width/2;
+        this.user.bg_exp_bar.y = this.user.panel.height*0.6;
+        this.user.bg_exp_bar.scaleX = 1.5;
+        this.user.panel.addChild(this.user.bg_exp_bar,1);
+        this.user.exp_bar = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.EXP_BAR, 50);
+        this.user.exp_bar.setDirection(ccui.LoadingBar.TYPE_LEFT);
+        this.user.exp_bar.x = this.user.panel.width/2;
+        this.user.exp_bar.y = this.user.panel.height*0.6;
+        this.user.exp_bar.scaleX = 1.5;
+        this.user.panel.addChild(this.user.exp_bar,2);
+        this.user.icon_exp = new cc.Sprite(); this.user.icon_exp.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.EXP_ICON));
+        this.user.icon_exp.x = this.user.panel.width*0.8;
+        this.user.icon_exp.y = this.user.panel.height*0.61;
+        this.user.panel.addChild(this.user.icon_exp,3);
+        this.user.exp = gv.lobbyLabel("1412",this.user.panel.width*0.5,this.user.panel.height*0.6);
+        this.user.panel.addChild(this.user.exp,3);
+        this.user.level = gv.lobbyLabel("9",this.user.panel.width*0.8,this.user.panel.height*0.6);
+        this.user.panel.addChild(this.user.level,3);
         // ranking bar
-        this.ranking = new cc.Sprite(); this.ranking.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.RANKING_BAR));
-        this.ranking.x = 140;
-        this.ranking.y = this._height - 110;
-        this.ranking.scaleX = 1.5;
-        this.addChild(this.ranking,0);
-        var ranking_icon = new cc.Sprite(); ranking_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.RANKING));
-        ranking_icon.x = 210;
-        ranking_icon.y = this._height - 107;
-        this.addChild(ranking_icon,2);
-
-        var amount_ranking = gv.lobbyLabel("257",145,this._height - 110);
-        this.addChild(amount_ranking,3);
+        this.user.rank_bar = new cc.Sprite(); this.user.rank_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.RANKING_BAR));
+        this.user.rank_bar.x = this.user.panel.width/2;
+        this.user.rank_bar.y = this.user.panel.height*0.4;
+        this.user.rank_bar.scaleX = 1.5;
+        this.user.panel.addChild(this.user.rank_bar,1);
+        this.user.rank_icon = new cc.Sprite(); this.user.rank_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.RANKING));
+        this.user.rank_icon.x = this.user.panel.width * 0.8;
+        this.user.rank_icon.y = this.user.panel.height * 0.41;
+        this.user.panel.addChild(this.user.rank_icon,2);
+        this.user.rank = gv.lobbyLabel("257",this.user.panel.width*0.5,this.user.panel.height*0.4);
+        this.user.panel.addChild(this.user.rank,2);
     },
-    showOtherUI:function(){
+    setBattle:function(){
+        // set panel
+        this.battle.panel = new cc.LayerColor(cc.color(0,0,0,0),width*0.3, height*0.5);
+        this.addChild(this.battle.panel,0);
+        this.battle.panel.x = 0;
+        this.battle.panel.y = 0;
         // fight
-        this.attack = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ATTACK, LOBBY_CFG.ATTACK_X,LOBBY_CFG.ATTACK_Y);
-        this.addChild(this.attack,1);
-        var battle_text = gv.lobbyLabel("BATTLE",LOBBY_CFG.ATTACK_X, LOBBY_CFG.ATTACK_Y - 30);
-        this.addChild(battle_text,3);
-
+        this.battle.attack = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ATTACK, this.battle.panel.width*0.2,this.battle.panel.height*0.2);
+        this.battle.panel.addChild(this.battle.attack,1);
+        //var battle_text = gv.lobbyLabel("BATTLE",LOBBY_CFG.ATTACK_X, LOBBY_CFG.ATTACK_Y - 30);
+        //this.battle.panel.addChild(battle_text,3);
         // guild
-        this.guild = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.GUILD, LOBBY_CFG.GUILD_X, LOBBY_CFG.GUILD_Y);
-        this.addChild(this.guild,1);
-
+        this.battle.guild = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.GUILD, this.battle.panel.width*0.15,this.battle.panel.height*0.45);
+        this.battle.panel.addChild(this.battle.guild,1);
         // guild fighting
-        this.guildFight = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.GUILD_FIGHT, LOBBY_CFG.GUILD_FIGHT_X, LOBBY_CFG.GUILD_FIGHT_Y);
-        this.addChild(this.guildFight,1);
-
-        // shop
-        this.shop = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SHOP,this._width - 70, 60);
-        this.addChild(this.shop,1);
-        this.shop.addClickEventListener(this.onShopClick.bind(this));
-        var shop_text = gv.lobbyLabel("SHOP",this._width - 70, 30);
-        this.addChild(shop_text,3);
-
-        // setting
-        this.setting = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SETTING, this._width - 50, 140);
-        this.addChild(this.setting,1);
-
-        // kho
-        this.kho = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.KHO, this._width - 50, 200);
-        this.addChild(this.kho,1);
-        this.kho.addClickEventListener(this.onKhoClick.bind(this));
-
-        // friend
-        this.friend = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SETTING, this._width - 150, 45);
-        this.addChild(this.friend,1);
+        this.battle.guild_battle = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.GUILD_FIGHT, this.battle.panel.width*0.15,this.battle.panel.height*0.65);
+        this.battle.panel.addChild(this.battle.guild_battle,1);
     },
-
-    // event handler
+    setUtils:function(){
+        // set panel
+        this.utils.panel = new cc.LayerColor(cc.color(0,0,0,0),width*0.3, height*0.5);
+        this.addChild(this.utils.panel,0);
+        this.utils.panel.x = width*0.7;
+        this.utils.panel.y = 0;
+        // shop
+        this.utils.shop = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SHOP,this.utils.panel.width *0.75, this.utils.panel.height*0.2);
+        this.utils.panel.addChild(this.utils.shop,1);
+        this.utils.shop.addClickEventListener(this.onShopClick.bind(this));
+        //var shop_text = gv.lobbyLabel("SHOP",this._width - 70, 30);
+        //this.addChild(shop_text,3);
+        // setting
+        this.utils.setting = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SETTING, this.utils.panel.width *0.8, this.utils.panel.height*0.45);
+        this.utils.panel.addChild(this.utils.setting,1);
+        // kho
+        this.utils.kho = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.KHO, this.utils.panel.width *0.8, this.utils.panel.height*0.65);
+        this.utils.panel.addChild(this.utils.kho,1);
+        this.utils.kho.addClickEventListener(this.onKhoClick.bind(this));
+        // friend
+        this.utils.friends = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.SETTING, this.utils.panel.width *0.45, this.utils.panel.height*0.15);
+        this.utils.panel.addChild(this.utils.friends,1);
+    },
+    setResources:function(){
+        // set panel
+        this.resources.panel = new cc.LayerColor(cc.color(0,0,0,0),width*0.3, height*0.4);
+        this.addChild(this.resources.panel,0);
+        this.resources.panel.x = width*0.7;
+        this.resources.panel.y = height*0.6;
+        //
+        // GOLD
+        this.resources.bg_gold_bar = new cc.Sprite(); this.resources.bg_gold_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_2));
+        this.resources.bg_gold_bar.x = this.resources.panel.width * 0.55;
+        this.resources.bg_gold_bar.y = this.resources.panel.height * 0.8;
+        this.resources.bg_gold_bar.scaleX = 1.5;
+        this.resources.panel.addChild(this.resources.bg_gold_bar,1);
+        this.resources.gold_bar = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.GOLD_BAR, 50);
+        this.resources.gold_bar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        this.resources.gold_bar.x = this.resources.panel.width * 0.53;
+        this.resources.gold_bar.y = this.resources.panel.height * 0.81;
+        this.resources.gold_bar.scaleX = 1.5;
+        this.resources.panel.addChild(this.resources.gold_bar,2);
+        this.resources.gold_icon = new cc.Sprite(); this.resources.gold_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.GOLD_ICON));
+        this.resources.gold_icon.x = this.resources.panel.width * 0.93;
+        this.resources.gold_icon.y = this.resources.panel.height * 0.82;
+        this.resources.panel.addChild(this.resources.gold_icon, 2);
+        this.resources.max_gold = gv.lobbyLabel("Max: 2.500.000",this.resources.panel.width * 0.55, this.resources.panel.height * 0.9);
+        this.resources.panel.addChild(this.resources.max_gold, 1);
+        this.resources.curr_gold = gv.lobbyLabel("1,250,000",this.resources.panel.width * 0.62, this.resources.panel.height * 0.81);
+        this.resources.panel.addChild(this.resources.curr_gold, 3);
+        //
+        // END GOLD ----------------------------------------------------------------------
+        //
+        // ELIXIR
+        this.resources.bg_elixir_bar = new cc.Sprite(); this.resources.bg_elixir_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_2));
+        this.resources.bg_elixir_bar.x = this.resources.panel.width * 0.55;
+        this.resources.bg_elixir_bar.y = this.resources.panel.height * 0.6;
+        this.resources.bg_elixir_bar.scaleX = 1.5;
+        this.resources.panel.addChild(this.resources.bg_elixir_bar,1);
+        this.resources.elixir_bar = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.ELIXIR_BAR, 50);
+        this.resources.elixir_bar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        this.resources.elixir_bar.x = this.resources.panel.width * 0.53;
+        this.resources.elixir_bar.y = this.resources.panel.height * 0.61;
+        this.resources.elixir_bar.scaleX = 1.5;
+        this.resources.panel.addChild(this.resources.elixir_bar,2);
+        this.resources.elixir_icon = new cc.Sprite(); this.resources.elixir_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.ELIXIR_ICON));
+        this.resources.elixir_icon.x = this.resources.panel.width * 0.93;
+        this.resources.elixir_icon.y = this.resources.panel.height * 0.62;
+        this.resources.panel.addChild(this.resources.elixir_icon, 2);
+        this.resources.max_elixir = gv.lobbyLabel("Max: 2.500.000",this.resources.panel.width * 0.55, this.resources.panel.height * 0.7);
+        this.resources.panel.addChild(this.resources.max_elixir, 1);
+        this.resources.curr_gold = gv.lobbyLabel("1,250,000",this.resources.panel.width * 0.62, this.resources.panel.height * 0.61);
+        this.resources.panel.addChild(this.resources.curr_gold, 3);
+        //
+        // END ELIXIR ----------------------------------------------------------------------
+        //
+        // G
+        this.resources.bg_g_bar = new cc.Sprite(); this.resources.bg_g_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_4));
+        this.resources.bg_g_bar.x = this.resources.panel.width * 0.55;
+        this.resources.bg_g_bar.y = this.resources.panel.height * 0.45;
+        this.resources.bg_g_bar.scaleX = 1.5;
+        this.resources.bg_g_bar.scaleY = 0.9;
+        this.resources.panel.addChild(this.resources.bg_g_bar,1);
+        this.resources.g_bar = new ccui.LoadingBar("GUIs/Main_Gui/" + lobby_resources.G_BAR, 50);
+        this.resources.g_bar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        this.resources.g_bar.x = this.resources.panel.width * 0.54;
+        this.resources.g_bar.y = this.resources.panel.height * 0.455;
+        this.resources.g_bar.scaleX = 1.5;
+        this.resources.g_bar.scaleY = 0.9;
+        this.resources.panel.addChild(this.resources.g_bar,2);
+        this.resources.g_icon = new cc.Sprite(); this.resources.g_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.G_ICON));
+        this.resources.g_icon.x = this.resources.panel.width * 0.93;
+        this.resources.g_icon.y = this.resources.panel.height * 0.45;
+        this.resources.panel.addChild(this.resources.g_icon, 2);
+        this.resources.add_g = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON, this.resources.panel.width * 0.26, this.resources.panel.height * 0.45);
+        this.resources.add_g.scaleX = 1.1;
+        this.resources.add_g.scaleY = 1.1;
+        this.resources.panel.addChild(this.resources.add_g,2);
+        this.resources.curr_g = gv.lobbyLabel("10,000",this.resources.panel.width * 0.62, this.resources.panel.height * 0.45);
+        this.resources.panel.addChild(this.resources.curr_g,3);
+        // END G ------------------------------------------------------------------------------
+        //
+    },
+    setGameInfo:function(){
+        // set panel
+        this.info_game.panel = new cc.LayerColor(cc.color(0,0,0,0),width*0.4, height*0.2);
+        this.addChild(this.info_game.panel,0);
+        this.info_game.panel.x = width*0.3;
+        this.info_game.panel.y = height*0.8;
+        //
+        // BUILDER
+        this.info_game.builder_bg_bar = new cc.Sprite(); this.info_game.builder_bg_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
+        this.info_game.builder_bg_bar.x = this.info_game.panel.width/2;
+        this.info_game.builder_bg_bar.y = this.info_game.panel.height*0.7;
+        this.info_game.panel.addChild(this.info_game.builder_bg_bar,1);
+        this.info_game.builder_add = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this.info_game.panel.width/2 + this.info_game.builder_bg_bar.width*0.45, this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild(this.info_game.builder_add,2);
+        this.info_game.builder_add = new cc.Sprite(); this.info_game.builder_add.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BUILDER_ICON));
+        this.info_game.builder_add.x = this.info_game.panel.width/2 - this.info_game.builder_bg_bar.width*0.45;
+        this.info_game.builder_add.y = this.info_game.panel.height*0.7;
+        this.info_game.panel.addChild(this.info_game.builder_add, 2);
+        this.info_game.builder_label = gv.lobbyLabel("Builder",this.info_game.panel.width/2, this.info_game.panel.height*0.9);
+        this.info_game.panel.addChild(this.info_game.builder_label,1);
+        this.info_game.builder_info = gv.lobbyLabel("2/2",this.info_game.panel.width/2, this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild(this.info_game.builder_info,3);
+        // END BUILDER ----------------------------
+        //
+        //
+        // ARMY
+        this.info_game.army_bg_bar = new cc.Sprite(); this.info_game.army_bg_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
+        this.info_game.army_bg_bar.x = this.info_game.panel.width*0.15;
+        this.info_game.army_bg_bar.y = this.info_game.panel.height*0.7;
+        this.info_game.army_bg_bar.scaleX = 1;
+        this.info_game.panel.addChild(this.info_game.army_bg_bar,1);
+        this.info_game.army_add = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this.info_game.panel.width*0.15 + this.info_game.army_bg_bar.width*0.45, this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild( this.info_game.army_add,2);
+        this.info_game.army_icon = new cc.Sprite(); this.info_game.army_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.ARMY_ICON));
+        this.info_game.army_icon.x = this.info_game.panel.width*0.15 - this.info_game.army_bg_bar.width*0.45;
+        this.info_game.army_icon.y = this.info_game.panel.height*0.7;
+        this.info_game.panel.addChild(this.info_game.army_icon, 2);
+        this.info_game.army_label = gv.lobbyLabel("Army",this.info_game.panel.width*0.15,this.info_game.panel.height*0.9);
+        this.info_game.panel.addChild(this.info_game.army_label,1);
+        this.info_game.army_info = gv.lobbyLabel("20/20",this.info_game.panel.width*0.15,this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild(this.info_game.army_info,3);
+        // END ARMY ------------------------------------
+        //
+        //
+        // SHIELD
+        this.info_game.shield_bg_bar = new cc.Sprite(); this.info_game.shield_bg_bar.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.BG_BAR_1));
+        this.info_game.shield_bg_bar.x = this.info_game.panel.width*0.85;
+        this.info_game.shield_bg_bar.y = this.info_game.panel.height*0.7;
+        this.info_game.shield_bg_bar.scaleX = 1;
+        this.info_game.panel.addChild(this.info_game.shield_bg_bar,1);
+        this.info_game.shield_add = gv.lobbyButton("GUIs/Main_Gui/" + lobby_resources.ADD_BUTTON,this.info_game.panel.width*0.85 + this.info_game.army_bg_bar.width*0.45, this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild( this.info_game.shield_add,2);
+        this.info_game.shield_icon = new cc.Sprite(); this.info_game.shield_icon.initWithSpriteFrame(cc.spriteFrameCache.getSpriteFrame(lobby_resources.SHIELD_ICON));
+        this.info_game.shield_icon.x = this.info_game.panel.width*0.85 - this.info_game.army_bg_bar.width*0.45;
+        this.info_game.shield_icon.y = this.info_game.panel.height*0.7;
+        this.info_game.panel.addChild(this.info_game.shield_icon, 2);
+        this.info_game.shield_label = gv.lobbyLabel("Shield",this.info_game.panel.width*0.85,this.info_game.panel.height*0.9);
+        this.info_game.panel.addChild(this.info_game.shield_label,1);
+        this.info_game.shield_info = gv.lobbyLabel("NONE",this.info_game.panel.width*0.85,this.info_game.panel.height*0.7);
+        this.info_game.panel.addChild(this.info_game.shield_info,3);
+        //
+        // END SHIELD ----------------------------------------------------------------       
+    },
+    // event click handler
     onShopClick:function()
     {
         // ui
@@ -302,10 +327,7 @@ var Lobby  = cc.Layer.extend({
     },
     onKhoClick: function(){
         var i = Math.floor(Math.random() * 4);     // returns a random integer from 0 to 9
-        var troop = TroopObjectGraphic.create(i);
-        fr.getCurrentScreen()._map._map.addChild(troop,15);
+        var troop = TroopObjectGraphic.create(3);
+        fr.getCurrentScreen()._mapLayer._map.addChild(troop,15);
     }
 });
-
-
-

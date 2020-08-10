@@ -30,7 +30,7 @@ CmdSendHandshake = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 CmdSendUserInfo = fr.OutPacket.extend(
     {
         ctor:function()
@@ -44,7 +44,7 @@ CmdSendUserInfo = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 CmdSendLogin = fr.OutPacket.extend(
     {
@@ -61,7 +61,7 @@ CmdSendLogin = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 
 /**

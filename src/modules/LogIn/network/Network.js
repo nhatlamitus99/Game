@@ -44,7 +44,7 @@ loginNetwork.Connector = cc.Class.extend({
         var pk = this.gameClient.getOutPacket(CmdSendLogin);
         pk.pack(user.getUsername(),user.getUID());
         this.gameClient.sendPacket(pk);
-    },
+    }
 });
 
 

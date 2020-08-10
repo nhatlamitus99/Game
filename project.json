@@ -102,6 +102,7 @@
     "src/modules/TroopObject/TrainTroopUI.js",
     "src/modules/TroopObject/TrainTroopObj.js",
     "src/modules/TroopObject/TrainTroopMiniObject.js",
+    "src/modules/TroopObject/TroopAnimationManager.js",
 
     "src/modules/Lobby/Lobby.js",
     "src/modules/Lobby/Setting.js"

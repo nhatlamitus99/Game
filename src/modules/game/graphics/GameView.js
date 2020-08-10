@@ -9,6 +9,7 @@ var GameScreen = cc.Layer.extend({
     ctor:function() {
         this._super();
         this.initCacheFrames();
+        TroopAnimationManager.getInstance();
         this._lobbyLayer = new Lobby();
         this._mapLayer = new MapView();
         this.addChild(this._mapLayer, GameConfig.ZORDER_MAP);
