@@ -21,7 +21,7 @@ var Substructure = cc.Sprite.extend({
             var shadow = cc.Sprite(res.object_mgr.normal_substructures.shadow[indexSubsPath]);
             this._normalSubs.addChild(subs, 0);
             this._normalSubs.addChild(shadow, 1);
-        }
+    }
         // create red green subs
         this._greenSubs = new cc.Sprite(res.object_mgr.red_substructures[indexSubsPath]);
         this._redSubs = new cc.Sprite(res.object_mgr.green_substructures[indexSubsPath]);

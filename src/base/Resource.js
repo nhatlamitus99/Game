@@ -15,6 +15,13 @@ res.map = {};
 res.map.img_cell = "content/Art/Map/gird.png";
 res.map.tmx_map = "content/Art/Map/MainScene.json";
 res.map.name_node_has_matrix_map = "Panel_1";
+res.map.arrow_move = [
+    "content/Art/Map/map_obj_bg/BG/arrowmove1.png",
+    "content/Art/Map/map_obj_bg/BG/arrowmove2.png",
+    "content/Art/Map/map_obj_bg/BG/arrowmove3.png",
+    "content/Art/Map/map_obj_bg/BG/arrowmove4.png",
+    "content/Art/Map/map_obj_bg/BG/arrowmove5.png"
+];
 
 res.object_mgr = {};
 res.object_mgr.normal_substructures = {};

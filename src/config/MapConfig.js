@@ -18,6 +18,8 @@ var MapConfig = {
     // zOrder of substructure
     Z_ORDER_SUBSTRUCTURE: 10,
 
+    Z_ORDER_ARROW: 200,
+
     // when a cell is not overided by building
     NULL_CELL: {type: -1, id: -1},
     getNullCell: function (){

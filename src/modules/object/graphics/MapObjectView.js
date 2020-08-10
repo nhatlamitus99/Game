@@ -7,6 +7,9 @@ var MapObjectView = cc.Sprite.extend({
     ctor: function(attributes) {
         this._super();
         switch (attributes.size.h) {
+            case 5:
+                this.initWithFile("content/Art/Buildings/army camp/AMC_1_1/idle/image0000.png");
+                break;
             case 4:
                 this.initWithFile("content/Art/Buildings/townhall/TOW_1_1/idle/image0000.png");
                 break;
