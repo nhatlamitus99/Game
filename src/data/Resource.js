@@ -145,11 +145,20 @@ var shop_resources = {
     ICON_G_BAR: "content/Art/GUIs/shop_gui/icon_g_bar.png",
     RES_INFO: "content/Art/GUIs/shop_gui/res_info.png",
     RES_BAR: "content/Art/GUIs/shop_gui/res_bar.png",
-    BACK_BTN: "content/Art/GUIs/shop_gui/back.png"
+    BACK_BTN: "content/Art/GUIs/shop_gui/back.png",
+    ICON_G: "content/Art/GUIs/shop_gui/g.png",
+    ICON_GOLD: "content/Art/GUIs/shop_gui/gold.png",
+    ICON_ELIXIR: "content/Art/GUIs/shop_gui/elixir.png"
+};
 
-
-
-
+var itemInfo_resources = {
+    AMC: "content/Design Documents/Config json/ArmyCamp.json",
+    BAR: "content/Design Documents/Config json/Barrack.json",
+    BDH: "content/Design Documents/Config json/BuilderHut.json",
+    DEF: "content/Design Documents/Config json/Defence.json",
+    RES: "content/Design Documents/Config json/Resource.json",
+    STO: "content/Design Documents/Config json/Storage.json",
+    TOW: "content/Design Documents/Config json/TownHall.json"
 };
 
 var g_resources = [

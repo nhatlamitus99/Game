@@ -308,7 +308,7 @@ var Lobby  = cc.Layer.extend({
         }
         else
         {
-            this.shopUI.visible = true;
+            this.shopUI.show();
         }
     }
 });

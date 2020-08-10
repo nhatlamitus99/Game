@@ -44,7 +44,7 @@ cc.game.onStart = function () {
         mapData.customInit();
 
         var resourcesData = ResourcesData.getInstance();
-        resourcesData.setAttributes([0,0,0]);
+        resourcesData.setAttributes([100000, 200, 500]);
 
         var objectMgr = ObjectMgr.getInstance();
 
