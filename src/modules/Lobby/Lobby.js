@@ -313,21 +313,23 @@ var Lobby  = cc.Layer.extend({
     onShopClick:function()
     {
         // ui
-        if(!this.shopUI)
-        {
-            //this.shopUI = TrainTroopUI.getInstance(1);
-            //this.addChild(this.shopUI, this.shopUI.zOrder);
-            this.shopUI = new ScreenShop();
-            this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
-        }
-        else
-        {
-            this.shopUI.visible = true;
-        }
+        //if(!this.shopUI)
+        //{
+        //    //this.shopUI = TrainTroopUI.getInstance(1);
+        //    //this.addChild(this.shopUI, this.shopUI.zOrder);
+        //    this.shopUI = new ScreenShop();
+        //    this.addChild(this.shopUI, this.shopUI.zOrder + 1000);
+        //}
+        //else
+        //{
+        //    this.shopUI.visible = true;
+        //}
+        var troop = TroopObjectGraphic.create(3);
+        fr.getCurrentScreen()._mapLayer.addTroop(3, troop,15);
     },
     onKhoClick: function(){
         var i = Math.floor(Math.random() * 4);     // returns a random integer from 0 to 9
-        var troop = TroopObjectGraphic.create(3);
-        fr.getCurrentScreen()._mapLayer._map.addChild(troop,15);
+        var troop = TroopObjectGraphic.create(2);
+        fr.getCurrentScreen()._mapLayer.addTroop(2, troop, 15);
     }
 });

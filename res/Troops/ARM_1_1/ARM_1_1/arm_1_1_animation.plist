@@ -7,7 +7,7 @@
 		<key>idle_1</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.1</real>
+			<real>0.05</real>
 			<key>restoreOriginalFrame</key>
 			<true/>
 			<key>loops</key>
@@ -66,7 +66,7 @@
 		<key>idle_5</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.2</real>
+			<real>0.05</real>
 			<key>restoreOriginalFrame</key>
 			<true/>
 			<key>loops</key>
@@ -125,7 +125,7 @@
 		<key>idle_6</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.2</real>
+			<real>0.05</real>
 			<key>restoreOriginalFrame</key>
 			<true/>
 			<key>loops</key>
@@ -184,7 +184,7 @@
 		<key>idle_7</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.2</real>
+			<real>0.05</real>
 			<key>restoreOriginalFrame</key>
 			<true/>
 			<key>loops</key>
@@ -243,7 +243,7 @@
 		<key>idle_8</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.2</real>
+			<real>0.05</real>
 			<key>restoreOriginalFrame</key>
 			<true/>
 			<key>loops</key>

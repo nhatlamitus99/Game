@@ -11,13 +11,12 @@ var TroopObjectGraphic = cc.Sprite.extend({
 
 
     ctor:function(type){
-        //this._super(cc.spriteFrameCache.getSpriteFrame(TC.ARM[type].LEVEL_1 + TC.idle_url + "/image0000.png"));
         this._super();
         this.type = type;
 
         var i = Math.floor(Math.random() *43);
         var j = Math.floor(Math.random() *43);
-        var pos = fr.getCurrentScreen()._mapLayer.getPosOfCell({i:i, j:j});
+        var pos = fr.getCurrentScreen()._mapLayer.getPosOfRegion({i:i, j:j});
         this.x = pos.x;
         this.y = pos.y;
 
@@ -26,30 +25,12 @@ var TroopObjectGraphic = cc.Sprite.extend({
 
         this.loadAnim(type);
 
-        this.schedule(this.updateDirectionAction,1);
+        this.updateDirectionAction();
+        this.schedule(this.updateDirectionAction,2);
     },
     loadAnim: function(type)
     {
         this.anims = TroopAnimationManager.getInstance().idle_animations[type];
-
-        //cc.animationCache.addAnimations(TROOP_ANIMATION.IDLE[type]);
-        //
-        //this.anims[1] = cc.animationCache.getAnimation("idle_1");
-        //
-        //this.anims[2] = cc.animationCache.getAnimation("idle_7");
-        //this.anims[3] = cc.animationCache.getAnimation("idle_6");
-        //this.anims[4] = cc.animationCache.getAnimation("idle_5");
-        //this.anims[5] = cc.animationCache.getAnimation("idle_5");
-        //this.anims[6] = cc.animationCache.getAnimation("idle_6");
-        //this.anims[7] = cc.animationCache.getAnimation("idle_7");
-        //
-        //this.anims[8] = cc.animationCache.getAnimation("idle_8");
-
-        for (var i = 1; i <= 8; i++)
-        {
-            this.anims[i].retain();
-        }
-
     },
     update:function (dt){
         var x = this.x, y = this.y;
@@ -93,49 +74,34 @@ var TroopObjectGraphic = cc.Sprite.extend({
 
         switch(this.direction){
             case 1:{
-
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 2:{
-                //animation =  this.animCache.getAnimation("idle_7");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 3:{
-                //animation =  this.animCache.getAnimation("idle_6");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 4:{
-                //animation =  this.animCache.getAnimation("idle_5");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 5:{
-                //animation =  this.animCache.getAnimation("idle_5");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 6:{
-                //animation =  this.animCache.getAnimation("idle_6");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 7:{
-                //animation =  this.animCache.getAnimation("idle_7");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }
             case 8:{
-                //animation =  this.animCache.getAnimation("idle_8");
-                //action = cc.animate(animation);
                 this.runAction(cc.sequence(action).repeatForever());
                 break;
             }

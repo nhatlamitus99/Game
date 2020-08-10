@@ -22,13 +22,17 @@ var MapView = cc.Layer.extend({
     _flagOfEditMovingSpeed: false,   // boolean value: true-touching, false- no touch
     _flagOfMovingScreen: false, // boolean value: true-screen was moving, false-screen was not moving
 
+    _troop_batches: null,
+
     ctor:function() {
         this._super();
         //this.giaLapLoadListObject();
         this._objectMgrView = new ObjectMgrView();
         //this._troopMgr = new ..
         this.loadMapGUI();
+        this.buildTroopBatches();
         this.setUserActions();
+
         this.schedule(this.updatePerFrame);
     },
 
@@ -42,6 +46,17 @@ var MapView = cc.Layer.extend({
         this.loadTroops();
         // load Arrow Move
         this.loadArrowMove();
+    },
+    buildTroopBatches: function()
+    {
+        this._troop_batches = [];
+        for (var i = 0; i <= 3; i++)
+        {
+            var node = new cc.Node();
+            this._map.addChild(node);
+
+            this._troop_batches[i] = node;
+        }
     },
     updatePerFrame: function() {
         this.moveMapPerFrame();
@@ -352,7 +367,11 @@ var MapView = cc.Layer.extend({
     // get center location of object in map
     showObjectInMap: function(objectView, cell) {
 
-    }
+    },
+    addTroop: function(troop_type, troop_view, zorder)
+    {
+        this._troop_batches[troop_type].addChild(troop_view, zorder);
+    },
 });
 
 var MAP_VIEW_ONLY_ONE = null;
