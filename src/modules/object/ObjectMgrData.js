@@ -49,7 +49,7 @@ var ObjectMgrData = cc.Class.extend({
         return this.listObject[type][id];
     },
 
-    getCellOfObject: function(type, id) {
+    getRegionOfObject: function(type, id) {
         var object = this.getObject(type, id);
         return {
             i: object.position.i,

@@ -63,6 +63,10 @@ var MapData = cc.Class.extend({
             type: this._map[cell.i][cell.j].type,
             id: this._map[cell.i][cell.j].id
         };
+    },
+
+    getObjectFromTypeID: function(type, id) {
+        return this._objectMgrData.getObject(type, id);
     }
 });
 
