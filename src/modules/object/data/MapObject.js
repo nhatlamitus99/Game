@@ -3,7 +3,6 @@ var SIZE_MAP = 40;
 
 var MapObject = cc.Class.extend(
     {
-
         name: null,
         type: null,
         id: null,
@@ -13,7 +12,6 @@ var MapObject = cc.Class.extend(
         imagePath: null,
         beginTime: null,
 
-
         ctor: function(type, position) {
             this.type = type;
             this.position = position;
@@ -21,7 +19,7 @@ var MapObject = cc.Class.extend(
         },
 
         loadInfo: function (type) {
-            // load infomation's object from excel file via type and level 
+            // load information's object from excel file via type and level
         },
 
         onCreate: function() {

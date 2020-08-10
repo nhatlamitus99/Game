@@ -5,6 +5,9 @@ var MapView = cc.Layer.extend({
     _scale: null,   // scale of current screen view map
     _mapOriginSize: null,   // size of screen after the first scaling
     _matrixMap: null,   // matrixMap (matrix of cell)
+    _objectMgrView: null,   // manager of object
+    _troopMgrView: null, // troop manager
+    _arrowMove: null, // arrow Moving which are used for moving
 
     // using for smoothly action
     _movingSpeed: {    // acceleration of Moving screen
@@ -19,10 +22,17 @@ var MapView = cc.Layer.extend({
     _flagOfEditMovingSpeed: false,   // boolean value: true-touching, false- no touch
     _flagOfMovingScreen: false, // boolean value: true-screen was moving, false-screen was not moving
 
+    _troop_batches: null,
+
     ctor:function() {
         this._super();
+        //this.giaLapLoadListObject();
+        this._objectMgrView = new ObjectMgrView();
+        //this._troopMgr = new ..
         this.loadMapGUI();
+        this.buildTroopBatches();
         this.setUserActions();
+
         this.schedule(this.updatePerFrame);
     },
 
@@ -31,9 +41,22 @@ var MapView = cc.Layer.extend({
     loadMapGUI: function() {
         // load map's sprite from MainScene.json
         this.loadMapAndMatrixMap();
-        // load building & troop to map
+        // load buildings, substructures & troop to map
         this.loadBuilding();
         this.loadTroops();
+        // load Arrow Move
+        this.loadArrowMove();
+    },
+    buildTroopBatches: function()
+    {
+        this._troop_batches = [];
+        for (var i = 0; i <= 3; i++)
+        {
+            var node = new cc.Node();
+            this._map.addChild(node);
+
+            this._troop_batches[i] = node;
+        }
     },
     updatePerFrame: function() {
         this.moveMapPerFrame();
@@ -77,33 +100,48 @@ var MapView = cc.Layer.extend({
     },
 
     loadBuilding: function() {
-        // gia lap du lieu lay tu objectView
-        var object1 = {
-            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_3_Island.png'),
-            i: 8,
-            j: 2,
-            h: 3,
-            w: 3
-        };
-        var object2 = {
-            sprite: new cc.Sprite('content/Art/Map/map_obj_bg/GRASS_4_Island.png'),
-            i: 15,
-            j: 15,
-            h: 4,
-            w: 4
-        };
-        var listObject = [object1, object2];
+        var objectMgrData = this.getObjectMgrData();
+        var listObject = this.getListObjectView();
+        var listSubs = this.getListObjectSubs();
         // add object to map
         for (var i = 0; i < listObject.length; ++i) {
-            var posBot = this.getPosOfCell(listObject[i]);
-            var posTop = this.getPosOfCell({
-                i:listObject[i].i+listObject[i].w,
-                j:listObject[i].j+listObject[i].h
-            });
-            this._map.addChild(listObject[i].sprite, 15);
-            listObject[i].sprite.x = (posBot.x + posTop.x)/2;
-            listObject[i].sprite.y = (posBot.y + posTop.y)/2;
+            for (var j = 0; j < listObject[i].length; ++j) {
+                // calculate Position
+                var region = objectMgrData.getRegionOfObject(listObject[i][j].getType(), listObject[i][j].getID());
+                cc.log("loadBuilding, type - id = " + listObject[i][j].getType() + listObject[i][j].getID());
+                // addChild and set ZOrder
+                var zOrder = this.calculateZOrderOfRegion(region);
+                this._map.addChild(listObject[i][j], zOrder);
+                this._map.addChild(listSubs[i][j], MapConfig.Z_ORDER_SUBSTRUCTURE);
+                // set position
+                var posCenter = this.getCenterPosOfRegion(region);
+                listObject[i][j].x = posCenter.x;
+                listObject[i][j].y = posCenter.y;
+                listSubs[i][j].x = posCenter.x;
+                listSubs[i][j].y = posCenter.y;
+            }
         }
+    },
+
+    loadArrowMove: function() {
+        this._arrowMove = new ArrowMove();
+        this._map.addChild(this._arrowMove, MapConfig.Z_ORDER_ARROW);
+    },
+
+    calculateZOrderOfRegion: function(region) {
+        return MapConfig.MAX_Z_ORDER_OBJECT - region.i*2 - region.j*2 - region.w - region.h;
+    },
+
+    getListObjectView: function() {
+        return this._objectMgrView.getListObject();
+    },
+
+    getListObjectSubs: function () {
+        return this._objectMgrView.getListSubs();
+    },
+
+    getObjectMgrData: function() {
+        return ObjectMgrData.getInstance();
     },
 
     loadTroops: function(){
@@ -125,7 +163,7 @@ var MapView = cc.Layer.extend({
                     event: cc.EventListener.MOUSE,
                     swallowTouches: true,
                     onMouseScroll: function (event) {
-                        var delta = -event.getScrollY()/MapConfig.ZOOM_MAXDELTA;
+                        var delta = -event.getScrollY()/MapConfig.ZOOM_MAX_DELTA;
                         //cc.log("On Mouse Scroll: ", delta);
                         event.getCurrentTarget().setScaleMap(delta, event.getLocation());
                         return true;
@@ -147,10 +185,11 @@ var MapView = cc.Layer.extend({
         // then, we scale screen and set the newPoint at position of our mouse.
         var scale = this._scale;
         var map = this._map;
-        var originSize= this._mapOriginSize;
-        var newPoint = {
-            x: (touch.x - map.x + originSize.w*(scale-delta)/2)/(scale-delta)*(scale) - originSize.w*(scale)/2 + map.x,
-            y: (touch.y - map.y + originSize.h*(scale-delta)/2)/(scale-delta)*(scale) - originSize.h*(scale)/2 + map.y
+        var originSize = this._mapOriginSize;
+        var newPoint;
+        newPoint = {
+            x: (touch.x - map.x + originSize.w * (scale - delta) / 2) / (scale - delta) * (scale) - originSize.w * (scale) / 2 + map.x,
+            y: (touch.y - map.y + originSize.h * (scale - delta) / 2) / (scale - delta) * (scale) - originSize.h * (scale) / 2 + map.y
         };
         // scale map and move map in screen
         map.setScale(scale);
@@ -169,10 +208,9 @@ var MapView = cc.Layer.extend({
         };
         this.moveMap(distance);
     },
-    
+
     onTouchesBegan: function (touches) {
         this._flagOfEditMovingSpeed = true;
-        this._map.stopAllActions();
         this._movingSpeed.x = 0;
         this._movingSpeed.y = 0;
         this._flagOfEditMovingSpeed = false;
@@ -206,9 +244,17 @@ var MapView = cc.Layer.extend({
                 // get object's type-id from MapLogic
                 var mapData = MapData.getInstance();
                 var typeID = mapData.getTypeIDFromCell(cell);
-                cc.log("Cell: (i,j)= " + cell.i + " " + cell.j + " ; type-id: " + typeID.type + " " + typeID.id);
-                // get objectView from ObjectMgr
-                // ...
+                if (typeID.type == -1 || typeID.id == -1) {
+                    this._arrowMove.setSizeArrow(0);
+                    return true;
+                }
+                var object = mapData.getObjectFromTypeID(typeID.type, typeID.id);
+                // show Arrow
+                cc.log("ARROW SIZE " + this._arrowMove._arrowSprites.length);
+                this._arrowMove.setSizeArrow(object.size);
+                var posCenter = this.getCenterPosOfRegion({i: object.position.i, j: object.position.j, w: object.size.w, h:object.size.h});
+                this._arrowMove.x = posCenter.x;
+                this._arrowMove.y = posCenter.y;
             } else {
                 cc.log("No cell in this position");
             }
@@ -238,16 +284,17 @@ var MapView = cc.Layer.extend({
     },
 
     getCellInMatrixMap: function(location) {
-        var titleH = MapConfig.getCellSize().h*this._scale;
-        var titleW = MapConfig.getCellSize().w*this._scale;
         // convert coordinate of touch to matrixMap's coordinate
-        var t = this.transformLocationScreenToMatrixMap(location);
+        var tmp = this.transformScreenToMap(location);
+        var t = this.transformMapToMMap(tmp);
         //cc.log(" getCellInMatrixMap, point= " + t.x + " " + t.y);
         // the formula here: https://stackoverflow.com/questions/39729815/converting-screen-coordinates-to-isometric-map-coordinates
         // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
+        var titleH = MapConfig.getCellSize().h*this._scale;
+        var titleW = MapConfig.getCellSize().w*this._scale;
         var result = {
-            i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),//Math.floor((t.y)/(titleH)+(t.x)/(2*titleW)),
-            j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))//Math.floor((t.y)/(titleH)-(t.x)/(2*titleW))
+            i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),
+            j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))
         };
         if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
             return null;
@@ -256,7 +303,7 @@ var MapView = cc.Layer.extend({
         return result;
     },
 
-    getPosOfCell: function(cell) {
+    getPosOfRegion: function(cell) {
         var titleH = MapConfig.getCellSize().h;
         var titleW = MapConfig.getCellSize().w;
         var location = {
@@ -264,25 +311,32 @@ var MapView = cc.Layer.extend({
             y: (cell.i + cell.j)*titleH/4
         };
         // convert coordinate of touch to matrixMap's coordinate
-        // cc.log("test getPosOfCell - matrixMap", location.x + " " + location.y);
+        // cc.log("test getPosOfRegion - matrixMap", location.x + " " + location.y);
         return this.transformLocationMatrixMapToMap(location);
     },
 
-    transformLocationMatrixMapToScreen: function(location) {
-        var result = {};
-        var map = this._map;
-        var mapSize = this._mapOriginSize;
-        var matrixMap = this._matrixMap;
-        var scale = this._scale;
-        // from matrixMap to map
-        result.x = location.x + matrixMap.x*scale;
-        result.y = location.y + matrixMap.y*scale;
-        // from map to Screen
-        result.x += map.x - mapSize.w*scale/2;
-        result.y += map.y - mapSize.h*scale/2;
-        return result;
+    getCenterPosOfRegion: function(region) {
+        var posBot = this.getPosOfRegion(region);
+        var posTop = this.getPosOfRegion({i: region.i + region.w, j: region.j + region.h});
+        return {x: (posBot.x + posTop.x)/2, y: (posBot.y + posTop.y)/2};
     },
 
+    // location: matrix map -> screen
+    //transformMMapToScreen: function(location) {
+    //    var result = {};
+    //    var map = this._map;
+    //    var mapSize = this._mapOriginSize;
+    //    var matrixMap = this._matrixMap;
+    //    var scale = this._scale;
+    //    // from matrixMap to map
+    //    result.x = location.x + matrixMap.x*scale;
+    //    result.y = location.y + matrixMap.y*scale;
+    //    // from map to Screen
+    //    result.x += map.x - mapSize.w*scale/2;
+    //    result.y += map.y - mapSize.h*scale/2;
+    //    return result;
+    //},
+    // location: MatrixMap -> map
     transformLocationMatrixMapToMap: function(location) {
         var result = {};
         var matrixMap = this._matrixMap;
@@ -291,19 +345,40 @@ var MapView = cc.Layer.extend({
         result.y = location.y + matrixMap.y;
         return result;
     },
-
-    transformLocationScreenToMatrixMap: function(location) {
+    // location: screen->Map
+    transformScreenToMap: function(location) {
         var result = {};
         var map = this._map;
         var mapSize = this._mapOriginSize;
-        var matrixMap = this._matrixMap;
         var scale = this._scale;
-        // from screen to map
         result.x = location.x - map.x + mapSize.w*scale/2;
         result.y = location.y - map.y + mapSize.h*scale/2;
-        // from map to matrixMap
-        result.x -= matrixMap.x*scale;
-        result.y -= matrixMap.y*scale;
         return result;
-    }
+    },
+    // location: Map->MatrixMap
+    transformMapToMMap: function(location){
+        var result = {};
+        var matrixMap = this._matrixMap;
+        var scale = this._scale;
+        result.x = location.x - matrixMap.x*scale;
+        result.y = location.y - matrixMap.y*scale;
+        return result;
+    },
+    // get center location of object in map
+    showObjectInMap: function(objectView, cell) {
+
+    },
+    addTroop: function(troop_type, troop_view, zorder)
+    {
+        this._troop_batches[troop_type].addChild(troop_view, zorder);
+    },
 });
+
+var MAP_VIEW_ONLY_ONE = null;
+MapView.getInstance = function(){
+    if(MAP_VIEW_ONLY_ONE == null){
+        MAP_VIEW_ONLY_ONE = new MapView();
+    }
+
+    return MAP_VIEW_ONLY_ONE;
+};

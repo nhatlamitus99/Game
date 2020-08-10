@@ -1,7 +1,3 @@
-/**
- * Created by GSN on 7/6/2015.
- */
-
 var ScreenLogin = cc.Layer.extend({
     background:null,
     loginBox:null,
@@ -77,7 +73,7 @@ var ScreenLogin = cc.Layer.extend({
     },
     onUserInfo:function(name, userName)
     {
-        cc.log("tenne: " + userName);
+        cc.log("username: " + userName);
         // on loading
         this.loading2 = new ccui.LoadingBar(resLogin.LOADING_BAR, 0);
         this.loading2.setDirection(ccui.LoadingBar.TYPE_LEFT);
@@ -95,7 +91,7 @@ var ScreenLogin = cc.Layer.extend({
         this.loading2.setPercent(percent);
         if(percent >= 100){
             this.unschedule(this.doLoadingBar);
-            fr.view(Lobby);
+            fr.view(GameScreen);
         }
     }
 

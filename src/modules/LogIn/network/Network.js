@@ -28,7 +28,16 @@ loginNetwork.Connector = cc.Class.extend({
             case gv.CMD.USER_INFO:
                 fr.getCurrentScreen().onUserInfo(packet.name, packet.username);
                 break;
+            case gv.CMD.INIT_GAME:
+                this.sendInitGameRequest();
+                break;
         }
+    },
+    sendInitGameRequest: function () {
+        cc.log("sendInitGameRequest");
+        var pk = this.gameClient.getOutPacket(CmdSendInitGame);
+        pk.pack(user.getUsername(), user.getUID());
+        this.gameClient.sendPacket(pk);
     },
     sendGetUserInfo:function()
     {
@@ -39,12 +48,11 @@ loginNetwork.Connector = cc.Class.extend({
     },
     sendLoginRequest: function () {
         var user = User.getInstance();
-
         cc.log("sendLoginRequest");
         var pk = this.gameClient.getOutPacket(CmdSendLogin);
         pk.pack(user.getUsername(),user.getUID());
         this.gameClient.sendPacket(pk);
-    },
+    }
 });
 
 

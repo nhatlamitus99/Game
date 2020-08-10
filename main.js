@@ -1,7 +1,7 @@
 
 var gv = gv || {};
 
-var DESIGN_RESOLUTION_WIDTH = 1136;
+var DESIGN_RESOLUTION_WIDTH = 960;
 var DESIGN_RESOLUTION_HEIGHT = 640;
 
 
@@ -39,19 +39,43 @@ cc.game.onStart = function () {
         var gameData = GameData.getInstance();
         // load data from server and add it to game Data
         var user = User.getInstance();
-
+        var objectMgrData = ObjectMgrData.getInstance();
+        // make mapData
         var mapData = MapData.getInstance();
         mapData.customInit();
+        mapData._objectMgrData = objectMgrData;
+        if (mapData.insertObject2Map({
+            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+            position: {i: 0, j: 0},
+            size: {h: 2, w: 2}}) == false
+        ) cc.log("adding object 1 to mapData false");
+        if (mapData.insertObject2Map({
+            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+            position: {i: 4, j: 0},
+            size: {h: 4, w: 4}}) == false
+        ) cc.log("adding object 2 to mapData false");
+        if (mapData.insertObject2Map({
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 0, j: 4},
+                size: {h: 3, w: 3}}) == false
+        ) cc.log("adding object 3 to mapData false");
+        if (mapData.insertObject2Map({
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 4, j: 4},
+                size: {h: 5, w: 5}}) == false
+        ) cc.log("adding object 4 to mapData false");
+        if (mapData.insertObject2Map({
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 3, j: 3},
+                size: {h:1, w:1}}) == false
+        ) cc.log("adding object 5 to mapData false");
 
         var resourcesData = ResourcesData.getInstance();
         resourcesData.setAttributes([100000, 200, 500]);
 
-        var objectMgr = ObjectMgr.getInstance();
-
-        gameData.setAttributes(user, resourcesData, mapData, objectMgr, null, null);
-
+        gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
         // view mainScreen
-         fr.view(GameScreen);
+        fr.view(GameScreen);
     }, this);
 };
 

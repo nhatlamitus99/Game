@@ -5,6 +5,7 @@
 gv.CMD = gv.CMD ||{};
 gv.CMD.HAND_SHAKE = 0;
 gv.CMD.USER_LOGIN = 1;
+gv.CMD.INIT_GAME = 2;
 
 gv.CMD.USER_INFO = 1001;
 
@@ -30,7 +31,7 @@ CmdSendHandshake = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 CmdSendUserInfo = fr.OutPacket.extend(
     {
         ctor:function()
@@ -44,7 +45,7 @@ CmdSendUserInfo = fr.OutPacket.extend(
             this.updateSize();
         }
     }
-)
+);
 
 CmdSendLogin = fr.OutPacket.extend(
     {
@@ -53,6 +54,23 @@ CmdSendLogin = fr.OutPacket.extend(
             this._super();
             this.initData(100);
             this.setCmdId(gv.CMD.USER_LOGIN);
+        },
+        pack:function(user, id){
+            this.packHeader();
+            this.putString(user);
+            this.putInt(id);
+            this.updateSize();
+        }
+    }
+);
+
+CmdSendInitGame = fr.OutPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+            this.initData(100);
+            this.setCmdId(gv.CMD.INIT_GAME);
         },
         pack:function(user, id){
             this.packHeader();
@@ -92,6 +110,20 @@ loginNetwork.packetMap[gv.CMD.USER_LOGIN] = fr.InPacket.extend(
     }
 );
 
+loginNetwork.packetMap[gv.CMD.INIT_GAME] = fr.InPacket.extend(
+    {
+        ctor:function()
+        {
+            this._super();
+        },
+        readData:function(){
+            this.data = this.getString();
+            cc.log(this.data);
+        }
+    }
+);
+
+
 
 loginNetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
     {
@@ -100,11 +132,10 @@ loginNetwork.packetMap[gv.CMD.USER_INFO] = fr.InPacket.extend(
             this._super();
         },
         readData:function(){
-            //  this.token = this.getInt();
-            // this.name = this.getString();
-            //this.x = this.getInt();
-            //this.y = this.getInt();
-            this.username = this.getString();
+            this.initGame = this.getString();
+            var data = JSON.parse(this.initGame);
+            //this.username = data.playerInfo.name;
+            this.username = this.initGame;
         }
     }
 );

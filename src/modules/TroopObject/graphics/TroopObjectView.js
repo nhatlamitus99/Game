@@ -3,28 +3,37 @@ var TroopObjectGraphic = cc.Sprite.extend({
     velocity:0,     // vector x
     zOrder:15,      // hiển thị
     type:1,         // kiểu lính
+    state:TC.TROOP_STATE.IDLE,        // hành động
     appearPosition: cc.p(800, 300),
     rect:null,     // lấy size hình ảnh
+    direction:null, // 1-8
+    anims:null,
 
 
-    ctor:function(arg, type){
-        this._super(arg.LEVEL_1[type].textureIdle[0]);
+    ctor:function(type){
+        this._super();
+        this.type = type;
 
-        var game = fr.getCurrentScreen();
-        var mapView = game._map;
-        this.appearPosition = mapView.getPosOfCell(0, 0);
+        var i = Math.floor(Math.random() *43);
+        var j = Math.floor(Math.random() *43);
+        var pos = fr.getCurrentScreen()._mapLayer.getPosOfRegion({i:i, j:j});
+        this.x = pos.x;
+        this.y = pos.y;
 
-        this.x = this.appearPosition.x;
-        this.y = this.appearPosition.y;
+        this.scaleX = fr.getCurrentScreen()._mapLayer._scale;
+        this.scaleY = fr.getCurrentScreen()._mapLayer._scale;
 
-        var idleFrames = [];
-        for(var i = 0; i < arg.LEVEL_1[type].textureIdle.length; i++){
-            idleFrames.push(arg.LEVEL_1[type].textureIdle[i]);
-        }
+        this.loadAnim(type);
 
-        var animation = new cc.Animation(idleFrames, 0.1);
-        var animate = cc.animate(animation);
-        this.runAction(animate.repeatForever());
+       // this.updateDirectionAction();
+       // this.schedule(this.updateDirectionAction,2);
+
+        var pos2 = fr.getCurrentScreen()._mapLayer.getPosOfRegion({i: Math.floor(Math.random() *43), j: Math.floor(Math.random() *43)});
+        this.move(pos2.x, pos2.y);
+    },
+    loadAnim: function(type)
+    {
+        this.anims = TroopAnimationManager.getInstance().idle_animations[type];
     },
     update:function (dt){
         var x = this.x, y = this.y;
@@ -41,7 +50,7 @@ var TroopObjectGraphic = cc.Sprite.extend({
     },
     initWithTexture:function (aTexture) {
         if (this._super(aTexture)) {
-            this._state = BULLET_STATE_UNGRABBED;
+            this._state = 1;
         }
         if (aTexture instanceof cc.Texture2D) {
             this._rect = cc.rect(0, 0, aTexture.width, aTexture.height);
@@ -52,16 +61,96 @@ var TroopObjectGraphic = cc.Sprite.extend({
     },
     initWithSpriteFrame:function(spriteFrame){
         if(this._super(spriteFrame)){
-            this._state = BULLET_STATE_UNGRABBED;
+            this._state = 1;
         }
         this._rect = spriteFrame.getRect();
         return true;
     },
-})
+    updateDirectionAction:function(){
+        var animation;
+        var action;
+        this.direction = Math.floor(Math.random() * 8) + 1;
+        this.stopAllActions();
+
+        animation =  this.anims[this.direction];
+        action = cc.animate(animation);
+
+        switch(this.direction){
+            case 1:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 2:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 3:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 4:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 5:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 6:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 7:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+            case 8:{
+                this.runAction(cc.sequence(action).repeatForever());
+                break;
+            }
+        }
+        // end switch
+    },
+    move:function(x, y){
+        var direct = -1;
+        // xác đinh hướng đi
+        if(x == this.x){
+            if(y > this.y) direct = 8;
+            else direct = 1;
+        }
+        else if(y == this.y){
+            if(x > this.x) direct = 3;
+            else direct = 6;
+        }
+        else if(x > this.x && y > this.y){
+            direct = 2;
+        }
+        else if(x < this.x && y > this.y){
+            direct = 7;
+        }
+        else if(x < this.x && y < this.y){
+            direct = 5;
+        }
+        else{
+            direct = 4;
+        }
+        this.direction = direct;
+        this.anims = TroopAnimationManager.getInstance().run_animations[this.type];
+        var animation =  this.anims[this.direction];
+        var action = cc.animate(animation);
+        var time = Math.sqrt((this.x-x)*(this.x-x) + (this.y-y)*(this.y-y))/60;
+        cc.log(time);0
+        this.runAction(cc.moveTo(time, x, y));
+        if(direct >=2 && direct<=4) {
+            this.scaleX*=-1;
+        }
+        this.runAction(cc.sequence(action).repeatForever());
+    }
+});
 
 // create
-TroopObjectGraphic.create = function(arg, type){
-    var troop = new TroopObjectGraphic(arg, type);
+TroopObjectGraphic.create = function(type){
+    var troop = new TroopObjectGraphic(type);
     MW.CONTAINER.TROOPS.push(troop);
     return troop;
 };
