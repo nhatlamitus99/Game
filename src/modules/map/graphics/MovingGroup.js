@@ -40,7 +40,7 @@ var MovingGroup = cc.Class.extend({
             this._subs.setGreenState();
         else
             this._subs.setRedState();
-        this._subs.setZOrder(MapConfig.Z_ORDER_MOVING_SUBS);
+        this._subs.setLocalZOrder(MapConfig.Z_ORDER_MOVING_SUBS);
     },
     goTo: function(cell) {
         if (this._newRegion.i == cell.i && this._newRegion.j == cell.j)
@@ -60,7 +60,7 @@ var MovingGroup = cc.Class.extend({
         this._subs.x = posCenter.x;
         this._subs.y = posCenter.y;
 
-        this._object.setZOrder(mapView.calculateZOrderOfRegion(this._newRegion));
+        this._object.setLocalZOrder(mapView.calculateZOrderOfRegion(this._newRegion));
     },
     goBack: function () {
         this.setPosArrow();
@@ -72,13 +72,13 @@ var MovingGroup = cc.Class.extend({
         this._subs.x = posCenter.x;
         this._subs.y = posCenter.y;
 
-        this._object.setZOrder(mapView.calculateZOrderOfRegion(this._oldRegion));
+        this._object.setLocalZOrder(mapView.calculateZOrderOfRegion(this._oldRegion));
 
     },
     showNormalSubs: function () {
         this._arrow.setSizeArrow(0);
         this._subs.setNormalState();
-        this._subs.setZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
+        this._subs.setLocalZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
     },
     isNULL: function () {
         return this._type == MapConfig.NULL_CELL.type;

@@ -4,7 +4,6 @@ var gv = gv || {};
 var DESIGN_RESOLUTION_WIDTH = 960;
 var DESIGN_RESOLUTION_HEIGHT = 640;
 
-
 cc.game.onStart = function () {
     if (!cc.sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
         document.body.removeChild(document.getElementById("cocosLoading"));
@@ -79,6 +78,10 @@ cc.game.onStart = function () {
         resourcesData.setAttributes([100000, 200, 500]);
 
         gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
+
+        // load Config
+        CONFIG_DATA.load();
+
         // view mainScreen
         fr.view(ScreenLogin);
     }, this);

@@ -39,17 +39,8 @@
     "src/base/Resource.js",
     "src/base/UIFactory.js",
 
+    "src/config/ConfigData.js",
     "src/config/MapConfig.js",
-
-
-    "src/modules/FrameCache/FrameCache.js",
-
-    "src/modules/game/data/GameData.js",
-    "src/modules/game/graphics/GameView.js",
-    "src/modules/game/data/GameData.js",
-    "src/modules/game/graphics/GameView.js",
-
-
     "src/config/LoginConfig.js",
     "src/config/TroopConfig.js",
     "src/config/LobbyConfig.js",
@@ -57,6 +48,19 @@
     "src/config/ResourcesConfig.js",
     "src/config/TroopType.js",
     "src/config/ObjectMgrConfig.js",
+    "src/config/LoginConfig.js",
+    "src/config/TroopConfig.js",
+    "src/config/LobbyConfig.js",
+    "src/config/GameConfig.js",
+    "src/config/ResourcesConfig.js",
+    "src/config/TroopType.js",
+
+    "src/modules/FrameCache/FrameCache.js",
+
+    "src/modules/game/data/GameData.js",
+    "src/modules/game/graphics/GameView.js",
+    "src/modules/game/data/GameData.js",
+    "src/modules/game/graphics/GameView.js",
 
     "src/modules/map/data/MapData.js",
     "src/modules/map/graphics/MovingGroup.js",
@@ -66,13 +70,6 @@
     "src/modules/resources/data/ResourcesData.js",
 
     "src/modules/UserInfo/User.js",
-
-    "src/config/LoginConfig.js",
-    "src/config/TroopConfig.js",
-    "src/config/LobbyConfig.js",
-    "src/config/GameConfig.js",
-    "src/config/ResourcesConfig.js",
-    "src/config/TroopType.js",
 
     "src/modules/object/ObjectMgrView.js",
     "src/modules/object/graphics/MapObjectView.js",

@@ -49,7 +49,7 @@
         this.itemInfo["Army"] = [itemInfo_resources.AMC, itemInfo_resources.BAR];
 
         this.listCategories["Decorations"] = [];
-        this.listItemsName["Decorations"] = []
+        this.listItemsName["Decorations"] = [];
 
         this.listCategories["Defense"] = ["DEF_1", "DEF_2", "DEF_3", "DEF_5"];
         this.listItemsName["Defense"] = ["Canon", "Archer tower", "Trebuchet", "A.A gun"];

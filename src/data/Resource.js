@@ -155,10 +155,16 @@ var itemInfo_resources = {
     AMC: "content/Design Documents/Config json/ArmyCamp.json",
     BAR: "content/Design Documents/Config json/Barrack.json",
     BDH: "content/Design Documents/Config json/BuilderHut.json",
+    CCS: "content/Design Documents/Config json/ClanCastle.json",
     DEF: "content/Design Documents/Config json/Defence.json",
+    DEB: "content/Design Documents/Config json/DefenceBase.json",
+    OBS: "content/Design Documents/Config json/Obstacle.json",
     RES: "content/Design Documents/Config json/Resource.json",
     STO: "content/Design Documents/Config json/Storage.json",
-    TOW: "content/Design Documents/Config json/TownHall.json"
+    TOW: "content/Design Documents/Config json/TownHall.json",
+    TRO: "content/Design Documents/Config json/Troop.json",
+    TRB: "content/Design Documents/Config json/TroopBase.json",
+    WAL: "content/Design Documents/Config json/Wall.json"
 };
 
 var g_resources = [
