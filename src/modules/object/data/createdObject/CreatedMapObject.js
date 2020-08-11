@@ -3,7 +3,6 @@
 
 var CreatedMapObject = MapObject.extend(
     {
-        level: 0,
         description: null,
         buildingCost: 0,
         buildingTime: 0,
@@ -13,7 +12,7 @@ var CreatedMapObject = MapObject.extend(
 
         ctor: function(type, position) {
             this._super(type, position);
-            this.loadInfo(type, level);
+            //this.loadInfo(type, level);
         },
 
         loadInfo: function(type, level) {

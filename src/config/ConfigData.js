@@ -34,7 +34,8 @@ var CONFIG_DATA = {
         "Wall": "WAL"
     },
     getData: function(key, type, level) {
-        cc.log(key + " " + level);
+        //cc.log(key + " " + type + " " + level);
+        //cc.log(this.file["OBS"][type]);
         var file = this.file[this.name[key]];
         return file[type][level];
     }

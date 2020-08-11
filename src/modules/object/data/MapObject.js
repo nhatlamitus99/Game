@@ -9,6 +9,7 @@ var MapObject = cc.Class.extend(
         position: null,
         size: null,
         state: false,
+        level: 1,
         imagePath: null,
         beginTime: null,
 
