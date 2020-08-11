@@ -27,6 +27,12 @@ var GameData = cc.Class.extend({
         var jsonContent = JSON.parse(jsonFile);
 
         cc.log("Loading JSON from server");
+
+        cc.log("Loading Resources");
+        var resourcesData = ResourcesData.getInstance();
+        resourcesData.setAttributes(jsonContent.resource);
+        resourcesData.showInfo();
+
         cc.log("Loading UserInfor");
         var user = User.getInstance();
         user.setAttributes(jsonContent.playerInfo);
@@ -38,20 +44,14 @@ var GameData = cc.Class.extend({
         mapData.setObjectMgrData(objectMgrData);
         for (var i = 0; i < jsonContent.listObject.length; ++i) {
             var attributes = this.updateObjectJson(jsonContent.listObject[i]);
-            cc.log(attributes.position.i + " " + attributes.position.j + " " + attributes.size.h + " " + attributes.size.w);
-            for (var key in attributes) {
-                cc.log(key + ": " + attributes[key]);
-            }
-            //if (mapData.insertObject2Map(attributes))
-            //    cc.log("Failed to load object " + i);
-            break;
+            //cc.log(attributes.position.i + " " + attributes.position.j + " " + attributes.size.h + " " + attributes.size.w);
+            //for (var key in attributes) {
+            //    cc.log(key + ": " + attributes[key]);
+            //}
+            if (mapData.insertObject2Map(attributes))
+                cc.log("Failed to load object " + i);
         }
         mapData.customInit();
-
-        cc.log("Loading Resources");
-        var resourcesData = ResourcesData.getInstance();
-        resourcesData.setAttributes(jsonContent.resource);
-        resourcesData.showInfo();
 
         this.setAttributes(user, resourcesData, mapData, null, null);
         cc.log("Loading done <3");
