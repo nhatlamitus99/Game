@@ -1,4 +1,18 @@
-
+var formatIntToString = function (x) {
+    if (x == 0)
+        return "0";
+    var str = "";
+    var Len = 0;
+    while (x >= 1) {
+        if (Len % 3 == 0 && Len != 0)
+            str = "," + str;
+        str = (x % 10) + str;
+        Len += 1;
+        x /= 10;
+        x = Math.floor(x);
+    }
+    return str;
+}
 
 var CustomTableViewCell = cc.TableViewCell.extend({
     draw: function (ctx) {
@@ -10,27 +24,32 @@ var TableViewTestLayer = cc.Layer.extend({
     shopBackground: null,
     scaleBackground: 0.9,
     zOrder: 100,
-    resources: [93123170, 445257, 69180],
+    resources: [0, 0, 0],
     ratioX: 1,
     ratioY: 1,
     _slotItemWidth: 0,
     _slotItemHeight: 0,
-    listItemsName: [],
-    listItemsSource: [],
+    listItemsName: null,
+    listItemsSource: null,
     _mainGUI: null,
+    listItemsInfo: null,
     currentListItemsNameIndex: 0,
-    ctor: function (mainGUI, listItemsSource, listItemsName) {
+    ctor: function (mainGUI, listItemsSource, listItemsName, listItemsInfo) {
         this._super();
-        this.readInfo(listItemsSource, listItemsName);
+        this.readInfo(listItemsSource, listItemsName, listItemsInfo);
         this.popUpListGUI();
         this._mainGUI = mainGUI;
         //this.animatePopUpGUI();
         this.show();
         this.init();
     },
-    readInfo: function (listItemsSource, listItemsName) {
+    readInfo: function (listItemsSource, listItemsName, listItemsInfo) {
         this.listItemsSource = listItemsSource;
         this.listItemsName = listItemsName;
+        this.listItemsInfo = listItemsInfo;
+        //cc.log(ResourcesData.getInstance()._resources);
+        this.resources = ResourcesData.getInstance()._resources;
+        
     },
     getResources: function () {
         
@@ -85,24 +104,11 @@ var TableViewTestLayer = cc.Layer.extend({
         scale.y = (ratioY * B.height) / A.height;
         return scale;
     },
-    formatIntToString: function (x) {
-        var str = "";
-        var Len = 0;
-        while (x >= 1) {
-            if (Len % 3 == 0 && Len != 0)
-                str = "," + str;
-            str = (x % 10) + str;
-            Len += 1;
-            x /= 10;
-            x = Math.floor(x);
-        }
-        return str;
-    },
     addResources: function (footer, icon, amount, id) {
         var resBar = new cc.Scale9Sprite(shop_resources.RES_BAR);
         var icon = new cc.Scale9Sprite(icon);
 
-        amount = this.formatIntToString(amount);
+        amount = formatIntToString(amount);
         var value = new cc.LabelBMFont(amount, "fonts/soji_16.fnt");
 
         // D: long distance, d: short distance between 2 resBar
@@ -251,7 +257,7 @@ var TableViewTestLayer = cc.Layer.extend({
             
             cell = new CustomTableViewCell();
             //var sprite = new cc.Sprite("shop_gui/back.png");
-            var sprite = new Item(this.listItemsName[this.currentListItemsNameIndex], "content/Art/GUIs/icons/shop_gui/icon/" + this.listItemsSource[this.currentListItemsNameIndex] + ".png", [], this.ratioX, this.ratioY).itemBackground;
+            var sprite = new Item(this.listItemsName[this.currentListItemsNameIndex], this.listItemsSource[this.currentListItemsNameIndex], this.listItemsInfo[this.currentListItemsNameIndex], this.ratioX, this.ratioY).itemBackground;
             sprite.anchorX = 0;
             sprite.anchorY = 0;
             sprite.x = 0;
@@ -266,12 +272,21 @@ var TableViewTestLayer = cc.Layer.extend({
         return this.listItemsSource.length;
     },
     onSelectClose: function () {
-        this.visible = false;
-        this._mainGUI.shopBackground.visible = true;
-        this._mainGUI.visible = false;
+        this.shopBackground.runAction(cc.sequence(
+            cc.scaleTo(0.2, 1.1),
+            cc.callFunc(this.invisibleAll.bind(this)),
+            cc.scaleTo(0, 1)
+        ));
+        
+            
     },
     onSelectBack: function () {
         this.visible = false;
         this._mainGUI.shopBackground.visible = true;
+    },
+    invisibleAll: function () {
+        this.visible = false;
+        this._mainGUI.shopBackground.visible = true;
+        this._mainGUI.visible = false;
     }
 });

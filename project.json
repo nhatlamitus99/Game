@@ -105,9 +105,15 @@
     "src/modules/TroopObject/TrainTroopUI.js",
     "src/modules/TroopObject/TrainTroopObj.js",
     "src/modules/TroopObject/TrainTroopMiniObject.js",
+    "src/modules/TroopObject/TroopAnimationManager.js",
 
     "src/modules/Lobby/Lobby.js",
-    "src/modules/Lobby/Setting.js"
+    "src/modules/Lobby/Setting.js",
+
+    "src/modules/shop/logic/Category.js",
+    "src/modules/shop/logic/Item.js",
+    "src/modules/shop/logic/ScreenShop.js",
+    "src/modules/shop/logic/ScreenTest.js"
 
   ]
 }

@@ -12,10 +12,10 @@ var ResourcesData = cc.Class.extend({
         // data.length must equal DATA_SIZE and data[i] >= 0
         if (data.length != ResourcesConfig.DATA_SIZE)
             return false;
-        for (var i = 0; i < ResourcesData.DATA_SIZE; ++i)
+        for (var i = 0; i < ResourcesConfig.DATA_SIZE; ++i)
             if (data[i] < 0)
                 return false;
-        for (i = 0; i < ResourcesData.DATA_SIZE; ++i)
+        for (i = 0; i < ResourcesConfig.DATA_SIZE; ++i)
             this._resources[i] = data[i];
         return true;
     },

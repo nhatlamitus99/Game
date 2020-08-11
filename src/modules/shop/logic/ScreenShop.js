@@ -11,6 +11,7 @@
     viewListArmy: null,
     viewListDefense: null,
     isViewing: false,
+    itemInfo: null,
     ctor: function () {
         this._super();
         this.init();
@@ -26,30 +27,33 @@
         ));
     },
     show: function () {
-        
-        this.visible = true;
         this.animatePopUpGUI();
-
+        this.visible = true;
+        this.shopBackground.visible = true;
     },
     init: function () {
         if (this.listCategories != null)
             return;
         this.listCategories = new Map();
         this.listItemsName = new Map();
+        this.itemInfo = new Map();
 
         this.listCategories["Treasures"] = ["gold_10", "gold_50", "gold_100", "elixir_10", "elixir_50", "elixir_100"];
         
         this.listCategories["Resources"] = ["BDH_1", "RES_1", "RES_2", "STO_1", "STO_2"];
         this.listItemsName["Resources"] = ["Builder hut", "Gold mine", "Elixir mine", "Gold storage", "Elixir storage"];
+        this.itemInfo["Resources"] = [itemInfo_resources.BDH, itemInfo_resources.RES, itemInfo_resources.RES, itemInfo_resources.STO, itemInfo_resources.STO];
 
         this.listCategories["Army"] = ["AMC_1", "BAR_1"];
         this.listItemsName["Army"] = ["Army camps", "Barrack"];
+        this.itemInfo["Army"] = [itemInfo_resources.AMC, itemInfo_resources.BAR];
 
         this.listCategories["Decorations"] = [];
         this.listItemsName["Decorations"] = []
 
         this.listCategories["Defense"] = ["DEF_1", "DEF_2", "DEF_3", "DEF_5"];
         this.listItemsName["Defense"] = ["Canon", "Archer tower", "Trebuchet", "A.A gun"];
+        this.itemInfo["Defense"] = [itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF];
 
         this.listCategories["Shield"] = [];
 
@@ -223,10 +227,12 @@
             cc.log("1");
     },
     onSelectResources: function () {
+        //var tmp = new Item("LeGau", "STO_1", itemInfo_resources.STO, 1, 1);
+        
         if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListResources == null) {
-                this.viewListResources = new TableViewTestLayer(this, this.listCategories["Resources"], this.listItemsName["Resources"]);
+                this.viewListResources = new TableViewTestLayer(this, this.listCategories["Resources"], this.listItemsName["Resources"], this.itemInfo["Resources"]);
                 this.addChild(this.viewListResources, 1);
             }
             else {
@@ -234,6 +240,7 @@
                     this.viewListResources.show();
             }
         }
+        
     },
     onSelectDecorations: function () {
         if (this.shopBackground.visible == true && this.visible == true)
@@ -243,7 +250,7 @@
         if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListArmy == null) {
-                this.viewListArmy = new TableViewTestLayer(this, this.listCategories["Army"], this.listItemsName["Army"]);
+                this.viewListArmy = new TableViewTestLayer(this, this.listCategories["Army"], this.listItemsName["Army"], this.itemInfo["Army"]);
                 this.addChild(this.viewListArmy, 1);
             }
             else {
@@ -256,7 +263,7 @@
         if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListDefense == null) {
-                this.viewListDefense = new TableViewTestLayer(this, this.listCategories["Defense"], this.listItemsName["Defense"]);
+                this.viewListDefense = new TableViewTestLayer(this, this.listCategories["Defense"], this.listItemsName["Defense"], this.itemInfo["Defense"]);
                 this.addChild(this.viewListDefense, 1);
             }
             else {

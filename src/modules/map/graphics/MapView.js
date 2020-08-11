@@ -26,13 +26,17 @@ var MapView = cc.Layer.extend({
     _flagOfEditMovingSpeed: false,          // boolean value: true-touching, false- no touch
     _flagOfMovingScreen: false,             // boolean value: true-screen was moving, false-screen was not moving
 
+    _troop_batches: null,
+
     ctor:function() {
         this._super();
         //this.giaLapLoadListObject();
         this._objectMgrView = new ObjectMgrView();
         //this._troopMgr = new ..
         this.loadMapGUI();
+        this.buildTroopBatches();
         this.setUserActions();
+
         this.schedule(this.updatePerFrame);
     },
 
@@ -46,6 +50,17 @@ var MapView = cc.Layer.extend({
         this.loadTroops();
         // load Arrow Move
         this.loadArrowMove();
+    },
+    buildTroopBatches: function()
+    {
+        this._troop_batches = [];
+        for (var i = 0; i <= 3; i++)
+        {
+            var node = new cc.Node();
+            this._map.addChild(node);
+
+            this._troop_batches[i] = node;
+        }
     },
     updatePerFrame: function() {
         this.moveMapPerFrame();
@@ -247,8 +262,8 @@ var MapView = cc.Layer.extend({
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
         //cc.log("this is my cell: " + cell.i + " " + cell.j);
         if (!selectedGroup.isNULL()) {
-            //if (MovingGroup.equal(beginGroup, selectedGroup) == true) {
-            if (selectedGroup.isInMovingState()) {
+            if (MovingGroup.equal(beginGroup, selectedGroup) == true) {
+            //if (selectedGroup.isInMovingState()) {
                 selectedGroup.goTo(cell);
                 return true;
             }
@@ -403,6 +418,7 @@ var MapView = cc.Layer.extend({
         result.y = location.y - matrixMap.y*scale;
         return result;
     },
+
     getObjectFromTypeID: function(type, id) {
         if (type == MapConfig.NULL_CELL.type)
             return null;
@@ -412,6 +428,14 @@ var MapView = cc.Layer.extend({
         if (type == MapConfig.NULL_CELL.type)
             return null;
         return this._objectMgrView.getSubsFromTypeID(type, id);
+    },
+    // get center location of object in map
+    showObjectInMap: function(objectView, cell) {
+
+    },
+    addTroop: function(troop_type, troop_view, zorder)
+    {
+        this._troop_batches[troop_type].addChild(troop_view, zorder);
     }
 });
 

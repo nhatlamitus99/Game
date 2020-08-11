@@ -1,7 +1,7 @@
 
 var gv = gv || {};
 
-var DESIGN_RESOLUTION_WIDTH = 1136;
+var DESIGN_RESOLUTION_WIDTH = 960;
 var DESIGN_RESOLUTION_HEIGHT = 640;
 
 
@@ -71,7 +71,7 @@ cc.game.onStart = function () {
         ) cc.log("adding object 5 to mapData false");
 
         var resourcesData = ResourcesData.getInstance();
-        resourcesData.setAttributes([0,0,0]);
+        resourcesData.setAttributes([100000, 200, 500]);
 
         gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
         // view mainScreen

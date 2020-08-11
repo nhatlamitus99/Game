@@ -14,6 +14,7 @@ var MapConfig = {
 
     // using for calculate zOrder of object in map
     MAX_Z_ORDER_OBJECT: 200,    // minZOrder of cell is 200 - 42*2*2 = 32
+    MAX_Z_ORDER_TROOP: 300,
 
     // zOrder of substructure
     Z_ORDER_SUBSTRUCTURE: 10,
