@@ -71,9 +71,11 @@ var ScreenLogin = cc.Layer.extend({
     {
         cc.log("Finish Login !!!");
     },
-    onUserInfo:function(name, userName)
+    onUserInfo:function(name, gameInfo)
     {
-        cc.log("username: " + userName);
+        //cc.log("game data: " + gameInfo);
+        var gameData = GameData.getInstance();
+        gameData.loadDataFromServer(gameInfo);
         // on loading
         this.loading2 = new ccui.LoadingBar(resLogin.LOADING_BAR, 0);
         this.loading2.setDirection(ccui.LoadingBar.TYPE_LEFT);

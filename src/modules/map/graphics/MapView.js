@@ -250,10 +250,6 @@ var MapView = cc.Layer.extend({
             typeID.id
         );
         group.setArrow(this._arrowMove);
-        //cc.log("cell: " + cell.i + " " + cell.j);
-        //cc.log("create currentGroup " + typeID.type + " " + typeID.id);
-        //if (region != null)
-        //    cc.log("current Region " + region.i + " " + region.j + " " + region.w + " " + region.h);
     },
 
     onTouchesMoved: function(touches) {

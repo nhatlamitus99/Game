@@ -23,7 +23,7 @@ var MapConfig = {
     Z_ORDER_ARROW: 200,
 
     // when a cell is not overided by building
-    NULL_CELL: {type: -1, id: -1},
+    NULL_CELL: {type: "null_item", id: -1},
     getNullCell: function (){
         return {
             type: this.NULL_CELL.type,

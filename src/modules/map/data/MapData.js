@@ -14,6 +14,9 @@ var MapData = cc.Class.extend({
         this._objectMgrData = objectMgrData;
         this._troopMgrData = troopMgrData;
     },
+    setObjectMgrData: function(mgr) {
+        this._objectMgrData = mgr;
+    },
     // true - > overlap
     checkOverlap: function(region, typeID){
         var x = region.i;
