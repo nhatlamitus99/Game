@@ -7,8 +7,9 @@ var MovingGroup = cc.Class.extend({
     _oldRegion: null,       // regions before moving
     _newRegion: null,       // regions of objects and substructures
     _type: null,            // type of objects
-    _id: null,             // id of each objects
+    _id: null,              // id of each objects
     _arrow: null,
+    flagOfMove: false,      // true when object is selecting, false otherwise
 
     ctor: function(subs, objects, oldRegion, newRegions, type, ids) {
         this._subs = subs;
@@ -52,7 +53,6 @@ var MovingGroup = cc.Class.extend({
         else
             this._subs.setGreenState();
         var mapView = MapView.getInstance();
-        //cc.log("GoTo - newRegion " + this._newRegion.i + " " + this._newRegion.j + " " + this._newRegion.w + " " + this._newRegion.h);
         var posCenter = mapView.getCenterPosOfRegion(this._newRegion);
         this._object.x = posCenter.x;
         this._object.y = posCenter.y;
@@ -76,15 +76,6 @@ var MovingGroup = cc.Class.extend({
     isNULL: function () {
         return this._type == MapConfig.NULL_CELL.type;
     },
-    copyFrom: function (x) {
-        this._subs = x._subs;
-        this._object = x._object;
-        this._oldRegion = x._oldRegion;
-        this._newRegion = x._newRegion;
-        this._type = x._type;
-        this._id = x._id;
-        this._arrow = x._arrow;
-    },
     setPosArrow: function() {
         var mapView = MapView.getInstance();
         //cc.log("new region of group " + this._newRegion.i + " " + this._newRegion.j);
@@ -101,16 +92,13 @@ var MovingGroup = cc.Class.extend({
         this._newRegion.j = this._oldRegion.j;
     },
     hasCell: function(cell) {
+        if (this._type == MapConfig.NULL_CELL.type)
+            return false;
         if (!(this._newRegion.i <= cell.i && cell.i < this._newRegion.i + this._newRegion.w))
             return false;
-        cc.log("hasCell");
         return this._newRegion.j <= cell.j && cell.j < this._newRegion.j + this._newRegion.h;
     },
     isInMovingState: function() {
         return this._subs.isInMovingState();
     }
 });
-
-MovingGroup.equal = function(a, b) {
-    return (a._type == b._type && a._id == b._id);
-};

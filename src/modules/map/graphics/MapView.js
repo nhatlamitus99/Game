@@ -1,7 +1,5 @@
 // this variables will be used for moving object
-var currentGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
 var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
-var beginGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
 
 var MapView = cc.Layer.extend({
     _map:null,
@@ -222,11 +220,13 @@ var MapView = cc.Layer.extend({
         this._movingSpeed.x = 0;
         this._movingSpeed.y = 0;
         this._flagOfEditMovingSpeed = false;
-        this.setGroupFromTouch(beginGroup, touches);
+
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
         if (!selectedGroup.isNULL())
-            if (MovingGroup.equal(beginGroup, selectedGroup) || selectedGroup.hasCell(cell))
+            if (selectedGroup.hasCell(cell)) {
                 selectedGroup.showMovingSubs();
+                selectedGroup.flagOfMove = true;
+            }
         return true;
     },
 
@@ -250,7 +250,6 @@ var MapView = cc.Layer.extend({
             typeID.id
         );
         group.setArrow(this._arrowMove);
-
         //cc.log("cell: " + cell.i + " " + cell.j);
         //cc.log("create currentGroup " + typeID.type + " " + typeID.id);
         //if (region != null)
@@ -260,10 +259,8 @@ var MapView = cc.Layer.extend({
     onTouchesMoved: function(touches) {
         this._flagOfMovingScreen = true;
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
-        //cc.log("this is my cell: " + cell.i + " " + cell.j);
         if (!selectedGroup.isNULL()) {
-            if (MovingGroup.equal(beginGroup, selectedGroup) == true) {
-            //if (selectedGroup.isInMovingState()) {
+            if (selectedGroup.flagOfMove) {
                 selectedGroup.goTo(cell);
                 return true;
             }
@@ -285,13 +282,12 @@ var MapView = cc.Layer.extend({
 
     onTouchesEnded: function(touches) {
         var mapData = MapData.getInstance();
-        //var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
             cc.log("Touch end with moving");
             if (!selectedGroup.isNULL())
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
-                    //selectedGroup.goTo(cell);
                     selectedGroup.showNormalSubs();
                     cc.log("move object1:");
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
@@ -299,7 +295,6 @@ var MapView = cc.Layer.extend({
                 }
         }
         else {
-            ////cc.log("touch End: " + currentGroup._type + "- " + currentGroup._id + "   " + selectedGroup._type + "- " + selectedGroup._id);
             if (!selectedGroup.isNULL()) {
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
