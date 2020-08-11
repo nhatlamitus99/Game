@@ -45,27 +45,32 @@ cc.game.onStart = function () {
         mapData.customInit();
         mapData._objectMgrData = objectMgrData;
         if (mapData.insertObject2Map({
-            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+            type: OBJECT_MGR_CONFIG.buildingType.AMC_1,
+            level: 9,
             position: {i: 0, j: 0},
             size: {h: 2, w: 2}}) == false
         ) cc.log("adding object 1 to mapData false");
         if (mapData.insertObject2Map({
-            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
-            position: {i: 4, j: 0},
+            type: OBJECT_MGR_CONFIG.buildingType.BAR_1,
+                level: 2,
+                position: {i: 4, j: 0},
             size: {h: 4, w: 4}}) == false
         ) cc.log("adding object 2 to mapData false");
         if (mapData.insertObject2Map({
-                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                type: OBJECT_MGR_CONFIG.buildingType.AMC_1,
+                level: 2,
                 position: {i: 0, j: 4},
                 size: {h: 3, w: 3}}) == false
         ) cc.log("adding object 3 to mapData false");
         if (mapData.insertObject2Map({
-                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                type: OBJECT_MGR_CONFIG.buildingType.BDH_1,
+                level: 1,
                 position: {i: 4, j: 4},
                 size: {h: 5, w: 5}}) == false
         ) cc.log("adding object 4 to mapData false");
         if (mapData.insertObject2Map({
-                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                type: OBJECT_MGR_CONFIG.buildingType.TOW_1,
+                level: 3,
                 position: {i: 3, j: 3},
                 size: {h:1, w:1}}) == false
         ) cc.log("adding object 5 to mapData false");
@@ -75,7 +80,7 @@ cc.game.onStart = function () {
 
         gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
         // view mainScreen
-        fr.view(GameScreen);
+        fr.view(ScreenLogin);
     }, this);
 };
 

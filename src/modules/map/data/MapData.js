@@ -37,7 +37,10 @@ var MapData = cc.Class.extend({
     insertObject2Map: function(attributes) {
         if (this.checkOverlap(attributes))
             return false;
+        cc.log("test1")
         attributes.id = this._objectMgrData.getNextIdOfType(attributes.type);
+        cc.log("test2")
+
         var x = attributes.position.i;
         var y = attributes.position.j;
         var w = attributes.size.w;
@@ -49,7 +52,11 @@ var MapData = cc.Class.extend({
                     id: attributes.id
                 };
             }
+        cc.log("test3")
+
         this._objectMgrData.createItemToList(attributes);
+        cc.log("test4")
+
         //cc.log("adding object type-id" + attributes.type + " " + attributes.id);
         return true;
     },
