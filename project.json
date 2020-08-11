@@ -59,6 +59,7 @@
     "src/config/ObjectMgrConfig.js",
 
     "src/modules/map/data/MapData.js",
+    "src/modules/map/graphics/MovingGroup.js",
     "src/modules/map/graphics/MapView.js",
     "src/modules/map/graphics/ArrowMove.js",
 

@@ -39,19 +39,23 @@ var Substructure = cc.Sprite.extend({
     getID: function(){
         return this._id;
     },
-    setGreenMode: function () {
+    setGreenState: function () {
         this._greenSubs.setVisible(true);
         this._redSubs.setVisible(false);
         this._normalSubs.setVisible(false);
     },
-    setRedMode: function () {
+    setRedState: function () {
         this._greenSubs.setVisible(false);
         this._redSubs.setVisible(true);
         this._normalSubs.setVisible(false);
     },
-    setNormalMode: function() {
+    setNormalState: function() {
         this._greenSubs.setVisible(false);
         this._redSubs.setVisible(false);
         this._normalSubs.setVisible(true);
+
+    },
+    isInMovingState: function() {
+        return !this._normalSubs.isVisible();
     }
 });

@@ -9,7 +9,6 @@ var ArrowMove = cc.Node.extend({
         // init arrow Sprites
         for (var i = 0; i < res.map.arrow_move.length; ++i) {
             this._arrowSprites[i] = cc.Sprite(res.map.arrow_move[i]);
-            //this._arrowSprites[i].setScale(20);
             this._arrowSprites[i].setVisible(false);
             this._arrowSprites[i].setScale(0.5);
             this.addChild(this._arrowSprites[i]);

@@ -53,9 +53,15 @@ var ObjectMgrView = cc.Class.extend({
         return this.listSubs;
     },
     setGreenState: function(type, id) {
-        this.listSubs[type][id].setGreenMode();
+        this.listSubs[type][id].setGreenState();
     },
     setNormalState: function(type, id) {
-        this.listSubs[type][id].setNormalMode();
+        this.listSubs[type][id].setNormalState();
+    },
+    getObjectFromTypeID: function(type, id) {
+        return this.listObject[type][id];
+    },
+    getSubsFromTypeID: function(type, id) {
+        return this.listSubs[type][id];
     }
 });

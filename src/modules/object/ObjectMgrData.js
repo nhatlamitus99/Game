@@ -58,7 +58,11 @@ var ObjectMgrData = cc.Class.extend({
             w: object.size.w
         }
     },
-
+    setPosOfObject: function(typeID, newRegion) {
+        var object = this.getObject(typeID.type, typeID.id);
+        object.position.i = newRegion.i;
+        object.position.j = newRegion.j;
+    },
     sendMessage: function (message) {
     }
 });

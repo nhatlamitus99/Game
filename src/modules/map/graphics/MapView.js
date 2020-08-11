@@ -1,27 +1,30 @@
+// this variables will be used for moving object
+var currentGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
+var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
+var beginGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
+
 var MapView = cc.Layer.extend({
     _map:null,
 
     // on client
-    _scale: null,   // scale of current screen view map
-    _mapOriginSize: null,   // size of screen after the first scaling
-    _matrixMap: null,   // matrixMap (matrix of cell)
-    _objectMgrView: null,   // manager of object
-    _troopMgrView: null, // troop manager
-    _arrowMove: null, // arrow Moving which are used for moving
-    _lastSelectedTypeID: null, // using for moving object
+    _scale: null,                           // scale of current screen view map
+    _mapOriginSize: null,                   // size of screen after the first scaling
+    _matrixMap: null,                       // matrixMap (matrix of cell)
+    _objectMgrView: null,                   // manager of object
+    _troopMgrView: null,                    // troop manager
+    _arrowMove: null,                       // arrow Moving which are used for moving
 
-    // using for smoothly action
-    _movingSpeed: {    // acceleration of Moving screen
+    _movingSpeed: {                         // using for smoothly action
         x: 0,
         y: 0,
-        unitX: 0,   // x -= unitX each frame
-        unitY: 0    // y -= unitY each frame
+        unitX: 0,                           // x -= unitX each frame
+        unitY: 0                            // y -= unitY each frame
     },
-    _scalingSpeed: 0,   // acceleration of Zoom screen
+    _scalingSpeed: 0,                       // acceleration of Zoom screen
 
     // Using for synchronize
-    _flagOfEditMovingSpeed: false,   // boolean value: true-touching, false- no touch
-    _flagOfMovingScreen: false, // boolean value: true-screen was moving, false-screen was not moving
+    _flagOfEditMovingSpeed: false,          // boolean value: true-touching, false- no touch
+    _flagOfMovingScreen: false,             // boolean value: true-screen was moving, false-screen was not moving
 
     ctor:function() {
         this._super();
@@ -100,13 +103,17 @@ var MapView = cc.Layer.extend({
                 this._map.addChild(listObject[i][j], zOrder);
                 this._map.addChild(listSubs[i][j], MapConfig.Z_ORDER_SUBSTRUCTURE);
                 // set position
-                var posCenter = this.getCenterPosOfRegion(region);
-                listObject[i][j].x = posCenter.x;
-                listObject[i][j].y = posCenter.y;
-                listSubs[i][j].x = posCenter.x;
-                listSubs[i][j].y = posCenter.y;
+                this.setPositionObjectSubs(listObject[i][j], listSubs[i][j], region);
             }
         }
+    },
+
+    setPositionObjectSubs: function(object, subs, region) {
+        var posCenter = this.getCenterPosOfRegion(region);
+        object.x = posCenter.x;
+        object.y = posCenter.y;
+        subs.x = posCenter.x;
+        subs.y = posCenter.y;
     },
 
     loadArrowMove: function() {
@@ -199,25 +206,59 @@ var MapView = cc.Layer.extend({
         this._flagOfEditMovingSpeed = true;
         this._movingSpeed.x = 0;
         this._movingSpeed.y = 0;
-        if (this._lastSelectedTypeID != null) {
-            var mapData = MapData.getInstance();
-            var touchLocation = touches[0].getLocation();
-            var cell = this.getCellInMatrixMap(touchLocation);
-            var typeID = mapData.getTypeIDFromCell(cell);
-            if (typeID.type == this._lastSelectedTypeID.type && typeID.id == this._lastSelectedTypeID.id) {
-                var objectMgrView = this._objectMgrView;
-                objectMgrView.setGreenState(typeID.type, typeID.id);
-            }
-        }
         this._flagOfEditMovingSpeed = false;
+        this.setGroupFromTouch(beginGroup, touches);
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        if (!selectedGroup.isNULL())
+            if (MovingGroup.equal(beginGroup, selectedGroup) || selectedGroup.hasCell(cell))
+                selectedGroup.showMovingSubs();
         return true;
+    },
+
+    setGroupFromTouch: function(group, touches){
+        var mapData = MapData.getInstance();
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        var typeID = mapData.getTypeIDFromCell(cell);
+        var objectData = mapData.getObjectFromTypeID(typeID.type, typeID.id);
+        var region = null, oldRegion = null;
+        if (objectData != null) {
+            region = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
+            oldRegion = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
+        }
+        // set currGroup
+        group.setAttributes(
+            this.getSubsFromTypeID(typeID.type, typeID.id),
+            this.getObjectFromTypeID(typeID.type, typeID.id),
+            oldRegion,
+            region,
+            typeID.type,
+            typeID.id
+        );
+        group.setArrow(this._arrowMove);
+
+        //cc.log("cell: " + cell.i + " " + cell.j);
+        //cc.log("create currentGroup " + typeID.type + " " + typeID.id);
+        //if (region != null)
+        //    cc.log("current Region " + region.i + " " + region.j + " " + region.w + " " + region.h);
     },
 
     onTouchesMoved: function(touches) {
         this._flagOfMovingScreen = true;
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        //cc.log("this is my cell: " + cell.i + " " + cell.j);
+        if (!selectedGroup.isNULL()) {
+            //if (MovingGroup.equal(beginGroup, selectedGroup) == true) {
+            if (selectedGroup.isInMovingState()) {
+                selectedGroup.goTo(cell);
+                return true;
+            }
+        }
+        this.moveMapAndSetVelocity(touches[0].getDelta());
+        return true;
+    },
+
+    moveMapAndSetVelocity: function(delta) {
         this._flagOfEditMovingSpeed = true;
-        var touch = touches[0];
-        var delta = touch.getDelta();
         this.moveMap(delta);
         // copy accelerationMoving
         this._movingSpeed.x = delta.x;
@@ -225,41 +266,37 @@ var MapView = cc.Layer.extend({
         this._movingSpeed.unitX = delta.x * MapConfig.MOVING_ACCELERATION;
         this._movingSpeed.unitY = delta.y * MapConfig.MOVING_ACCELERATION;
         this._flagOfEditMovingSpeed = false;
-        return true;
     },
 
     onTouchesEnded: function(touches) {
-        // if screen moving -> no select object;
+        var mapData = MapData.getInstance();
+        //var cell = this.getCellInMatrixMap(touches[0].getLocation());
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
-        } else { // else select object at touch's position
-            var touchLocation = touches[0].getLocation();
-            // get cell in matrixMap
-            var cell = this.getCellInMatrixMap(touchLocation);
-            if (cell != null) {
-                // get object's type-id from MapLogic
-                var mapData = MapData.getInstance();
-                var typeID = mapData.getTypeIDFromCell(cell);
-                if (this._lastSelectedTypeID != null) {
-                    var objectMgrView = this._objectMgrView;
-                    objectMgrView.setNormalState(this._lastSelectedTypeID.type, this._lastSelectedTypeID.id);
+            cc.log("Touch end with moving");
+            if (!selectedGroup.isNULL())
+                if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
+                    //selectedGroup.goTo(cell);
+                    selectedGroup.showNormalSubs();
+                    cc.log("move object1:");
+                    mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
+                    selectedGroup.updateOldRegion();
                 }
-                if (typeID.type == -1 || typeID.id == -1) {
-                    this._lastSelectedTypeID = null;
-                    this._arrowMove.setSizeArrow(0);
-                    return true;
+        }
+        else {
+            ////cc.log("touch End: " + currentGroup._type + "- " + currentGroup._id + "   " + selectedGroup._type + "- " + selectedGroup._id);
+            if (!selectedGroup.isNULL()) {
+                if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
+                    selectedGroup.showNormalSubs();
+                    cc.log("move object2:");
+                    mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
+                    selectedGroup.updateOldRegion();
+                } else {
+                    selectedGroup.goBack();
+                    selectedGroup.revertNewRegion();
                 }
-                var object = mapData.getObjectFromTypeID(typeID.type, typeID.id);
-                this._lastSelectedTypeID = typeID;
-                // show Arrow
-                cc.log("ARROW SIZE " + this._arrowMove._arrowSprites.length);
-                this._arrowMove.setSizeArrow(object.size);
-                var posCenter = this.getCenterPosOfRegion({i: object.position.i, j: object.position.j, w: object.size.w, h:object.size.h});
-                this._arrowMove.x = posCenter.x;
-                this._arrowMove.y = posCenter.y;
-            } else {
-                cc.log("No cell in this position");
             }
+            this.setGroupFromTouch(selectedGroup, touches);
         }
         return true;
     },
@@ -298,10 +335,10 @@ var MapView = cc.Layer.extend({
             i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),
             j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))
         };
-        if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
-            return null;
-        if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
-            return null;
+        //if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
+        //    return null;
+        //if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
+        //    return null;
         return result;
     },
 
@@ -366,9 +403,15 @@ var MapView = cc.Layer.extend({
         result.y = location.y - matrixMap.y*scale;
         return result;
     },
-    // get center location of object in map
-    showObjectInMap: function(objectView, cell) {
-
+    getObjectFromTypeID: function(type, id) {
+        if (type == MapConfig.NULL_CELL.type)
+            return null;
+        return this._objectMgrView.getObjectFromTypeID(type, id);
+    },
+    getSubsFromTypeID: function(type, id) {
+        if (type == MapConfig.NULL_CELL.type)
+            return null;
+        return this._objectMgrView.getSubsFromTypeID(type, id);
     }
 });
 

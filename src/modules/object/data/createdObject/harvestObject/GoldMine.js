@@ -8,5 +8,5 @@ var GoldMine = HarvestObject.extend(
         }
 
     }
-)
+);
 
