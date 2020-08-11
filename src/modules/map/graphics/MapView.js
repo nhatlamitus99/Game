@@ -247,9 +247,9 @@ var MapView = cc.Layer.extend({
             oldRegion,
             region,
             typeID.type,
-            typeID.id
+            typeID.id,
+            this._arrowMove
         );
-        group.setArrow(this._arrowMove);
     },
 
     onTouchesMoved: function(touches) {

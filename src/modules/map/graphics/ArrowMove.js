@@ -17,12 +17,12 @@ var ArrowMove = cc.Node.extend({
 
     setSizeArrow: function(size) {
         for (var i = 0; i < res.map.arrow_move.length; ++i) {
-            if (i+1 != size.h) {
-                //cc.log("ARROW " + i);
+            if (i+1 != size)
                 this._arrowSprites[i].setVisible(false);
-            }
-            else
+            else {
                 this._arrowSprites[i].setVisible(true);
+                //cc.log("ARROW " + i);
+            }
         }
     }
 });

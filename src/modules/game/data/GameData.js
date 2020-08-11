@@ -41,6 +41,7 @@ var GameData = cc.Class.extend({
         cc.log("Loading listObject");
         var objectMgrData = ObjectMgrData.getInstance();
         var mapData = MapData.getInstance();
+        mapData.customInit();
         mapData.setObjectMgrData(objectMgrData);
         for (var i = 0; i < jsonContent.listObject.length; ++i) {
             var attributes = this.updateObjectJson(jsonContent.listObject[i]);
@@ -48,10 +49,9 @@ var GameData = cc.Class.extend({
             //for (var key in attributes) {
             //    cc.log(key + ": " + attributes[key]);
             //}
-            if (mapData.insertObject2Map(attributes))
-                cc.log("Failed to load object " + i);
+            //if (mapData.insertObject2Map(attributes))
+            //    cc.log("Failed to load object " + i);
         }
-        mapData.customInit();
 
         this.setAttributes(user, resourcesData, mapData, null, null);
         cc.log("Loading done <3");

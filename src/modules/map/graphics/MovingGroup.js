@@ -20,21 +20,22 @@ var MovingGroup = cc.Class.extend({
         this._id = ids;
     },
 
-    setArrow: function(arrowSprite) {
-        this._arrow = arrowSprite;
-    },
-
-    setAttributes: function(subs, object, oldRegion, newRegion, type, id) {
+    setAttributes: function(subs, object, oldRegion, newRegion, type, id, arrow) {
         this._subs = subs;
         this._object = object;
         this._oldRegion = oldRegion;
         this._newRegion = newRegion;
         this._type = type;
         this._id = id;
+        this._arrow = arrow;
+
+        if (this._type != MapConfig.NULL_CELL.type) {
+            this._arrow.setSizeArrow(this._oldRegion.w);
+            this.setPosArrow();
+        } else
+            this._arrow.setSizeArrow(0);
     },
     showMovingSubs: function() {
-        this._arrow.setSizeArrow(this._oldRegion.w);
-        this.setPosArrow();
         var mapData = MapData.getInstance();
         if (!mapData.checkOverlap(this._newRegion, {type:this._type, id:this._id}))
             this._subs.setGreenState();
@@ -55,11 +56,7 @@ var MovingGroup = cc.Class.extend({
             this._subs.setGreenState();
         var mapView = MapView.getInstance();
         var posCenter = mapView.getCenterPosOfRegion(this._newRegion);
-        this._object.x = posCenter.x;
-        this._object.y = posCenter.y;
-        this._subs.x = posCenter.x;
-        this._subs.y = posCenter.y;
-
+        this.updateGroupPos(posCenter);
         this._object.setLocalZOrder(mapView.calculateZOrderOfRegion(this._newRegion));
     },
     goBack: function () {
@@ -67,16 +64,20 @@ var MovingGroup = cc.Class.extend({
         this._subs.setNormalState();
         var mapView = MapView.getInstance();
         var posCenter = mapView.getCenterPosOfRegion(this._oldRegion);
+        this.updateGroupPos(posCenter);
+        this._object.setLocalZOrder(mapView.calculateZOrderOfRegion(this._oldRegion));
+
+    },
+    updateGroupPos: function(posCenter) {
         this._object.x = posCenter.x;
         this._object.y = posCenter.y;
         this._subs.x = posCenter.x;
         this._subs.y = posCenter.y;
-
-        this._object.setLocalZOrder(mapView.calculateZOrderOfRegion(this._oldRegion));
-
+        this._arrow.x = posCenter.x;
+        this._arrow.y = posCenter.y;
     },
     showNormalSubs: function () {
-        this._arrow.setSizeArrow(0);
+        //this._arrow.setSizeArrow(0);
         this._subs.setNormalState();
         this._subs.setLocalZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
     },
