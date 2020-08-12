@@ -40,9 +40,9 @@ var MapData = cc.Class.extend({
     insertObject2Map: function(attributes) {
         if (this.checkOverlap(attributes))
             return false;
-        cc.log("test1")
+        //cc.log("test1")
         attributes.id = this._objectMgrData.getNextIdOfType(attributes.type);
-        cc.log("test2")
+        //cc.log("test2")
 
         var x = attributes.position.i;
         var y = attributes.position.j;
@@ -55,10 +55,10 @@ var MapData = cc.Class.extend({
                     id: attributes.id
                 };
             }
-        cc.log("test3")
+        //cc.log("test3")
 
         this._objectMgrData.createItemToList(attributes);
-        cc.log("test4")
+        //cc.log("test4")
 
         //cc.log("adding object type-id" + attributes.type + " " + attributes.id);
         return true;
@@ -116,7 +116,7 @@ var MapData = cc.Class.extend({
             }
     },
 
-    findRegionForBuilding: function(size) {
+    findRegionForBuilding: function(centerCell, size) {
         var res = [];
         var data = this._map;
         var mapSize = MapConfig.MAP_SIZE;
@@ -133,29 +133,31 @@ var MapData = cc.Class.extend({
             if (b < a && b < c) return b;
             return c;
         };
-
-        var maxRegion = {i:0, j:0, h:size, w:size};
+        var getDistance = function(cell, region) {
+            return Math.abs(cell.i - (region.i+region.w/2)) + Math.abs(cell.j - (region.j+region.h/2));
+        };
 
         for (i = 0; i < mapSize.h; ++i)
             if (data[i][0].type == nullCell.type)
                 res[i][0] = 1;
-
         for (j = 0; j < mapSize.w; ++j)
             if (data[0][j].type == nullCell.type)
                 res[0][j] = 1;
 
+        var nearestRegion = {i:-100, j:-100, h:size, w:size};
         for (i = 1; i < mapSize.h; ++i)
         for (j = 1; j < mapSize.w; ++j)
             if (data[i][j].type == nullCell.type) {
                 res[i][j] = minFunc(res[i][j - 1], res[i - 1][j], res[i - 1][j - 1]) + 1;
-                if (res[i][j]>=maxRegion.h) {
-                    maxRegion.i = i-maxRegion.h+1;
-                    maxRegion.j = j-maxRegion.w+1;
-                    if (MapView.checkInsideScreen(maxRegion))
-                        return maxRegion;
+                var newRegion = {i: i-size+1, j: j-size+1, w: size, h: size};
+                if (res[i][j]>=size && getDistance(centerCell, newRegion) <= getDistance(centerCell, nearestRegion)) {
+                    //cc.log("distance: " + newRegion.i + " " + newRegion.j + " = " + getDistance(centerCell, newRegion));
+                    nearestRegion.i = newRegion.i;
+                    nearestRegion.j = newRegion.j;
                 }
             }
-        return maxRegion;
+            else res[i][j] = 0;
+        return nearestRegion;
     }
 });
 

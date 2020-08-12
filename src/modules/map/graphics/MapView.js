@@ -218,17 +218,7 @@ var MapView = cc.Layer.extend({
                 selectedGroup.showMovingSubs();
                 selectedGroup.flagOfMove = true;
             }
-
-        // use for get new region for build object
-        var mapData = MapData.getInstance();
-        var mapView = MapView.getInstance();
-        var region = mapData.findRegionForBuilding(5);
-        var posMap = mapView.getCenterPosOfRegion(region);
-        var posScreen = mapView.transformMapToScreen(posMap);
-        //cc.log("Pos of cell for building: " + posScreen.x + " " + posScreen.y);
-        //cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
-        cc.log("current cell " + cell.i + " " + cell.j);
-
+        this.findRegionForBuilding(3);
         return true;
     },
 
@@ -272,9 +262,8 @@ var MapView = cc.Layer.extend({
     },
     isTouchMove: function(delta) {
         var sumDelta = (delta.x+delta.x)*(delta.x+delta.x) + (delta.y+delta.y)*(delta.y+delta.y);
-        if (sumDelta < MapConfig.MIN_TOUCH_MOVE_DELTA)
-            return false;
-        return true;
+        return sumDelta >= MapConfig.MIN_TOUCH_MOVE_DELTA;
+
     },
     moveMapAndSetVelocity: function(delta) {
         this.moveMap(delta);
@@ -298,11 +287,9 @@ var MapView = cc.Layer.extend({
         selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
-            //cc.log("Touch end with moving");
             if (!selectedGroup.isNULL())
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
-                    //cc.log("move object1:");
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
                     selectedGroup.updateOldRegion();
                 }
@@ -311,7 +298,6 @@ var MapView = cc.Layer.extend({
             if (!selectedGroup.isNULL()) {
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
-                    //cc.log("move object2:");
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
                     selectedGroup.updateOldRegion();
                 } else {
@@ -354,29 +340,19 @@ var MapView = cc.Layer.extend({
         // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
         var titleH = MapConfig.getCellSize().h*this._scale;
         var titleW = MapConfig.getCellSize().w*this._scale;
-        var result = {
+        return{
             i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),
             j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))
         };
-        //if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
-        //    return null;
-        //if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
-        //    return null;
-        // convert to true pos
-        //result.i -= 1;
-        return result;
     },
 
     getPosOfRegion: function(cell) {
-        //cell.i += 1;
         var titleH = MapConfig.getCellSize().h;
         var titleW = MapConfig.getCellSize().w;
         var location = {
             x: (cell.i - cell.j)*titleW/4 + titleW*MapConfig.MAP_SIZE.w/4,// because of a column is overlap 50% with another column (2 side: left and right)
             y: (cell.i + cell.j)*titleH/4
         };
-        // convert coordinate of touch to matrixMap's coordinate
-        // cc.log("test getPosOfRegion - matrixMap", location.x + " " + location.y);
         return this.transformMMapToMap(location);
     },
 
@@ -387,16 +363,16 @@ var MapView = cc.Layer.extend({
     },
 
     // location: matrix map -> screen
-    transformMapToScreen: function(location) {
-        var result = {};
-        var map = this._map;
-        var mapSize = this._mapOriginSize;
-        var scale = this._scale;
-        // from map to Screen
-        result.x = location.x + map.x - mapSize.w*scale/2;
-        result.y = location.y + map.y - mapSize.h*scale/2;
-        return result;
-    },
+    //transformMapToScreen: function(location) {
+    //    var result = {};
+    //    var map = this._map;
+    //    var mapSize = this._mapOriginSize;
+    //    var scale = this._scale;
+    //    // from map to Screen
+    //    result.x = location.x + map.x - mapSize.w*scale/2;
+    //    result.y = location.y + map.y - mapSize.h*scale/2;
+    //    return result;
+    //},
     // location: MatrixMap -> map
     transformMMapToMap: function(location) {
         var result = {};
@@ -445,6 +421,16 @@ var MapView = cc.Layer.extend({
     addTroop: function(troop_type, troop_view, zorder)
     {
         this._troop_batches[troop_type].addChild(troop_view, zorder);
+    },
+    findRegionForBuilding: function(sizeObject) {
+        var size = sizeObject.w == null ? sizeObject : sizeObject.w;
+        var winSize = cc.director.getWinSize();
+        var centerCell = this.getCellInMatrixMap({x:winSize.width/2, y:winSize.height/2});
+        // use for get new region for build object
+        var mapData = MapData.getInstance();
+        var region = mapData.findRegionForBuilding(centerCell, size);
+        //cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
+        //cc.log("center Cell " + centerCell.i + " " + centerCell.j);
     }
 });
 
@@ -454,15 +440,4 @@ MapView.getInstance = function(){
         MAP_VIEW_ONLY_ONE = new MapView();
     }
     return MAP_VIEW_ONLY_ONE;
-};
-
-
-MapView.checkInsideScreen = function(region) {
-    var mapView = MapView.getInstance();
-    var posMap = mapView.getCenterPosOfRegion(region);
-    var posScreen = mapView.transformMapToScreen(posMap);
-    var winSize = cc.director.getWinSize();
-    if (!(0 < posScreen.x && posScreen.x < winSize.width))
-        return false;
-    return 0 < posScreen.y && posScreen.y < winSize.height;
 };
