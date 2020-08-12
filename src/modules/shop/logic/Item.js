@@ -1,21 +1,25 @@
 var Item = cc.Class.extend({
-    itemBackground: null,
-    _ratioX: 1,
-    _ratioY: 1,
-    _state: 0,
-    _resources: [],
-    levelTownHall: 0,
-    countBuilt: 0,
-    available: 0,
-    textColor: cc.color(255, 255, 255),
-    maxBuilt: 0,
-    requireLevel: 1,
     ctor: function (name, id, infoSource, ratioX, ratioY) {
         this._ratioX = ratioX;
         this._ratioY = ratioY;
+        this.id = id;
+
+        this.itemBackground = null;
+        this._state = 0;
+        this._resources = [];
+        this.levelTownHall = 0;
+        this.countBuilt = 0;
+        this.available = 0;
+        this.textColor = cc.color(255, 255, 255);
+        this.maxBuilt = 0;
+        this.requireLevel = 1;
+        this.id = 0;
+        this.available = true;
+        this.need = 0;
 
         // Read info from JSON
         var info = cc.loader.getRes(infoSource);
+
         var townhall = cc.loader.getRes(itemInfo_resources.TOW);
 
         this.loadUserInfo(townhall, id);
@@ -95,9 +99,10 @@ var Item = cc.Class.extend({
             this.itemBackground.addChild(built);
         }
         else {
-            var noti = new cc.LabelBMFont("Require town hall level " + this.requireLevel, "fonts/soji_16.fnt");
+            var noti = new cc.LabelBMFont("Require town hall level " + this.requireLevel, "fonts/soji_12.fnt");
             noti.x = this.itemBackground.width / 2;
             noti.y = this.itemBackground.height * 0.3;
+            
             noti.setColor(cc.color(255, 0, 0));
             this.itemBackground.addChild(noti);
         }
@@ -130,7 +135,6 @@ var Item = cc.Class.extend({
         icon.setState(this._state);
         price.addChild(icon);
         
-        
     },
     convertTimeToString: function(value) {
         if (value == undefined)
@@ -155,7 +159,7 @@ var Item = cc.Class.extend({
     loadUserInfo: function (townhall, id) {
         this._resources = ResourcesData.getInstance()._resources;
 
-        this.levelTownHall = 5;
+        this.levelTownHall = 3;
         this.countBuilt = 2;
         if (id == "BDH_1")
             this.maxBuilt = 5;
@@ -166,20 +170,25 @@ var Item = cc.Class.extend({
         if (id == "BDH_1") {
             if (this._resources[2] < info[id]["" + (this.countBuilt + 1)]["coin"]) {
                 this.textColor = cc.color(255, 0, 0);
+                this.need = info[id]["" + (this.countBuilt + 1)]["coin"] - this._resources[2]
                 }
             else
                 this.textColor = cc.color(255, 255, 255);
         }
         else {
             if (info[id]["1"]["gold"] != undefined && info[id]["1"]["gold"] > 0) {
-                if (this._resources[0] < info[id]["1"]["gold"])
+                if (this._resources[0] < info[id]["1"]["gold"]) {
                     this.textColor = cc.color(255, 0, 0);
+                    this.need = info[id]["1"]["gold"] - this._resources[0]
+                }
                 else
                     this.textColor = cc.color(255, 255, 255);
             }
             else if (info[id]["1"]["elixir"] != undefined && info[id]["1"]["elixir"] > 0) {
-                if (this._resources[1] < info[id]["1"]["elixir"])
+                if (this._resources[1] < info[id]["1"]["elixir"]) {
                     this.textColor = cc.color(255, 0, 0);
+                    this.need = info[id]["1"]["elixir"] - this._resources[1]
+                }
                 else
                     this.textcolor = cc.color(255, 255, 255);
             }
@@ -188,6 +197,7 @@ var Item = cc.Class.extend({
     checkLevelTownHall: function (townhall, id) {
         if (this.maxBuilt <= this.countBuilt) {
             this._state = 1;
+            this.available = false;
         }
         if (id != "BDH_1") {
             for (var i = 1; i <= 15; ++i) {
@@ -198,5 +208,11 @@ var Item = cc.Class.extend({
                 }
             }
         }
+    },
+    isAvailable: function () {
+        return this.available;
+    },
+    getNeed: function () {
+        return this.need;
     }
 });
