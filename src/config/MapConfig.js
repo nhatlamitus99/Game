@@ -1,7 +1,7 @@
 var MapConfig = {
     MAP_SIZE: {
-        h: 42,
-        w: 42
+        h: 40,
+        w: 40
     },
 
     MOVING_ACCELERATION: 0.02,

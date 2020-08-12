@@ -225,8 +225,8 @@ var MapView = cc.Layer.extend({
         var region = mapData.findRegionForBuilding(5);
         var posMap = mapView.getCenterPosOfRegion(region);
         var posScreen = mapView.transformMapToScreen(posMap);
-        cc.log("Pos of cell for building: " + posScreen.x + " " + posScreen.y);
-        cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
+        //cc.log("Pos of cell for building: " + posScreen.x + " " + posScreen.y);
+        //cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
         cc.log("current cell " + cell.i + " " + cell.j);
 
         return true;
@@ -362,10 +362,13 @@ var MapView = cc.Layer.extend({
         //    return null;
         //if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
         //    return null;
+        // convert to true pos
+        //result.i -= 1;
         return result;
     },
 
     getPosOfRegion: function(cell) {
+        //cell.i += 1;
         var titleH = MapConfig.getCellSize().h;
         var titleW = MapConfig.getCellSize().w;
         var location = {
@@ -398,9 +401,12 @@ var MapView = cc.Layer.extend({
     transformMMapToMap: function(location) {
         var result = {};
         var matrixMap = this._matrixMap;
+        var titleH = MapConfig.getCellSize().h;
+        var titleW = MapConfig.getCellSize().w;
+
         // from matrixMap to map
-        result.x = location.x + matrixMap.x;
-        result.y = location.y + matrixMap.y;
+        result.x = location.x + matrixMap.x + titleW/2;
+        result.y = location.y + matrixMap.y + titleH/2;
         return result;
     },
     // location: screen->Map
@@ -418,8 +424,11 @@ var MapView = cc.Layer.extend({
         var result = {};
         var matrixMap = this._matrixMap;
         var scale = this._scale;
-        result.x = location.x - matrixMap.x*scale;
-        result.y = location.y - matrixMap.y*scale;
+        var titleH = MapConfig.getCellSize().h;
+        var titleW = MapConfig.getCellSize().w;
+
+        result.x = location.x - (matrixMap.x+titleW/2)*scale;
+        result.y = location.y - (matrixMap.y+titleH/2)*scale;
         return result;
     },
 
