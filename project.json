@@ -63,9 +63,10 @@
     "src/modules/game/graphics/GameView.js",
 
     "src/modules/map/data/MapData.js",
+    "src/modules/map/graphics/ArrowMove.js",
+    "src/modules/map/graphics/ArrowPool.js",
     "src/modules/map/graphics/MovingGroup.js",
     "src/modules/map/graphics/MapView.js",
-    "src/modules/map/graphics/ArrowMove.js",
 
     "src/modules/resources/data/ResourcesData.js",
 

@@ -13,9 +13,8 @@ var MapObject = cc.Class.extend(
         imagePath: null,
         beginTime: null,
 
-        ctor: function(type, position) {
+        ctor: function(type) {
             this.type = type;
-            this.position = position;
             this.loadInfo(type);
         },
 

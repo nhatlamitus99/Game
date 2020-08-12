@@ -5,6 +5,7 @@ var OBJECT_MGR_CONFIG = OBJECT_MGR_CONFIG || {};
 
 
 OBJECT_MGR_CONFIG.buildingType = {
+    mapObject: 0,
     AMC_1: 1,
     BAR_1: 2,
     DEF_1: 3,
@@ -31,7 +32,7 @@ OBJECT_MGR_CONFIG.buildingType = {
     OBS_11: 24,
     OBS_12: 25,
     OBS_13: 26,
-    OBS_14: 27,
+    OBS_14: 27
 };
 
 OBJECT_MGR_CONFIG.SCALE_BUILDING = 0.5;

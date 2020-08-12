@@ -1,5 +1,5 @@
 // this variables will be used for moving object
-var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type, null);
+var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type);
 
 var MapView = cc.Layer.extend({
     _map:null,
@@ -10,7 +10,6 @@ var MapView = cc.Layer.extend({
     _matrixMap: null,                       // matrixMap (matrix of cell)
     _objectMgrView: null,                   // manager of object
     _troopMgrView: null,                    // troop manager
-    _arrowMove: null,                       // arrow Moving which are used for moving
 
     _movingSpeed: {                         // using for smoothly action
         x: 0,
@@ -46,8 +45,6 @@ var MapView = cc.Layer.extend({
         // load buildings, substructures & troop to map
         this.loadBuilding();
         this.loadTroops();
-        // load Arrow Move
-        this.loadArrowMove();
     },
     buildTroopBatches: function()
     {
@@ -127,11 +124,6 @@ var MapView = cc.Layer.extend({
         object.y = posCenter.y;
         subs.x = posCenter.x;
         subs.y = posCenter.y;
-    },
-
-    loadArrowMove: function() {
-        this._arrowMove = new ArrowMove();
-        this._map.addChild(this._arrowMove, MapConfig.Z_ORDER_ARROW);
     },
 
     calculateZOrderOfRegion: function(region) {
@@ -233,6 +225,9 @@ var MapView = cc.Layer.extend({
     setGroupFromTouch: function(group, touches){
         var mapData = MapData.getInstance();
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        if (selectedGroup.hasCell(cell))
+            return;
+
         var typeID = mapData.getTypeIDFromCell(cell);
         var objectData = mapData.getObjectFromTypeID(typeID.type, typeID.id);
         var region = null, oldRegion = null;
@@ -240,16 +235,14 @@ var MapView = cc.Layer.extend({
             region = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
             oldRegion = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
         }
-        // set currGroup
+
         group.setAttributes(
             this.getSubsFromTypeID(typeID.type, typeID.id),
             this.getObjectFromTypeID(typeID.type, typeID.id),
             oldRegion,
             region,
             typeID.type,
-            typeID.id,
-            this._arrowMove
-        );
+            typeID.id);
     },
 
     onTouchesMoved: function(touches) {
@@ -281,11 +274,11 @@ var MapView = cc.Layer.extend({
         selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
-            cc.log("Touch end with moving");
+            //cc.log("Touch end with moving");
             if (!selectedGroup.isNULL())
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
-                    cc.log("move object1:");
+                    //cc.log("move object1:");
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
                     selectedGroup.updateOldRegion();
                 }
@@ -294,7 +287,7 @@ var MapView = cc.Layer.extend({
             if (!selectedGroup.isNULL()) {
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
-                    cc.log("move object2:");
+                    //cc.log("move object2:");
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
                     selectedGroup.updateOldRegion();
                 } else {
@@ -420,10 +413,6 @@ var MapView = cc.Layer.extend({
             return null;
         return this._objectMgrView.getSubsFromTypeID(type, id);
     },
-    // get center location of object in map
-    showObjectInMap: function(objectView, cell) {
-
-    },
     addTroop: function(troop_type, troop_view, zorder)
     {
         this._troop_batches[troop_type].addChild(troop_view, zorder);
@@ -435,6 +424,5 @@ MapView.getInstance = function(){
     if(MAP_VIEW_ONLY_ONE == null){
         MAP_VIEW_ONLY_ONE = new MapView();
     }
-
     return MAP_VIEW_ONLY_ONE;
 };

@@ -96,9 +96,9 @@ var MapData = cc.Class.extend({
 
     moveObject: function(oldRegion, newRegion, typeID) {
         //cc.log("update position object in MapData");
-        cc.log("update: oldR:"+oldRegion.i + " " + oldRegion.j + " -- " + oldRegion.w + " " + oldRegion.h);
+        //cc.log("update: oldR:"+oldRegion.i + " " + oldRegion.j + " -- " + oldRegion.w + " " + oldRegion.h);
         this.setValuesCells(oldRegion, MapConfig.getNullCell());
-        cc.log("update: newR:"+newRegion.i + " " + newRegion.j + " -- " + newRegion.w + " " + newRegion.h);
+        //cc.log("update: newR:"+newRegion.i + " " + newRegion.j + " -- " + newRegion.w + " " + newRegion.h);
         this.setValuesCells(newRegion, typeID);
         this._objectMgrData.setPosOfObject(typeID, newRegion);
     },

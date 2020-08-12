@@ -54,6 +54,8 @@ var ObjectMgrData = cc.Class.extend({
             case OBJECT_MGR_CONFIG.buildingType.TOW_1:
                 object = new TownHall();
                 break;
+            default :
+                object = new MapObject(attributes.type);
         }
 
         cc.log("test object: "+object)

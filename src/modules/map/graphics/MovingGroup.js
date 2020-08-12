@@ -9,9 +9,11 @@ var MovingGroup = cc.Class.extend({
     _type: null,            // type of objects
     _id: null,              // id of each objects
     _arrow: null,
+    _defaultColor: null,
     flagOfMove: false,      // true when object is selecting, false otherwise
 
     ctor: function(subs, objects, oldRegion, newRegions, type, ids) {
+        // set attributes
         this._subs = subs;
         this._object = objects;
         this._oldRegion = oldRegion;
@@ -20,20 +22,66 @@ var MovingGroup = cc.Class.extend({
         this._id = ids;
     },
 
-    setAttributes: function(subs, object, oldRegion, newRegion, type, id, arrow) {
+    // select new group
+    setAttributes: function(subs, object, oldRegion, newRegion, type, id) {
+        this.endActionGroup();
+
         this._subs = subs;
         this._object = object;
         this._oldRegion = oldRegion;
         this._newRegion = newRegion;
         this._type = type;
         this._id = id;
-        this._arrow = arrow;
+        this._arrow = null;
 
         if (this._type != MapConfig.NULL_CELL.type) {
+            var arrowPool = ArrowPool.getInstance();
+            this._arrow = arrowPool.getArrow();
             this._arrow.setSizeArrow(this._oldRegion.w);
             this.setPosArrow();
-        } else
-            this._arrow.setSizeArrow(0);
+        }
+
+        this.beginActionGroup();
+    },
+    endActionGroup: function() {
+        if (this._type == MapConfig.NULL_CELL.type)
+            return;
+        var arrow = this._arrow;
+        this._arrow = null;
+        // action of object
+        this._object.stopAllActions();
+        this._object.setScale(OBJECT_MGR_CONFIG.SCALE_BUILDING);
+        this._object.setColor(this._defaultColor);
+        // action of arrow
+        var scaleAR = cc.scaleBy(0.1, 0.4);
+        var sendBackToPool = function () {
+            var arrowPool = ArrowPool.getInstance();
+            arrowPool.sendToPool(this);
+        };
+        var scaleARSeq = cc.sequence(scaleAR, cc.callFunc(sendBackToPool.bind(arrow)));
+        arrow.runAction(scaleARSeq);
+    },
+    beginActionGroup: function () {
+        cc.log("Begin Action");
+        if (this._type == MapConfig.NULL_CELL.type)
+            return;
+        // action of object
+        var scale = cc.scaleBy(0.1, 1.2);
+        var scaleSeq = cc.sequence(scale, scale.reverse());
+        var tintBy = cc.tintBy(0.7, -100, -100, -100);
+        var tintBySeq = cc.sequence(tintBy, tintBy.reverse()).repeatForever();
+        this._defaultColor = this._object.getColor();
+        // run action
+        this._object.runAction(scaleSeq);
+        this._object.runAction(tintBySeq);
+        // action of arrow
+        this._arrow.setScale(0.5);
+        this._arrow.opacity = 0;
+        var scaleAR_1 = cc.scaleBy(0.1, 2.5);
+        var scaleAR_2 = cc.scaleBy(0.1, 2/2.5);
+        var scaleAR_Seq = cc.sequence(scaleAR_1, scaleAR_2);
+        // run action
+        this._arrow.runAction(scaleAR_Seq);
     },
     showMovingSubs: function() {
         var mapData = MapData.getInstance();
@@ -77,7 +125,6 @@ var MovingGroup = cc.Class.extend({
         this._arrow.y = posCenter.y;
     },
     showNormalSubs: function () {
-        //this._arrow.setSizeArrow(0);
         this._subs.setNormalState();
         this._subs.setLocalZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
     },
@@ -86,10 +133,10 @@ var MovingGroup = cc.Class.extend({
     },
     setPosArrow: function() {
         var mapView = MapView.getInstance();
-        //cc.log("new region of group " + this._newRegion.i + " " + this._newRegion.j);
         var posCenter = mapView.getCenterPosOfRegion(this._newRegion);
         this._arrow.x = posCenter.x;
         this._arrow.y = posCenter.y;
+        cc.log("SIZE ARROW " + this._arrow.currentSize);
     },
     updateOldRegion: function() {
         this._oldRegion.i = this._newRegion.i;
@@ -108,5 +155,11 @@ var MovingGroup = cc.Class.extend({
     },
     isInMovingState: function() {
         return this._subs.isInMovingState();
+    },
+    getType: function() {
+        return this._type;
+    },
+    getID: function() {
+        return this._id;
     }
 });
