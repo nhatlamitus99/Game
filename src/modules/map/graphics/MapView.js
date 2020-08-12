@@ -24,6 +24,7 @@ var MapView = cc.Layer.extend({
     _flagOfMovingScreen: false,             // boolean value: true-screen was moving, false-screen was not moving
 
     _troop_batches: null,
+    _currentFrames: null,
 
     ctor:function() {
         this._super();
@@ -60,6 +61,7 @@ var MapView = cc.Layer.extend({
     updatePerFrame: function() {
         this.moveMapPerFrame();
         this.zoomMapPerFrame();
+        this._currentFrames = (this._currentFrames+1)%MapConfig.MAX_COUNTING_FRAMES;
     },
     moveMapPerFrame: function() {
         if (!this._flagOfEditMovingSpeed && !this._flagOfMovingScreen) {
@@ -208,10 +210,11 @@ var MapView = cc.Layer.extend({
     },
 
     onTouchesBegan: function (touches) {
-        this._flagOfEditMovingSpeed = true;
-        this._movingSpeed.x = 0;
-        this._movingSpeed.y = 0;
-        this._flagOfEditMovingSpeed = false;
+        //this._flagOfEditMovingSpeed = true;
+        //this._movingSpeed.x = 0;
+        //this._movingSpeed.y = 0;
+        //this._flagOfEditMovingSpeed = false;
+        this.setVelocity({x: 0, y: 0});
 
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
         if (!selectedGroup.isNULL())
@@ -246,6 +249,9 @@ var MapView = cc.Layer.extend({
     },
 
     onTouchesMoved: function(touches) {
+        if (!this.isTouchMove(touches[0].getDelta()))
+            return true;
+        this._currFrameMove = this._currentFrames;
         this._flagOfMovingScreen = true;
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
         if (!selectedGroup.isNULL()) {
@@ -257,11 +263,18 @@ var MapView = cc.Layer.extend({
         this.moveMapAndSetVelocity(touches[0].getDelta());
         return true;
     },
-
+    isTouchMove: function(delta) {
+        var sumDelta = (delta.x+delta.x)*(delta.x+delta.x) + (delta.y+delta.y)*(delta.y+delta.y);
+        if (sumDelta < MapConfig.MIN_TOUCH_MOVE_DELTA)
+            return false;
+        return true;
+    },
     moveMapAndSetVelocity: function(delta) {
-        this._flagOfEditMovingSpeed = true;
         this.moveMap(delta);
-        // copy accelerationMoving
+        this.setVelocity(delta);
+    },
+    setVelocity: function(delta){
+        this._flagOfEditMovingSpeed = true;
         this._movingSpeed.x = delta.x;
         this._movingSpeed.y = delta.y;
         this._movingSpeed.unitX = delta.x * MapConfig.MOVING_ACCELERATION;
@@ -270,6 +283,10 @@ var MapView = cc.Layer.extend({
     },
 
     onTouchesEnded: function(touches) {
+        if ((this._currentFrames-this._currFrameMove)%MapConfig.MAX_COUNTING_FRAMES > MapConfig.COUNT_NO_MOVING) {
+            this.setVelocity({x: 0, y: 0});
+        }
+
         var mapData = MapData.getInstance();
         selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {

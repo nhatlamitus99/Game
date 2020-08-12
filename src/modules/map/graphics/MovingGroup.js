@@ -62,7 +62,6 @@ var MovingGroup = cc.Class.extend({
         arrow.runAction(scaleARSeq);
     },
     beginActionGroup: function () {
-        cc.log("Begin Action");
         if (this._type == MapConfig.NULL_CELL.type)
             return;
         // action of object
@@ -136,7 +135,6 @@ var MovingGroup = cc.Class.extend({
         var posCenter = mapView.getCenterPosOfRegion(this._newRegion);
         this._arrow.x = posCenter.x;
         this._arrow.y = posCenter.y;
-        cc.log("SIZE ARROW " + this._arrow.currentSize);
     },
     updateOldRegion: function() {
         this._oldRegion.i = this._newRegion.i;

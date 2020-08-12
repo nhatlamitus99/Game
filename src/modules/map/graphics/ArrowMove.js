@@ -23,7 +23,6 @@ var ArrowMove = cc.Node.extend({
                 this._arrowSprites[i].setVisible(true);
             }
         }
-
         this.currentSize = size;
     }
 });

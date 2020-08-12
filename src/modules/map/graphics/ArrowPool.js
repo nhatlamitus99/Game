@@ -6,7 +6,6 @@ var ArrowPool = cc.Class.extend({
     ctor: function() {
     },
     getArrow: function() {
-        cc.log("Arrow Pool size = ", this._pool.length);
         var arrow = null;
         if (this._pool.length == 0) {
             arrow = new ArrowMove();
@@ -21,7 +20,6 @@ var ArrowPool = cc.Class.extend({
     },
     sendToPool: function(arrow) {
         //arrow.setVisible(false);
-        cc.log("SEND TO POOL " + this._pool.length);
         arrow.setSizeArrow(0);
         this._pool.push(arrow);
     }
