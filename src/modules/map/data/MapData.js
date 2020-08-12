@@ -114,6 +114,48 @@ var MapData = cc.Class.extend({
                 this._map[i][j].type = typeID.type;
                 this._map[i][j].id = typeID.id;
             }
+    },
+
+    findRegionForBuilding: function(size) {
+        var res = [];
+        var data = this._map;
+        var mapSize = MapConfig.MAP_SIZE;
+        var nullCell = MapConfig.NULL_CELL;
+
+        for (var i = 0; i < mapSize.h; ++i) {
+            res[i] = [];
+            for (var j = 0; j < mapSize.w; ++j)
+                res[i][j] = 0;
+        }
+
+        var minFunc = function (a,b,c) {
+            if (a < b && a < c) return a;
+            if (b < a && b < c) return b;
+            return c;
+        };
+
+        var maxRegion = {i:0, j:0, h:size, w:size};
+
+        for (i = 0; i < mapSize.h; ++i)
+            if (data[i][0].type == nullCell.type)
+                res[i][0] = 1;
+
+        for (j = 0; j < mapSize.w; ++j)
+            if (data[0][j].type == nullCell.type)
+                res[0][j] = 1;
+
+        for (i = 1; i < mapSize.h; ++i)
+        for (j = 1; j < mapSize.w; ++j)
+            if (data[i][j].type == nullCell.type) {
+                res[i][j] = minFunc(res[i][j - 1], res[i - 1][j], res[i - 1][j - 1]) + 1;
+                if (res[i][j]>=maxRegion.h) {
+                    maxRegion.i = i-maxRegion.h+1;
+                    maxRegion.j = j-maxRegion.w+1;
+                    if (MapView.checkInsideScreen(maxRegion))
+                        return maxRegion;
+                }
+            }
+        return maxRegion;
     }
 });
 

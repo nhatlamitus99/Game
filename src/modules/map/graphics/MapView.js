@@ -210,10 +210,6 @@ var MapView = cc.Layer.extend({
     },
 
     onTouchesBegan: function (touches) {
-        //this._flagOfEditMovingSpeed = true;
-        //this._movingSpeed.x = 0;
-        //this._movingSpeed.y = 0;
-        //this._flagOfEditMovingSpeed = false;
         this.setVelocity({x: 0, y: 0});
 
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
@@ -222,6 +218,17 @@ var MapView = cc.Layer.extend({
                 selectedGroup.showMovingSubs();
                 selectedGroup.flagOfMove = true;
             }
+
+        // use for get new region for build object
+        var mapData = MapData.getInstance();
+        var mapView = MapView.getInstance();
+        var region = mapData.findRegionForBuilding(5);
+        var posMap = mapView.getCenterPosOfRegion(region);
+        var posScreen = mapView.transformMapToScreen(posMap);
+        cc.log("Pos of cell for building: " + posScreen.x + " " + posScreen.y);
+        cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
+        cc.log("current cell " + cell.i + " " + cell.j);
+
         return true;
     },
 
@@ -367,7 +374,7 @@ var MapView = cc.Layer.extend({
         };
         // convert coordinate of touch to matrixMap's coordinate
         // cc.log("test getPosOfRegion - matrixMap", location.x + " " + location.y);
-        return this.transformLocationMatrixMapToMap(location);
+        return this.transformMMapToMap(location);
     },
 
     getCenterPosOfRegion: function(region) {
@@ -377,22 +384,18 @@ var MapView = cc.Layer.extend({
     },
 
     // location: matrix map -> screen
-    //transformMMapToScreen: function(location) {
-    //    var result = {};
-    //    var map = this._map;
-    //    var mapSize = this._mapOriginSize;
-    //    var matrixMap = this._matrixMap;
-    //    var scale = this._scale;
-    //    // from matrixMap to map
-    //    result.x = location.x + matrixMap.x*scale;
-    //    result.y = location.y + matrixMap.y*scale;
-    //    // from map to Screen
-    //    result.x += map.x - mapSize.w*scale/2;
-    //    result.y += map.y - mapSize.h*scale/2;
-    //    return result;
-    //},
+    transformMapToScreen: function(location) {
+        var result = {};
+        var map = this._map;
+        var mapSize = this._mapOriginSize;
+        var scale = this._scale;
+        // from map to Screen
+        result.x = location.x + map.x - mapSize.w*scale/2;
+        result.y = location.y + map.y - mapSize.h*scale/2;
+        return result;
+    },
     // location: MatrixMap -> map
-    transformLocationMatrixMapToMap: function(location) {
+    transformMMapToMap: function(location) {
         var result = {};
         var matrixMap = this._matrixMap;
         // from matrixMap to map
@@ -442,4 +445,15 @@ MapView.getInstance = function(){
         MAP_VIEW_ONLY_ONE = new MapView();
     }
     return MAP_VIEW_ONLY_ONE;
+};
+
+
+MapView.checkInsideScreen = function(region) {
+    var mapView = MapView.getInstance();
+    var posMap = mapView.getCenterPosOfRegion(region);
+    var posScreen = mapView.transformMapToScreen(posMap);
+    var winSize = cc.director.getWinSize();
+    if (!(0 < posScreen.x && posScreen.x < winSize.width))
+        return false;
+    return 0 < posScreen.y && posScreen.y < winSize.height;
 };
