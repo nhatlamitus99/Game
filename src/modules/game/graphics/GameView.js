@@ -11,7 +11,7 @@ var GameScreen = cc.Layer.extend({
         this.initCacheFrames();
         TroopAnimationManager.getInstance();
         this._lobbyLayer = new Lobby();
-        this._mapLayer = new MapView();
+        this._mapLayer = MapView.getInstance();
         this.addChild(this._mapLayer, GameConfig.ZORDER_MAP);
         this.addChild(this._lobbyLayer, GameConfig.ZORDER_LOBBY);
     },

@@ -19,8 +19,7 @@ var Item = cc.Class.extend({
 
         // Read info from JSON
         var info = cc.loader.getRes(infoSource);
-
-        var townhall = cc.loader.getRes(itemInfo_resources.TOW);
+        var townhall = CONFIG_DATA.file.TOW;//cc.loader.getRes(itemInfo_resources.TOW);
 
         this.loadUserInfo(townhall, id);
         

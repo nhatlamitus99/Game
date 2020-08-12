@@ -9,14 +9,9 @@ var ResourcesData = cc.Class.extend({
     },
 
     setAttributes: function(data) {
-        // data.length must equal DATA_SIZE and data[i] >= 0
-        if (data.length != ResourcesConfig.DATA_SIZE)
+        if (data.gold < 0 || data.elixir < 0 || data.g < 0)
             return false;
-        for (var i = 0; i < ResourcesConfig.DATA_SIZE; ++i)
-            if (data[i] < 0)
-                return false;
-        for (i = 0; i < ResourcesConfig.DATA_SIZE; ++i)
-            this._resources[i] = data[i];
+        this._resources = [data.gold, data.elixir, data.g];
         return true;
     },
 
@@ -43,6 +38,9 @@ var ResourcesData = cc.Class.extend({
         for (var i = 0; i < this._resources.length; ++i)
             res.push(this._resources[i]);
         return res;
+    },
+    showInfo: function() {
+        cc.log("resources :(Gold-Elixir-G)="+this.getResources());
     }
 });
 

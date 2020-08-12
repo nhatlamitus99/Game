@@ -23,8 +23,8 @@ var Substructure = cc.Sprite.extend({
             this._normalSubs.addChild(shadow, 1);
     }
         // create red green subs
-        this._greenSubs = new cc.Sprite(res.object_mgr.red_substructures[indexSubsPath]);
-        this._redSubs = new cc.Sprite(res.object_mgr.green_substructures[indexSubsPath]);
+        this._greenSubs = new cc.Sprite(res.object_mgr.green_substructures[indexSubsPath]);
+        this._redSubs = new cc.Sprite(res.object_mgr.red_substructures[indexSubsPath]);
 
         this.addChild(this._normalSubs);
         this.addChild(this._greenSubs, 0);
@@ -39,19 +39,23 @@ var Substructure = cc.Sprite.extend({
     getID: function(){
         return this._id;
     },
-    setGreenMode: function () {
+    setGreenState: function () {
         this._greenSubs.setVisible(true);
         this._redSubs.setVisible(false);
         this._normalSubs.setVisible(false);
     },
-    setRedMode: function () {
+    setRedState: function () {
         this._greenSubs.setVisible(false);
         this._redSubs.setVisible(true);
         this._normalSubs.setVisible(false);
     },
-    setNormalMode: function() {
+    setNormalState: function() {
         this._greenSubs.setVisible(false);
         this._redSubs.setVisible(false);
         this._normalSubs.setVisible(true);
+
+    },
+    isInMovingState: function() {
+        return !this._normalSubs.isVisible();
     }
 });

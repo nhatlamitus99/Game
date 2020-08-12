@@ -37,16 +37,14 @@ var User = cc.Class.extend({
     setUID:function(value){
         this.uId = value;
     },
-    setAttributes:function(name,level,ranking,vip,exp){
-        this.name = name;
-        this.level = level;
-        this.ranking = ranking;
-        this.vip = vip;
-        this.exp = exp;
+    setAttributes: function(attributes){
+        this.uId = attributes.id;
+        this.username = attributes.name;
+    },
+    showInfor: function() {
+        cc.log("userInfor: (uId:" + this.uId+", username: " + this.username+");" );
     }
-
 });
-
 
 var CURR_USER = null;
 

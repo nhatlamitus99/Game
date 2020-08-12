@@ -1,28 +1,30 @@
+// this variables will be used for moving object
+var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type);
+
 var MapView = cc.Layer.extend({
     _map:null,
 
     // on client
-    _scale: null,   // scale of current screen view map
-    _mapOriginSize: null,   // size of screen after the first scaling
-    _matrixMap: null,   // matrixMap (matrix of cell)
-    _objectMgrView: null,   // manager of object
-    _troopMgrView: null, // troop manager
-    _arrowMove: null, // arrow Moving which are used for moving
+    _scale: null,                           // scale of current screen view map
+    _mapOriginSize: null,                   // size of screen after the first scaling
+    _matrixMap: null,                       // matrixMap (matrix of cell)
+    _objectMgrView: null,                   // manager of object
+    _troopMgrView: null,                    // troop manager
 
-    // using for smoothly action
-    _movingSpeed: {    // acceleration of Moving screen
+    _movingSpeed: {                         // using for smoothly action
         x: 0,
         y: 0,
-        unitX: 0,   // x -= unitX each frame
-        unitY: 0    // y -= unitY each frame
+        unitX: 0,                           // x -= unitX each frame
+        unitY: 0                            // y -= unitY each frame
     },
-    _scalingSpeed: 0,   // acceleration of Zoom screen
+    _scalingSpeed: 0,                       // acceleration of Zoom screen
 
     // Using for synchronize
-    _flagOfEditMovingSpeed: false,   // boolean value: true-touching, false- no touch
-    _flagOfMovingScreen: false, // boolean value: true-screen was moving, false-screen was not moving
+    _flagOfEditMovingSpeed: false,          // boolean value: true-touching, false- no touch
+    _flagOfMovingScreen: false,             // boolean value: true-screen was moving, false-screen was not moving
 
     _troop_batches: null,
+    _currentFrames: null,
 
     ctor:function() {
         this._super();
@@ -44,8 +46,6 @@ var MapView = cc.Layer.extend({
         // load buildings, substructures & troop to map
         this.loadBuilding();
         this.loadTroops();
-        // load Arrow Move
-        this.loadArrowMove();
     },
     buildTroopBatches: function()
     {
@@ -61,6 +61,7 @@ var MapView = cc.Layer.extend({
     updatePerFrame: function() {
         this.moveMapPerFrame();
         this.zoomMapPerFrame();
+        this._currentFrames = (this._currentFrames+1)%MapConfig.MAX_COUNTING_FRAMES;
     },
     moveMapPerFrame: function() {
         if (!this._flagOfEditMovingSpeed && !this._flagOfMovingScreen) {
@@ -114,18 +115,17 @@ var MapView = cc.Layer.extend({
                 this._map.addChild(listObject[i][j], zOrder);
                 this._map.addChild(listSubs[i][j], MapConfig.Z_ORDER_SUBSTRUCTURE);
                 // set position
-                var posCenter = this.getCenterPosOfRegion(region);
-                listObject[i][j].x = posCenter.x;
-                listObject[i][j].y = posCenter.y;
-                listSubs[i][j].x = posCenter.x;
-                listSubs[i][j].y = posCenter.y;
+                this.setPositionObjectSubs(listObject[i][j], listSubs[i][j], region);
             }
         }
     },
 
-    loadArrowMove: function() {
-        this._arrowMove = new ArrowMove();
-        this._map.addChild(this._arrowMove, MapConfig.Z_ORDER_ARROW);
+    setPositionObjectSubs: function(object, subs, region) {
+        var posCenter = this.getCenterPosOfRegion(region);
+        object.x = posCenter.x;
+        object.y = posCenter.y;
+        subs.x = posCenter.x;
+        subs.y = posCenter.y;
     },
 
     calculateZOrderOfRegion: function(region) {
@@ -210,54 +210,102 @@ var MapView = cc.Layer.extend({
     },
 
     onTouchesBegan: function (touches) {
-        this._flagOfEditMovingSpeed = true;
-        this._movingSpeed.x = 0;
-        this._movingSpeed.y = 0;
-        this._flagOfEditMovingSpeed = false;
+        this.setVelocity({x: 0, y: 0});
+
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        if (!selectedGroup.isNULL())
+            if (selectedGroup.hasCell(cell)) {
+                selectedGroup.showMovingSubs();
+                selectedGroup.flagOfMove = true;
+            }
+        this.findRegionForBuilding(3);
         return true;
     },
 
+    setGroupFromTouch: function(group, touches){
+        var mapData = MapData.getInstance();
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        if (selectedGroup.hasCell(cell))
+            return;
+
+        var typeID = mapData.getTypeIDFromCell(cell);
+        var objectData = mapData.getObjectFromTypeID(typeID.type, typeID.id);
+        var region = null, oldRegion = null;
+        if (objectData != null) {
+            region = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
+            oldRegion = {i: objectData.position.i, j: objectData.position.j, h: objectData.size.h, w: objectData.size.w};
+        }
+
+        group.setAttributes(
+            this.getSubsFromTypeID(typeID.type, typeID.id),
+            this.getObjectFromTypeID(typeID.type, typeID.id),
+            oldRegion,
+            region,
+            typeID.type,
+            typeID.id);
+    },
+
     onTouchesMoved: function(touches) {
+        if (!this.isTouchMove(touches[0].getDelta()))
+            return true;
+        this._currFrameMove = this._currentFrames;
         this._flagOfMovingScreen = true;
-        this._flagOfEditMovingSpeed = true;
-        var touch = touches[0];
-        var delta = touch.getDelta();
+        var cell = this.getCellInMatrixMap(touches[0].getLocation());
+        if (!selectedGroup.isNULL()) {
+            if (selectedGroup.flagOfMove) {
+                selectedGroup.goTo(cell);
+                return true;
+            }
+        }
+        this.moveMapAndSetVelocity(touches[0].getDelta());
+        return true;
+    },
+    isTouchMove: function(delta) {
+        var sumDelta = (delta.x+delta.x)*(delta.x+delta.x) + (delta.y+delta.y)*(delta.y+delta.y);
+        return sumDelta >= MapConfig.MIN_TOUCH_MOVE_DELTA;
+
+    },
+    moveMapAndSetVelocity: function(delta) {
         this.moveMap(delta);
-        // copy accelerationMoving
+        this.setVelocity(delta);
+    },
+    setVelocity: function(delta){
+        this._flagOfEditMovingSpeed = true;
         this._movingSpeed.x = delta.x;
         this._movingSpeed.y = delta.y;
         this._movingSpeed.unitX = delta.x * MapConfig.MOVING_ACCELERATION;
         this._movingSpeed.unitY = delta.y * MapConfig.MOVING_ACCELERATION;
         this._flagOfEditMovingSpeed = false;
-        return true;
     },
 
     onTouchesEnded: function(touches) {
-        // if screen moving -> no select object;
+        if ((this._currentFrames-this._currFrameMove)%MapConfig.MAX_COUNTING_FRAMES > MapConfig.COUNT_NO_MOVING) {
+            this.setVelocity({x: 0, y: 0});
+        }
+
+        var mapData = MapData.getInstance();
+        selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
-        } else { // else select object at touch's position
-            var touchLocation = touches[0].getLocation();
-            // get cell in matrixMap
-            var cell = this.getCellInMatrixMap(touchLocation);
-            if (cell != null) {
-                // get object's type-id from MapLogic
-                var mapData = MapData.getInstance();
-                var typeID = mapData.getTypeIDFromCell(cell);
-                if (typeID.type == -1 || typeID.id == -1) {
-                    this._arrowMove.setSizeArrow(0);
-                    return true;
+            if (!selectedGroup.isNULL())
+                if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
+                    selectedGroup.showNormalSubs();
+                    mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
+                    selectedGroup.updateOldRegion();
                 }
-                var object = mapData.getObjectFromTypeID(typeID.type, typeID.id);
-                // show Arrow
-                cc.log("ARROW SIZE " + this._arrowMove._arrowSprites.length);
-                this._arrowMove.setSizeArrow(object.size);
-                var posCenter = this.getCenterPosOfRegion({i: object.position.i, j: object.position.j, w: object.size.w, h:object.size.h});
-                this._arrowMove.x = posCenter.x;
-                this._arrowMove.y = posCenter.y;
-            } else {
-                cc.log("No cell in this position");
+        }
+        else {
+            if (!selectedGroup.isNULL()) {
+                if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
+                    selectedGroup.showNormalSubs();
+                    mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
+                    selectedGroup.updateOldRegion();
+                } else {
+                    selectedGroup.goBack();
+                    selectedGroup.revertNewRegion();
+                }
             }
+            this.setGroupFromTouch(selectedGroup, touches);
         }
         return true;
     },
@@ -292,15 +340,10 @@ var MapView = cc.Layer.extend({
         // 'MapConfig.MAP_SIZE.h/4' because isometric 's width is overlap if we if we look it in the vertical axis.
         var titleH = MapConfig.getCellSize().h*this._scale;
         var titleW = MapConfig.getCellSize().w*this._scale;
-        var result = {
+        return{
             i: Math.floor(((t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2))),
             j: Math.floor((-(t.x-titleW*MapConfig.MAP_SIZE.w/4)/(titleW/2) + t.y/(titleH/2)))
         };
-        if (result.i < 0 || result.i >= MapConfig.MAP_SIZE.w)
-            return null;
-        if (result.j < 0 || result.j >= MapConfig.MAP_SIZE.h)
-            return null;
-        return result;
     },
 
     getPosOfRegion: function(cell) {
@@ -310,9 +353,7 @@ var MapView = cc.Layer.extend({
             x: (cell.i - cell.j)*titleW/4 + titleW*MapConfig.MAP_SIZE.w/4,// because of a column is overlap 50% with another column (2 side: left and right)
             y: (cell.i + cell.j)*titleH/4
         };
-        // convert coordinate of touch to matrixMap's coordinate
-        // cc.log("test getPosOfRegion - matrixMap", location.x + " " + location.y);
-        return this.transformLocationMatrixMapToMap(location);
+        return this.transformMMapToMap(location);
     },
 
     getCenterPosOfRegion: function(region) {
@@ -322,27 +363,26 @@ var MapView = cc.Layer.extend({
     },
 
     // location: matrix map -> screen
-    //transformMMapToScreen: function(location) {
+    //transformMapToScreen: function(location) {
     //    var result = {};
     //    var map = this._map;
     //    var mapSize = this._mapOriginSize;
-    //    var matrixMap = this._matrixMap;
     //    var scale = this._scale;
-    //    // from matrixMap to map
-    //    result.x = location.x + matrixMap.x*scale;
-    //    result.y = location.y + matrixMap.y*scale;
     //    // from map to Screen
-    //    result.x += map.x - mapSize.w*scale/2;
-    //    result.y += map.y - mapSize.h*scale/2;
+    //    result.x = location.x + map.x - mapSize.w*scale/2;
+    //    result.y = location.y + map.y - mapSize.h*scale/2;
     //    return result;
     //},
     // location: MatrixMap -> map
-    transformLocationMatrixMapToMap: function(location) {
+    transformMMapToMap: function(location) {
         var result = {};
         var matrixMap = this._matrixMap;
+        var titleH = MapConfig.getCellSize().h;
+        var titleW = MapConfig.getCellSize().w;
+
         // from matrixMap to map
-        result.x = location.x + matrixMap.x;
-        result.y = location.y + matrixMap.y;
+        result.x = location.x + matrixMap.x + titleW/2;
+        result.y = location.y + matrixMap.y + titleH/2;
         return result;
     },
     // location: screen->Map
@@ -360,18 +400,38 @@ var MapView = cc.Layer.extend({
         var result = {};
         var matrixMap = this._matrixMap;
         var scale = this._scale;
-        result.x = location.x - matrixMap.x*scale;
-        result.y = location.y - matrixMap.y*scale;
+        var titleH = MapConfig.getCellSize().h;
+        var titleW = MapConfig.getCellSize().w;
+
+        result.x = location.x - (matrixMap.x+titleW/2)*scale;
+        result.y = location.y - (matrixMap.y+titleH/2)*scale;
         return result;
     },
-    // get center location of object in map
-    showObjectInMap: function(objectView, cell) {
 
+    getObjectFromTypeID: function(type, id) {
+        if (type == MapConfig.NULL_CELL.type)
+            return null;
+        return this._objectMgrView.getObjectFromTypeID(type, id);
+    },
+    getSubsFromTypeID: function(type, id) {
+        if (type == MapConfig.NULL_CELL.type)
+            return null;
+        return this._objectMgrView.getSubsFromTypeID(type, id);
     },
     addTroop: function(troop_type, troop_view, zorder)
     {
         this._troop_batches[troop_type].addChild(troop_view, zorder);
     },
+    findRegionForBuilding: function(sizeObject) {
+        var size = sizeObject.w == null ? sizeObject : sizeObject.w;
+        var winSize = cc.director.getWinSize();
+        var centerCell = this.getCellInMatrixMap({x:winSize.width/2, y:winSize.height/2});
+        // use for get new region for build object
+        var mapData = MapData.getInstance();
+        var region = mapData.findRegionForBuilding(centerCell, size);
+        //cc.log("region for building object: " + region.i + " " + region.j + " // " + region.h + " " + region.w);
+        //cc.log("center Cell " + centerCell.i + " " + centerCell.j);
+    }
 });
 
 var MAP_VIEW_ONLY_ONE = null;
@@ -379,6 +439,5 @@ MapView.getInstance = function(){
     if(MAP_VIEW_ONLY_ONE == null){
         MAP_VIEW_ONLY_ONE = new MapView();
     }
-
     return MAP_VIEW_ONLY_ONE;
 };

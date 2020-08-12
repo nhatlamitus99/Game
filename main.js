@@ -4,7 +4,6 @@ var gv = gv || {};
 var DESIGN_RESOLUTION_WIDTH = 960;
 var DESIGN_RESOLUTION_HEIGHT = 640;
 
-
 cc.game.onStart = function () {
     if (!cc.sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
         document.body.removeChild(document.getElementById("cocosLoading"));
@@ -35,24 +34,20 @@ cc.game.onStart = function () {
         gv.poolObjects = new PoolObject();
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
 
-        // create new GameClass and class Logic
-        var gameData = GameData.getInstance();
-        // load data from server and add it to game Data
-        var user = User.getInstance();
-        var objectMgrData = ObjectMgrData.getInstance();
         // make mapData
         var mapData = MapData.getInstance();
+        var objectMgrData = ObjectMgrData.getInstance();
         mapData.customInit();
         mapData._objectMgrData = objectMgrData;
         if (mapData.insertObject2Map({
-            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
-            position: {i: 0, j: 0},
-            size: {h: 2, w: 2}}) == false
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 0, j: 0},
+                size: {h: 2, w: 2}}) == false
         ) cc.log("adding object 1 to mapData false");
         if (mapData.insertObject2Map({
-            type: OBJECT_MGR_CONFIG.buildingType.mapObject,
-            position: {i: 4, j: 0},
-            size: {h: 4, w: 4}}) == false
+                type: OBJECT_MGR_CONFIG.buildingType.mapObject,
+                position: {i: 4, j: 0},
+                size: {h: 4, w: 4}}) == false
         ) cc.log("adding object 2 to mapData false");
         if (mapData.insertObject2Map({
                 type: OBJECT_MGR_CONFIG.buildingType.mapObject,
@@ -70,12 +65,10 @@ cc.game.onStart = function () {
                 size: {h:1, w:1}}) == false
         ) cc.log("adding object 5 to mapData false");
 
-        var resourcesData = ResourcesData.getInstance();
-        resourcesData.setAttributes([100000, 200, 500]);
+        // load Config
+        CONFIG_DATA.load();
 
-        gameData.setAttributes(user, resourcesData, mapData, objectMgrData, null, null);
-        // view mainScreen
-        fr.view(GameScreen);
+        fr.view(ScreenLogin);
     }, this);
 };
 

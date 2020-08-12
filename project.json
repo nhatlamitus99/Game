@@ -39,8 +39,21 @@
     "src/base/Resource.js",
     "src/base/UIFactory.js",
 
+    "src/config/ConfigData.js",
     "src/config/MapConfig.js",
-
+    "src/config/LoginConfig.js",
+    "src/config/TroopConfig.js",
+    "src/config/LobbyConfig.js",
+    "src/config/GameConfig.js",
+    "src/config/ResourcesConfig.js",
+    "src/config/TroopType.js",
+    "src/config/ObjectMgrConfig.js",
+    "src/config/LoginConfig.js",
+    "src/config/TroopConfig.js",
+    "src/config/LobbyConfig.js",
+    "src/config/GameConfig.js",
+    "src/config/ResourcesConfig.js",
+    "src/config/TroopType.js",
 
     "src/modules/FrameCache/FrameCache.js",
 
@@ -49,29 +62,15 @@
     "src/modules/game/data/GameData.js",
     "src/modules/game/graphics/GameView.js",
 
-
-    "src/config/LoginConfig.js",
-    "src/config/TroopConfig.js",
-    "src/config/LobbyConfig.js",
-    "src/config/GameConfig.js",
-    "src/config/ResourcesConfig.js",
-    "src/config/TroopType.js",
-    "src/config/ObjectMgrConfig.js",
-
     "src/modules/map/data/MapData.js",
-    "src/modules/map/graphics/MapView.js",
     "src/modules/map/graphics/ArrowMove.js",
+    "src/modules/map/graphics/ArrowPool.js",
+    "src/modules/map/graphics/MovingGroup.js",
+    "src/modules/map/graphics/MapView.js",
 
     "src/modules/resources/data/ResourcesData.js",
 
     "src/modules/UserInfo/User.js",
-
-    "src/config/LoginConfig.js",
-    "src/config/TroopConfig.js",
-    "src/config/LobbyConfig.js",
-    "src/config/GameConfig.js",
-    "src/config/ResourcesConfig.js",
-    "src/config/TroopType.js",
 
     "src/modules/object/ObjectMgrView.js",
     "src/modules/object/graphics/MapObjectView.js",
@@ -84,6 +83,9 @@
     "src/modules/object/data/createdObject/DefenseObject.js",
     "src/modules/object/data/createdObject/HarvestObject.js",
     "src/modules/object/data/createdObject/WarehouseObject.js",
+    "src/modules/object/data/createdObject/BuilderHut.js",
+    "src/modules/object/data/createdObject/ClanCastle.js",
+    "src/modules/object/data/createdObject/TownHall.js",
     "src/modules/object/data/createdObject/armyObject/ArmyCamp.js",
     "src/modules/object/data/createdObject/armyObject/Barrack.js",
     "src/modules/object/data/createdObject/defenseObject/AnchorTown.js",

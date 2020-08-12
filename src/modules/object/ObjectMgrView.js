@@ -14,7 +14,8 @@ var ObjectMgrView = cc.Class.extend({
                 var attributes = {
                     type: listObject[i][j].type,
                     id: listObject[i][j].id,
-                    size: listObject[i][j].size
+                    size: listObject[i][j].size,
+                    level: listObject[i][j].level
                 };
                 this.createItemListObject(attributes);
                 this.createItemListSubs(attributes);
@@ -51,5 +52,17 @@ var ObjectMgrView = cc.Class.extend({
     },
     getListSubs: function() {
         return this.listSubs;
+    },
+    setGreenState: function(type, id) {
+        this.listSubs[type][id].setGreenState();
+    },
+    setNormalState: function(type, id) {
+        this.listSubs[type][id].setNormalState();
+    },
+    getObjectFromTypeID: function(type, id) {
+        return this.listObject[type][id];
+    },
+    getSubsFromTypeID: function(type, id) {
+        return this.listSubs[type][id];
     }
 });

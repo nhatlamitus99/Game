@@ -20,6 +20,61 @@ var GameData = cc.Class.extend({
         this._builderManager = builderManager;
         this._shop = shop;
         return true;
+    },
+
+    loadDataFromServer: function(jsonFile) {
+        cc.log(jsonFile);
+        var jsonContent = JSON.parse(jsonFile);
+
+        cc.log("Loading JSON from server");
+
+        cc.log("Loading Resources");
+        var resourcesData = ResourcesData.getInstance();
+        resourcesData.setAttributes(jsonContent.resource);
+        resourcesData.showInfo();
+
+        cc.log("Loading UserInfor");
+        var user = User.getInstance();
+        user.setAttributes(jsonContent.playerInfo);
+        user.showInfor();
+
+        cc.log("Loading listObject");
+        var objectMgrData = ObjectMgrData.getInstance();
+        var mapData = MapData.getInstance();
+        mapData.customInit();
+        mapData.setObjectMgrData(objectMgrData);
+        for (var i = 0; i < jsonContent.listObject.length; ++i) {
+            var attributes = this.updateObjectJson(jsonContent.listObject[i]);
+            //cc.log(attributes.position.i + " " + attributes.position.j + " " + attributes.size.h + " " + attributes.size.w);
+            //for (var key in attributes) {
+            //    cc.log(key + ": " + attributes[key]);
+            //}
+            //if (mapData.insertObject2Map(attributes))
+            //    cc.log("Failed to load object " + i);
+        }
+
+        this.setAttributes(user, resourcesData, mapData, null, null);
+        cc.log("Loading done <3");
+    },
+    updateObjectJson: function(json) {
+        var fileCategory = CONFIG_DATA.getData(json.typeCategory, json.typeObject, json.level);
+        var res = {
+            position: {
+                i:json.position.x,
+                j:json.position.y
+            },
+            size: {
+                w: fileCategory.width,
+                h: fileCategory.height
+            }
+        };
+        for (var key in json)
+            if (key != "position")
+                res[key] = json[key];
+        for (key in fileCategory)
+            if (key != "height" && key != "width")
+                res[key] = fileCategory[key];
+        return res;
     }
 });
 
