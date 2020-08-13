@@ -95,7 +95,7 @@
     "src/modules/object/data/createdObject/harvestObject/GoldMine.js",
     "src/modules/object/data/createdObject/warehouseObject/ElixirStorage.js",
     "src/modules/object/data/createdObject/warehouseObject/GoldStorage.js",
-    
+
     "src/modules/LogIn/ScreenLogin.js",
     "src/modules/LogIn/network/Network.js",
     "src/modules/LogIn/network/Packet.js",
@@ -112,9 +112,10 @@
     "src/modules/Lobby/Setting.js",
 
     "src/modules/shop/logic/Category.js",
-    "src/modules/shop/logic/Item.js",
     "src/modules/shop/logic/ScreenShop.js",
+    "src/modules/shop/logic/Item.js",
     "src/modules/shop/logic/ScreenTest.js"
+
 
   ]
 }

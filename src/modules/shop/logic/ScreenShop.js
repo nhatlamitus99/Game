@@ -14,6 +14,7 @@
     itemInfo: null,
     ctor: function () {
         this._super();
+        this.viewList = null;
         this.init();
         this.popUpShopGUI();
         this.show();
@@ -34,6 +35,10 @@
     init: function () {
         if (this.listCategories != null)
             return;
+        this.viewList = new TableViewTestLayer(this);
+        this.viewList.visible = false;
+        this.addChild(this.viewList);
+
         this.listCategories = new Map();
         this.listItemsName = new Map();
         this.itemInfo = new Map();
@@ -71,8 +76,9 @@
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
             onTouchBegan: function (touch, event) {
-                if (this.visible == false)
+                if (this.visible == false || this.shopBackground.visible == false)
                     return false;
+                
                 var locationInNode = Sprite.convertToNodeSpace(touch.getLocation());
                 var s = Sprite.getContentSize();
                 var rect = cc.rect(0, 0, s.width, s.height);
@@ -228,18 +234,21 @@
     },
     onSelectResources: function () {
         //var tmp = new Item("LeGau", "STO_1", itemInfo_resources.STO, 1, 1);
-        
-        if (this.shopBackground.visible == true && this.visible == true) {
+        this.viewList.show("Resources", this.listCategories["Resources"], this.listItemsName["Resources"], this.itemInfo["Resources"]);
+        /*if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListResources == null) {
                 this.viewListResources = new TableViewTestLayer(this, this.listCategories["Resources"], this.listItemsName["Resources"], this.itemInfo["Resources"]);
+                this.viewListResources.visible = false;
                 this.addChild(this.viewListResources, 1);
+                this.viewListResources.show("Resources");
             }
             else {
                 if (this.viewListResources.visible == false)
-                    this.viewListResources.show();
+                    this.viewListResources.show("Resources");
             }
-        }
+        }*/
+        
         
     },
     onSelectDecorations: function () {
@@ -247,20 +256,23 @@
             cc.log("3");
     },
     onSelectArmy: function () {
-        if (this.shopBackground.visible == true && this.visible == true) {
+        this.viewList.show("Army", this.listCategories["Army"], this.listItemsName["Army"], this.itemInfo["Army"]);
+        /*if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListArmy == null) {
                 this.viewListArmy = new TableViewTestLayer(this, this.listCategories["Army"], this.listItemsName["Army"], this.itemInfo["Army"]);
-                this.addChild(this.viewListArmy, 1);
+                this.addChild(this.viewListArmy, 2);
             }
             else {
                 if (this.viewListArmy.visible == false)
                     this.viewListArmy.show();
             }
         }
+        */
     },
     onSelectDefense: function () {
-        if (this.shopBackground.visible == true && this.visible == true) {
+        this.viewList.show("Defense", this.listCategories["Defense"], this.listItemsName["Defense"], this.itemInfo["Defense"]);
+        /*if (this.shopBackground.visible == true && this.visible == true) {
             //this.visible = false;
             if (this.viewListDefense == null) {
                 this.viewListDefense = new TableViewTestLayer(this, this.listCategories["Defense"], this.listItemsName["Defense"], this.itemInfo["Defense"]);
@@ -270,7 +282,7 @@
                 if (this.viewListDefense.visible == false)
                     this.viewListDefense.show();
             }
-        }
+        }*/
     },
     onSelectShield: function () {
         if (this.shopBackground.visible == true && this.visible == true)
