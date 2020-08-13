@@ -78,9 +78,9 @@ var MapData = cc.Class.extend({
     getTypeIDFromCell: function(cell){
         if (cell == null)
             return MapConfig.getNullCell();
-        if (cell.i < 0 || cell.i > MapConfig.MAP_SIZE.w)
+        if (cell.i < 0 || cell.i >= MapConfig.MAP_SIZE.w)
             return MapConfig.getNullCell();
-        if (cell.j < 0 || cell.j > MapConfig.MAP_SIZE.h)
+        if (cell.j < 0 || cell.j >= MapConfig.MAP_SIZE.h)
             return MapConfig.getNullCell();
         return {
             type: this._map[cell.i][cell.j].type,
