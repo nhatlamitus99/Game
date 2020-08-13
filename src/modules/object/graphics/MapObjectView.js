@@ -8,16 +8,18 @@ var MapObjectView = cc.Sprite.extend({
         this._super();
         switch(attributes.type) {
             case OBJECT_MGR_CONFIG.buildingType.AMC_1:
-                new ArmyCampView(attributes.level, attributes.position, this);
+                new ArmyCampView(4, attributes.position, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.BAR_1:
                 new BarrackView(attributes.level, attributes.position, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.BDH_1:
-                new BuilderHutView(attributes.level, attributes.position, this);
+                //new BuilderHutView(attributes.level, attributes.position, this);
+                new BarrackView(5, attributes.position, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.CLC_1:
-                new ClanCastleView(attributes.level, attributes.position, this);
+                //new ClanCastleView(attributes.level, attributes.position, this);
+                new ElixirMineView(attributes.level, attributes.position, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.RES_1:
                 new GoldMineView(attributes.level, attributes.position, this);
