@@ -218,7 +218,8 @@ var MapView = cc.Layer.extend({
                 selectedGroup.showMovingSubs();
                 selectedGroup.flagOfMove = true;
             }
-        this.findRegionForBuilding(3);
+        
+        //this.findRegionForBuilding(3);
         return true;
     },
 
