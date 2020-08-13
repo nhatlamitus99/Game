@@ -127,8 +127,8 @@ var MovingGroup = cc.Class.extend({
         this._subs.setNormalState();
         this._subs.setLocalZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
     },
-    isNULL: function () {
-        return this._type == MapConfig.NULL_CELL.type;
+    isNULLorObstacle: function () {
+        return (this._type == MapConfig.NULL_CELL.type || this._type >= OBJECT_MGR_CONFIG.buildingType.OBS_1);
     },
     setPosArrow: function() {
         var mapView = MapView.getInstance();

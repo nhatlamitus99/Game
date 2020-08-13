@@ -213,7 +213,7 @@ var MapView = cc.Layer.extend({
         this.setVelocity({x: 0, y: 0});
 
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
-        if (!selectedGroup.isNULL())
+        if (!selectedGroup.isNULLorObstacle())
             if (selectedGroup.hasCell(cell)) {
                 selectedGroup.showMovingSubs();
                 selectedGroup.flagOfMove = true;
@@ -252,7 +252,7 @@ var MapView = cc.Layer.extend({
         this._currFrameMove = this._currentFrames;
         this._flagOfMovingScreen = true;
         var cell = this.getCellInMatrixMap(touches[0].getLocation());
-        if (!selectedGroup.isNULL()) {
+        if (!selectedGroup.isNULLorObstacle()) {
             if (selectedGroup.flagOfMove) {
                 selectedGroup.goTo(cell);
                 return true;
@@ -288,7 +288,7 @@ var MapView = cc.Layer.extend({
         selectedGroup.flagOfMove = false;
         if (this._flagOfMovingScreen == true) {
             this._flagOfMovingScreen = false;
-            if (!selectedGroup.isNULL())
+            if (!selectedGroup.isNULLorObstacle())
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
@@ -296,7 +296,7 @@ var MapView = cc.Layer.extend({
                 }
         }
         else {
-            if (!selectedGroup.isNULL()) {
+            if (!selectedGroup.isNULLorObstacle()) {
                 if (!mapData.checkOverlap(selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id})) {
                     selectedGroup.showNormalSubs();
                     mapData.moveObject(selectedGroup._oldRegion, selectedGroup._newRegion, {type:selectedGroup._type, id:selectedGroup._id});
