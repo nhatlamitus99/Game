@@ -5,7 +5,6 @@ var OBJECT_MGR_CONFIG = OBJECT_MGR_CONFIG || {};
 
 
 OBJECT_MGR_CONFIG.buildingType = {
-    mapObject: 0,
     AMC_1: 1,
     BAR_1: 2,
     DEF_1: 3,
