@@ -164,7 +164,8 @@ var itemInfo_resources = {
     TOW: "content/Design Documents/Config json/TownHall.json",
     TRO: "content/Design Documents/Config json/Troop.json",
     TRB: "content/Design Documents/Config json/TroopBase.json",
-    WAL: "content/Design Documents/Config json/Wall.json"
+    WAL: "content/Design Documents/Config json/Wall.json",
+    LAB: "content/Design Documents/Config json/Laboratory.json"
 };
 
 var g_resources = [
