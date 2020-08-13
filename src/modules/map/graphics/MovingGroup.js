@@ -128,7 +128,17 @@ var MovingGroup = cc.Class.extend({
         this._subs.setLocalZOrder(MapConfig.Z_ORDER_SUBSTRUCTURE);
     },
     isNULLorObstacle: function () {
-        return (this._type == MapConfig.NULL_CELL.type || this._type >= OBJECT_MGR_CONFIG.buildingType.OBS_1 || this._type == OBJECT_MGR_CONFIG.buildingType.CLC_1);
+        if (this._type == MapConfig.NULL_CELL.type || this._type >= OBJECT_MGR_CONFIG.buildingType.OBS_1)
+            return true;
+        if (this._type != OBJECT_MGR_CONFIG.buildingType.CLC_1)
+            return false;
+        // if you go to this line, it mean this._type == clan castle
+        var typeCastle = OBJECT_MGR_CONFIG.buildingType.CLC_1;
+        var objectMgrData = ObjectMgrData.getInstance();
+        var list = objectMgrData.getListObject();
+        var castle = list[typeCastle][0];   // because we have only 1 clan castle
+        return castle.getLevel() < OBJECT_MGR_CONFIG.CLAN_CASTLE_ACTIVATE_LEVEL;
+
     },
     setPosArrow: function() {
         var mapView = MapView.getInstance();
