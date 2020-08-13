@@ -7,7 +7,6 @@ var WarehouseObject = CreatedMapObject.extend({
 
     ctor: function(type, position) {
         this._super(type, position);
-        this.loadInfo(type, level);
     },
 
     loadInfo: function(type, level) {

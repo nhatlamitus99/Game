@@ -87,6 +87,7 @@
     "src/modules/object/data/createdObject/ClanCastle.js",
     "src/modules/object/data/createdObject/TownHall.js",
     "src/modules/object/data/createdObject/armyObject/ArmyCamp.js",
+    "src/modules/object/data/createdObject/armyObject/ArmyCampView.js",
     "src/modules/object/data/createdObject/armyObject/Barrack.js",
     "src/modules/object/data/createdObject/defenseObject/AnchorTown.js",
     "src/modules/object/data/createdObject/defenseObject/Canon.js",

@@ -1,5 +1,5 @@
 var ObjectMgrView = cc.Class.extend({
-    numTypeObject: 11,  // number of type of building objects
+    numTypeObject: 27,  // number of type of building objects
     listObject: [],  // list of building objects in current map
     listSubs: [], // list of substructures of building in current map
 
@@ -9,16 +9,28 @@ var ObjectMgrView = cc.Class.extend({
             this.listSubs[i] = [];
         }
         var listObject = ObjectMgrData.getInstance().getListObject();
+
         for (i = 0; i < listObject.length; ++i) {
+            if(listObject[i].length == 0)
+                continue;
             for (var j = 0; j < listObject[i].length; ++j) {
+               
                 var attributes = {
                     type: listObject[i][j].type,
                     id: listObject[i][j].id,
-                    size: listObject[i][j].size,
-                    level: listObject[i][j].level
+                    size: {
+                        w: listObject[i][j].size.w,
+                        h: listObject[i][j].size.h
+                    },
+                    level: listObject[i][j].level,
+                    position: {
+                        i: listObject[i][j].position.i,
+                        j: listObject[i][j].position.j
+                    }
                 };
                 this.createItemListObject(attributes);
                 this.createItemListSubs(attributes);
+
             }
         }
     },
@@ -26,6 +38,7 @@ var ObjectMgrView = cc.Class.extend({
     createItemListObject: function(attributes) {
         var object = new MapObjectView(attributes);
         object.setAnchorPoint(0.5, 0.5);
+        object.setPosition(cc.p(attributes.position.i, attributes.position.j));
         this.addObject(object);
     },
 
