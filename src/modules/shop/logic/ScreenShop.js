@@ -49,16 +49,16 @@
         this.listItemsName["Resources"] = ["Builder hut", "Gold mine", "Elixir mine", "Gold storage", "Elixir storage"];
         this.itemInfo["Resources"] = [itemInfo_resources.BDH, itemInfo_resources.RES, itemInfo_resources.RES, itemInfo_resources.STO, itemInfo_resources.STO];
 
-        this.listCategories["Army"] = ["AMC_1", "BAR_1"];
-        this.listItemsName["Army"] = ["Army camps", "Barrack"];
-        this.itemInfo["Army"] = [itemInfo_resources.AMC, itemInfo_resources.BAR];
+        this.listCategories["Army"] = ["AMC_1", "BAR_1", "BAR_2", "LAB_1"];
+        this.listItemsName["Army"] = ["Army camps", "Barrack", "X-men house", "Laboratory"];
+        this.itemInfo["Army"] = [itemInfo_resources.AMC, itemInfo_resources.BAR, itemInfo_resources.BAR, itemInfo_resources.LAB];
 
         this.listCategories["Decorations"] = [];
         this.listItemsName["Decorations"] = [];
 
-        this.listCategories["Defense"] = ["DEF_1", "DEF_2", "DEF_3", "DEF_5"];
-        this.listItemsName["Defense"] = ["Canon", "Archer tower", "Trebuchet", "A.A gun"];
-        this.itemInfo["Defense"] = [itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF];
+        this.listCategories["Defense"] = ["WAL_1", "DEF_1", "DEF_2", "DEF_3", "DEF_5", "DEF_4", "DEF_7", "DEF_8", "DEF_9", "DEF_12"];
+        this.listItemsName["Defense"] = ["Wall", "Canon", "Archer tower", "Trebuchet", "A.A gun", "Wizard tower", "Bow machine", "Lightning tower", "Laser tower", "Dragon cannon"];
+        this.itemInfo["Defense"] = [itemInfo_resources.WAL, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF, itemInfo_resources.DEF];
 
         this.listCategories["Shield"] = [];
 

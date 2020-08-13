@@ -22,7 +22,7 @@ var Item = cc.Class.extend({
         var townhall = CONFIG_DATA.file.TOW;//cc.loader.getRes(itemInfo_resources.TOW);
 
         this.loadUserInfo(townhall, id);
-        
+
         this.checkLevelTownHall(townhall, id);
         this.checkResources(info, id);
 
@@ -41,7 +41,7 @@ var Item = cc.Class.extend({
         item_bg.setState(this._state);
         //item_bg.scale = Math.max(this._ratioY, this._ratioY);
         this.itemBackground.addChild(item_bg, 1)
-        
+
         // Add main image
         var mainImage = new cc.Scale9Sprite("content/Art/GUIs/icons/shop_gui/icon/" + id + ".png");
         mainImage.x = this.itemBackground.width / 2;
@@ -50,14 +50,14 @@ var Item = cc.Class.extend({
         //mainImage.setColor(cc.color(105, 105, 105))
         //mainImage.scale = Math.max(this._ratioX, this._ratioY);
         this.itemBackground.addChild(mainImage, 2);
-        
+
         // Add title name
         var name = new cc.LabelBMFont(name, "fonts/soji_16.fnt");
         name.x = this.itemBackground.width / 2;
         name.y = this.itemBackground.height * 90 / 100;
         name.scale *= this._ratioX;
         name.scale *= this._ratioY;
-       // name.setState(this._state);
+        // name.setState(this._state);
         this.itemBackground.addChild(name);
         if (this.requireLevel <= this.levelTownHall) {
             // Add time icon
@@ -101,7 +101,7 @@ var Item = cc.Class.extend({
             var noti = new cc.LabelBMFont("Require town hall level " + this.requireLevel, "fonts/soji_12.fnt");
             noti.x = this.itemBackground.width / 2;
             noti.y = this.itemBackground.height * 0.3;
-            
+
             noti.setColor(cc.color(255, 0, 0));
             this.itemBackground.addChild(noti);
         }
@@ -133,18 +133,20 @@ var Item = cc.Class.extend({
         icon.y = price.height / 2;
         icon.setState(this._state);
         price.addChild(icon);
-        
+
     },
-    convertTimeToString: function(value) {
-        if (value == undefined)
+    convertTimeToString: function (value) {
+        if (value == undefined || value == 0)
             return "0s";
         var time = ["d", "h", "m", "s"];
         var timeValue = [0, 0, 0, 0];
-        for (var i = time.length - 1; i >= 0; --i) {
+        for (var i = time.length - 1; i >= 2; --i) {
             timeValue[i] = value % 60;
-            value = value / 60;
-            value = Math.floor(value);
+            value = (value - value % 60) / 60;
         }
+        timeValue[1] = value;
+        timeValue[0] = (timeValue[1] - timeValue[1] % 24) / 24;
+        timeValue[1] %= 24;
         var res = "";
         for (var i = 0; i < time.length; ++i) {
             if (timeValue[i] != 0)
@@ -157,9 +159,16 @@ var Item = cc.Class.extend({
     },
     loadUserInfo: function (townhall, id) {
         this._resources = ResourcesData.getInstance()._resources;
-
-        this.levelTownHall = 3;
-        this.countBuilt = 2;
+        var listObject = ObjectMgrData.getInstance().getListObject();
+        this.levelTownHall = listObject[OBJECT_MGR_CONFIG.buildingType.TOW_1][0].level;
+        this.countBuilt = 0;
+        for (var i = 0; i < listObject.length; ++i) {
+            for (var j = 0; j < listObject[i].length; ++j) {
+                if (listObject[i][j].code == id) {
+                    this.countBuilt += 1;
+                }
+            }
+        }
         if (id == "BDH_1")
             this.maxBuilt = 5;
         else
@@ -199,7 +208,7 @@ var Item = cc.Class.extend({
             this.available = false;
         }
         if (id != "BDH_1") {
-            for (var i = 1; i <= 15; ++i) {
+            for (var i = 1; i <= 11; ++i) {
                 if (townhall["TOW_1"]["" + i][id] != 0) {
                     this.requireLevel = i;
                     //cc.log(id + "  " + townhall["TOW_1"]["" + i][id]);

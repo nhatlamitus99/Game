@@ -79,6 +79,7 @@ var TableViewTestLayer = cc.Layer.extend({
         this.addTitle(title);
         this.animatePopUpGUI();
         this.tableView = new TableView(this.shopBackground, listItemsName, listItemsSource, listItemsInfo);
+        //this.tableView = new TableViewTest();
         this.shopBackground.addChild(this.tableView);
     },
     animatePopUpGUI: function () {
@@ -144,8 +145,6 @@ var TableViewTestLayer = cc.Layer.extend({
 
         icon.x = resBar.width - icon.width/2;
         icon.y = resBar.height / 2;
-
-        
 
         this.resBar = resBar;
         this.icon = icon;
@@ -266,8 +265,15 @@ var TableView = cc.Layer.extend({
         this.ratioX = 1;
         this.ratioY = 1;
 
+        
+
         this._slotItemHeight = null;
         this._slotItemWidth = null;
+        for (var i = 0; i < listItemsName.length; ++i) {
+            this.id.push("NULL");
+            this.status.push(false);
+            this.need.push(0);
+        }
         this._super();
         this.init();
         
@@ -283,9 +289,6 @@ var TableView = cc.Layer.extend({
         this.tableView.setDirection(cc.SCROLLVIEW_DIRECTION_HORIZONTAL);
         this.tableView.x = this.shopBackground.width / 50;
         this.tableView.y = this.shopBackground.height / 2 - tmp.height / 2;
-
-        this.tableView.x = 20;
-        this.tableView.y = winSize.height / 2 - 150;
 
         this.tableView.setDelegate(this);
         this.addChild(this.tableView);
@@ -304,8 +307,7 @@ var TableView = cc.Layer.extend({
     },
 
     tableCellTouched: function (table, cell) {
-        cc.log(this.id[cell.getIdx()] + "   " + this.need[cell.getIdx()]);
-        //cc.log(cell.getIdx());
+        cc.log(this.id[cell.getIdx()] + " " + this.need[cell.getIdx()] + " " + this.status[cell.getIdx()]);
     },
     tableCellTouched2: function () {
         cc.log("cell touched at index: ");
@@ -316,25 +318,43 @@ var TableView = cc.Layer.extend({
     },
 
     tableCellAtIndex: function (table, idx) {
-        var strValue = idx.toFixed(0);
+        var index = Number(idx.toFixed(0));
         var cell = table.dequeueCell();
+        var sprite;
         var label;
         if (!cell) {
-
             cell = new CustomTableViewCell();
-            //var sprite = new cc.Sprite(shop_resources.BACK_BTN);
-            var item = new Item(this.listItemsName[this.currentListItemsNameIndex], this.listItemsSource[this.currentListItemsNameIndex], this.listItemsInfo[this.currentListItemsNameIndex], this.ratioX, this.ratioY);
-            var sprite = item.itemBackground;
+            var item = new Item(this.listItemsName[index], this.listItemsSource[index], this.listItemsInfo[index], this.ratioX, this.ratioY);
+            sprite = item.itemBackground;
             sprite.anchorX = 0;
             sprite.anchorY = 0;
             sprite.x = 0;
             sprite.y = 0;
+            sprite.tag = 123;
             cell.addChild(sprite);
-            this.id.push(this.listItemsSource[this.currentListItemsNameIndex]);
 
-            this.status.push(item.isAvailable());
-            this.need.push(item.getNeed());
-            this.currentListItemsNameIndex += 1;   
+            this.id[index] = this.listItemsSource[index];
+            this.status[index] = item.isAvailable();
+            this.need[index] = item.getNeed();
+
+        }
+        else {
+            sprite = cell.getChildByTag(123);
+            if (sprite != null) {
+                var item = new Item(this.listItemsName[index], this.listItemsSource[index], this.listItemsInfo[index], this.ratioX, this.ratioY);
+                sprite.removeFromParent();
+                sprite = item.itemBackground;
+                sprite.anchorX = 0;
+                sprite.anchorY = 0;
+                sprite.x = 0;
+                sprite.y = 0;
+                sprite.tag = 123;
+                cell.addChild(item.itemBackground);
+
+                this.id[index] = this.listItemsSource[index];
+                this.status[index] = item.isAvailable();
+                this.need[index] = item.getNeed();
+            }
         }
         return cell;
     },
