@@ -4,6 +4,7 @@ var Barrack = CreatedMapObject.extend({
     sizeBarrack: 0,
     trainingQueue: [],
     creatableItems: [],
+    code: "BAR_1",
 
     ctor: function(type, position) {
         this._super(type, position);

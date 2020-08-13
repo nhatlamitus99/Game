@@ -38,7 +38,7 @@ cc.game.onStart = function () {
         // load Config
         CONFIG_DATA.load();
 
-        fr.view(GameScreen);
+        fr.view(ScreenLogin);
     }, this);
 };
 
