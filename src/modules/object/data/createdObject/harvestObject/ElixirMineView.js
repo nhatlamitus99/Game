@@ -1,22 +1,18 @@
 
 
-var BarrackView = cc.Sprite.extend({
+var ElixirMineView = cc.Sprite.extend({
 
-    _numAttack: 5,
-    _levelEffect: 4,
+    _numAttack: 9,
 
     ctor: function(level, pos, view) {
         this._super();
-        view.initWithFile("content/Art/Buildings/barrack/BAR_1_" + level + "/idle/image0000.png");
+        view.initWithFile("content/Art/Buildings/elixir collector/RES_2_" + level + "/idle/image0000.png");
         this.x = view.width / 2;
         this.y = view.height / 2;
 
-        if(level < this._levelEffect)
-            return;
-
         var animation = new cc.Animation();
         for (var i = 0; i < this._numAttack; i++) {
-            var frameName = "content/Art/Effects/BAR_1_" + level + "_effect/0"+ i +".png";
+            var frameName = "content/Art/Effects/RES_2_" + level + "_effect/0"+ i +".png";
             animation.addSpriteFrameWithFile(frameName);
         }
         animation.setDelayPerUnit(0.1);

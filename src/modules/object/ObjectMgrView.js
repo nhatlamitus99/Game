@@ -39,6 +39,7 @@ var ObjectMgrView = cc.Class.extend({
         var object = new MapObjectView(attributes);
         object.setAnchorPoint(0.5, 0.5);
         object.setPosition(cc.p(attributes.position.i, attributes.position.j));
+        cc.log("position idle: ", attributes.type, attributes.position.i, attributes.position.j)
         this.addObject(object);
     },
 

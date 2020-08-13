@@ -265,6 +265,8 @@ var TableView = cc.Layer.extend({
         this.ratioX = 1;
         this.ratioY = 1;
 
+        
+
         this._slotItemHeight = null;
         this._slotItemWidth = null;
         for (var i = 0; i < listItemsName.length; ++i) {

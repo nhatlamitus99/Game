@@ -3,6 +3,7 @@
 var ArmyCamp = CreatedMapObject.extend({
     capacity: 0,
     value: 0,
+    code: "AMC_1",
 
     ctor: function(type, position) {
         this._super(type, position);
