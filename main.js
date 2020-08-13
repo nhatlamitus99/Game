@@ -33,12 +33,11 @@ cc.game.onStart = function () {
         gv.gameClient = new GameClient();
         gv.poolObjects = new PoolObject();
         loginNetwork.connector = new loginNetwork.Connector(gv.gameClient);
-
-      
+        
         // load Config
         CONFIG_DATA.load();
 
-        fr.view(GameScreen);
+        fr.view(ScreenLogin);
     }, this);
 };
 
