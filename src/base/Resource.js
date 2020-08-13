@@ -25,12 +25,18 @@ res.map.arrow_move = [
 
 res.object_mgr = {};
 res.object_mgr.normal_substructures = {};
+res.object_mgr.normal_obstacle = {};
 res.object_mgr.normal_substructures.subs = [
     "content/Art/Map/map_obj_bg/BG_0/1.png",
     "content/Art/Map/map_obj_bg/BG_0/2.png",
     "content/Art/Map/map_obj_bg/BG_0/3.png",
     "content/Art/Map/map_obj_bg/BG_0/4.png",
     "content/Art/Map/map_obj_bg/BG_0/5.png"
+];
+res.object_mgr.normal_obstacle.subs = [
+    "content/Art/Map/map_obj_bg/GRASS_0_2_OBS.png",
+    "content/Art/Map/map_obj_bg/GRASS_0_2_OBS.png",
+    "content/Art/Map/map_obj_bg/GRASS_0_3_OBS.png",
 ];
 res.object_mgr.normal_substructures.shadow = [
     null,

@@ -16,12 +16,21 @@ var Substructure = cc.Sprite.extend({
         var indexSubsPath = sizeSubs - 1;
         // normal Subs
         this._normalSubs = new cc.Node();
+
+
         if (sizeSubs > 1) {
-            var subs = cc.Sprite(res.object_mgr.normal_substructures.subs[indexSubsPath]);
-            var shadow = cc.Sprite(res.object_mgr.normal_substructures.shadow[indexSubsPath]);
-            this._normalSubs.addChild(subs, 0);
-            this._normalSubs.addChild(shadow, 1);
-    }
+
+            if(attributes.type <= 13) {
+                var subs = cc.Sprite(res.object_mgr.normal_substructures.subs[indexSubsPath]);
+                this._normalSubs.addChild(subs, 0);
+                var shadow = cc.Sprite(res.object_mgr.normal_substructures.shadow[indexSubsPath]);
+                this._normalSubs.addChild(shadow, 1);
+            }
+            else{
+                var subs = cc.Sprite(res.object_mgr.normal_obstacle.subs[indexSubsPath]);
+                this._normalSubs.addChild(subs, 0);
+            }
+        }
         // create red green subs
         this._greenSubs = new cc.Sprite(res.object_mgr.green_substructures[indexSubsPath]);
         this._redSubs = new cc.Sprite(res.object_mgr.red_substructures[indexSubsPath]);

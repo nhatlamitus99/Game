@@ -23,7 +23,6 @@ var GameData = cc.Class.extend({
     },
 
     loadDataFromServer: function(jsonFile) {
-        cc.log(jsonFile);
         var jsonContent = JSON.parse(jsonFile);
 
         cc.log("Loading JSON from server");
@@ -44,19 +43,19 @@ var GameData = cc.Class.extend({
         mapData.customInit();
         mapData.setObjectMgrData(objectMgrData);
         for (var i = 0; i < jsonContent.listObject.length; ++i) {
+            
             var attributes = this.updateObjectJson(jsonContent.listObject[i]);
-            //cc.log(attributes.position.i + " " + attributes.position.j + " " + attributes.size.h + " " + attributes.size.w);
-            //for (var key in attributes) {
-            //    cc.log(key + ": " + attributes[key]);
-            //}
-            //if (mapData.insertObject2Map(attributes))
-            //    cc.log("Failed to load object " + i);
+            
+            if (!mapData.insertObject2Map(attributes))
+                cc.log("Failed to load object " + i);
         }
 
         this.setAttributes(user, resourcesData, mapData, null, null);
         cc.log("Loading done <3");
     },
     updateObjectJson: function(json) {
+
+    
         var fileCategory = CONFIG_DATA.getData(json.typeCategory, json.typeObject, json.level);
         var res = {
             position: {
@@ -74,6 +73,7 @@ var GameData = cc.Class.extend({
         for (key in fileCategory)
             if (key != "height" && key != "width")
                 res[key] = fileCategory[key];
+           
         return res;
     }
 });

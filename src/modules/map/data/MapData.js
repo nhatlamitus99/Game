@@ -23,16 +23,13 @@ var MapData = cc.Class.extend({
         var y = region.j;
         var w = region.w;
         var h = region.h;
-        if (x < 0 || x + w > MapConfig.MAP_SIZE.w)
+        if (x < 0 || x + w >= MapConfig.MAP_SIZE.w)
             return true;
-        if (y < 0 || y + h > MapConfig.MAP_SIZE.h)
+        if (y < 0 || y + h >= MapConfig.MAP_SIZE.h)
             return true;
         for (var i = x; i < x+w; ++i)
             for (var j = y; j < y+h; ++j)
-                if ((this._map[i][j].type != MapConfig.NULL_CELL.type
-                        && this._map[i][j].type != typeID.type)
-                    || (this._map[i][j].id != MapConfig.NULL_CELL.id
-                        && this._map[i][j].id != typeID.id))
+                if (this._map[i][j].type != MapConfig.NULL_CELL.type)
                     return true;
         return false;
     },
@@ -40,7 +37,8 @@ var MapData = cc.Class.extend({
     insertObject2Map: function(attributes) {
         if (this.checkOverlap(attributes))
             return false;
-        //cc.log("test1")
+        
+        attributes.type = OBJECT_MGR_CONFIG.buildingType[attributes.typeObject];
         attributes.id = this._objectMgrData.getNextIdOfType(attributes.type);
         //cc.log("test2")
 
@@ -48,13 +46,16 @@ var MapData = cc.Class.extend({
         var y = attributes.position.j;
         var w = attributes.size.w;
         var h = attributes.size.h;
-        for (var i = x; i < x+w; ++i)
+        for (var i = x; i < x+w; ++i) {
+            if (i >= 40) continue;
             for (var j = y; j < y+h; ++j) {
+                if (j >= 40) continue;
                 this._map[i][j] = {
                     type: attributes.type,
                     id: attributes.id
                 };
             }
+        }
         //cc.log("test3")
 
         this._objectMgrData.createItemToList(attributes);
