@@ -1,13 +1,13 @@
 var ObjectInfo = cc.Layer.extend({
-    ctor: function (id, level, isUpgrade = false, description = "Nothing to show ...") {
+    ctor: function (id, level, value, description = "Nothing to show ...") {
         this._super();
         this.infoBackground = null;
         this.ratioX = 1;
         this.ratioY = 1;
-
-        this.createGUI(id, level, isUpgrade, description);
+        this.createInfoGUI(id, level, value, description);
+        this.animatePopUpGUI();
     },
-    animatePopUpGUI: function (a, b, c) {
+    animatePopUpGUI: function () {
         this.infoBackground.runAction(cc.sequence(
             cc.scaleTo(0, 0.8),
             cc.scaleTo(0.2, 1.05),
@@ -18,7 +18,10 @@ var ObjectInfo = cc.Layer.extend({
     show: function () {
         //this.animatePopUpGUI();
     },
-    createGUI: function (id, level, isUpgrade, description) {
+    createInfoGUI: function (id, level, value, description) {
+        cc.log(id);
+        cc.log(level);
+        cc.log(value);
         // Create background
         this.infoBackground = new cc.Scale9Sprite(GUIInfo_resources.BACKGROUND);
         this.infoBackground.x = cc.winSize.width / 2;
@@ -46,12 +49,7 @@ var ObjectInfo = cc.Layer.extend({
 
         // Add title
         var title = new cc.LabelBMFont("", font_resources.SOJI_24_NON);
-        if (isUpgrade) {
-            title.setString("Upgrade to level " + (level + 1));
-        }
-        else {
-            title.setString(OBJECT_MGR_CONFIG.getNameByID[id] + " level " + level);
-        }
+        title.setString(OBJECT_MGR_CONFIG.getNameByID[id] + " level " + level);
         title.x = this.infoBackground.width / 2;
         title.y = this.infoBackground.height - title.height / 2 - 5;
         this.infoBackground.addChild(title);
@@ -94,11 +92,10 @@ var ObjectInfo = cc.Layer.extend({
 
         var attributes = {
             type: OBJECT_MGR_CONFIG.buildingType[id],
-            level: level,
-            value: 0,
-            capacity: 0
+            level: level
         };
-        var object = new MapObjectView(attributes);
+        var object = new MapObjectView();
+        object.initObject(attributes);
         object.x = objectBackground.width / 2;
         object.y = objectBackground.height / 2;
         objectBackground.addChild(object);
@@ -135,14 +132,22 @@ var ObjectInfo = cc.Layer.extend({
         }
 
         var start = this.infoBackground.height * 4 / 5;
-        var value = [0, 0, null];
+        
         for (var i = 0; i < list.length; ++i) {
-            var resBar = this.createResBar(iconList[i], list[i], read[id][level][list[0]], value[i]);
-            resBar.x = this.infoBackground.width * 3 / 4;
+            var resBar = this.createResBar(iconList[i], list[i], read[id][level][list[i]], value[list[i]]);
+            resBar.x = this.infoBackground.width * 70 / 100;
             resBar.y = start;
             start -= 60;
             this.infoBackground.addChild(resBar);
         }
+
+        // Add info button
+        var closeBtn = gv.lobbyButton(GUIInfo_resources.BTN_CLOSE, 1, 1);
+        closeBtn.x = this.infoBackground.width - closeBtn.width / 2 - 10;
+        closeBtn.y = this.infoBackground.height - closeBtn.height / 2;
+        this.infoBackground.addChild(closeBtn, 1);
+        closeBtn.addClickEventListener(this.onCloseClick.bind(this));
+
     },
     createResBar: function (icon, title, max, value = null) {
 
@@ -175,7 +180,7 @@ var ObjectInfo = cc.Layer.extend({
         if (title == "Productivity") {
             title = "Productive rate";
         }
-        if (value != null) {
+        if (icon != "HITPOINTS" && icon != "DAMAGEPERSHOT" && icon.slice(0, 12) != "PRODUCTIVITY") {
             content = new cc.LabelBMFont(title + ": " + formatIntToString(value) + "/" + formatIntToString(max), font_resources.SOJI_12_NON);
             infoBarBG.setPercent(Math.min(100, value * 100 / max));
         }
@@ -193,5 +198,16 @@ var ObjectInfo = cc.Layer.extend({
         infoBar.addChild(content);
 
         return infoBar;
+    },
+    onCloseClick: function () {
+        this.infoBackground.runAction(cc.sequence(
+            cc.scaleTo(0.2, 1.1),
+            cc.callFunc(this.closeInfoBackground.bind(this)),
+            cc.scaleTo(0, 1)
+        ));
+        
+    },
+    closeInfoBackground: function (sender) {
+        this.infoBackground.removeFromParent();
     }
 });

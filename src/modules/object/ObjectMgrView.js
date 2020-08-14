@@ -18,36 +18,46 @@ var ObjectMgrView = cc.Class.extend({
                 var attributes = {
                     type: listObject[i][j].type,
                     id: listObject[i][j].id,
-                    size: {
-                        w: listObject[i][j].size.w,
-                        h: listObject[i][j].size.h
-                    },
+                    size: listObject[i][j].size,
                     level: listObject[i][j].level,
-                    position: {
-                        i: listObject[i][j].position.i,
-                        j: listObject[i][j].position.j
-                    }
+                    position: listObject[i][j].position
                 };
-                this.createItemListObject(attributes);
-                this.createItemListSubs(attributes);
+                //this.createItemListObject(attributes);
+                //this.createItemListSubs(attributes);
+                if(attributes.type != 13)
+                    this.buildObject(attributes);
+                else
+                    this.initObject(attributes);
+
 
             }
         }
     },
 
-    createItemListObject: function(attributes) {
-        var object = new MapObjectView(attributes);
+    buildObject: function(attributes) {
+        this.createItemListObject(attributes);
+        var object = new Substructure(attributes);
+        object.createGround(attributes);
+        object.createProgressBar(attributes);
         object.setAnchorPoint(0.5, 0.5);
-        object.setPosition(cc.p(attributes.position.i, attributes.position.j));
-        cc.log("position idle: ", attributes.type, attributes.position.i, attributes.position.j)
-        this.addObject(object);
+        this.addSubs(object);
+
     },
 
-    createItemListSubs: function(attributes) {
+    initObject: function(attributes) {
+        this.createItemListObject(attributes);
         var object = new Substructure(attributes);
         object.setAnchorPoint(0.5, 0.5);
         this.addSubs(object);
     },
+
+    createItemListObject: function(attributes) {
+        var object = new MapObjectView();
+        object.initObject(attributes);
+        object.setAnchorPoint(0.5, 0.5);
+        this.addObject(object);
+    },
+
 
     addObject: function(object) {
         this.listObject[object.getType()].push(object);

@@ -32,7 +32,6 @@ OBJECT_MGR_CONFIG.buildingType = {
     OBS_13: 26,
     OBS_14: 27
 };
-
 // Map ObjectCodeID -> Name
 OBJECT_MGR_CONFIG.getNameByID = new Map();
 OBJECT_MGR_CONFIG.getNameByID["AMC_1"] = "Army camps";
@@ -101,3 +100,5 @@ OBJECT_MGR_CONFIG.detailedInfo["LAB_1"] = "Laboratory";
 
 
 OBJECT_MGR_CONFIG.SCALE_BUILDING = 0.5;
+
+OBJECT_MGR_CONFIG.CLAN_CASTLE_ACTIVATE_LEVEL = 1;

@@ -232,6 +232,15 @@ var Item = cc.Class.extend({
         return this.need;
     },
     onInfoClick: function (id) {
-        cc.log(id);
+        //cc.log(id);
+        //var value = { capacityGold: 188000, capacityElixir: 750000 };
+        var value = {};
+        for (var i = 0; i < OBJECT_MGR_CONFIG.detailedInfo[id].length; ++i) {
+            value[OBJECT_MGR_CONFIG.detailedInfo[id][i]] = 0;
+        }
+        var tmp = new ObjectInfo(id, 1, value, "Yooooo");
+        tmp.x = 0;
+        tmp.y = 0;
+        fr.getCurrentScreen().addChild(tmp, 10000);
     }
 });

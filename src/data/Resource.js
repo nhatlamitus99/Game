@@ -199,7 +199,8 @@ var GUIInfo_resources = {
     DAMAGEPERSHOT: "content/Art/GUIs/upgrade_building_gui/small/Damage_Icon.png",
     INFO_BAR: "content/Art/GUIs/upgrade_building_gui/info_bar.png",
     INFO_BAR_BG: "content/Art/GUIs/upgrade_building_gui/info_bar_BG.png",
-    INFO_BAR_NEXTLV: "content/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png"
+    INFO_BAR_NEXTLV: "content/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png",
+    BTN_CLOSE: "content/Art/GUIs/upgrade_building_gui/close.png"
 }
 
 var g_resources = [

@@ -14,9 +14,10 @@
     itemInfo: null,
     ctor: function () {
         this._super();
-        //var tmp = new ObjectInfo("DEF_1", 1, false);
-        //this.addChild(tmp);
-        
+        /*var value = { capacityGold: 188000, capacityElixir: 750000 };
+        var tmp = new ObjectInfo("TOW_1", 8, value, "Yooooo");
+        this.addChild(tmp);
+        */
         //tmp.show();
         this.viewList = null;
         this.init();
