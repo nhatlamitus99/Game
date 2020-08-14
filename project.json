@@ -129,7 +129,8 @@
     "src/modules/shop/logic/Category.js",
     "src/modules/shop/logic/ScreenShop.js",
     "src/modules/shop/logic/Item.js",
-    "src/modules/shop/logic/ScreenTest.js"
+    "src/modules/shop/logic/ScreenTest.js",
+    "src/modules/ObjectInfo/graphics/ObjectInfo.js"
 
 
   ]

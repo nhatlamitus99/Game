@@ -65,6 +65,7 @@ var font_resources = {
     FISTA_16_NON: "fonts/fista_16_non.fnt",
     FISTA_20_NON: "fonts/fista_20_non.fnt",
     FISTA_24_NON: "fonts/fista_24_non.fnt",
+    SOJI_12_NON: "fonts/soji_12.fnt",
     SOJI_16_NON: "fonts/soji_16.fnt",
     SOJI_20_NON: "fonts/soji_20.fnt",
     SOJI_24_NON: "fonts/soji_24.fnt"
@@ -148,9 +149,11 @@ var shop_resources = {
     BACK_BTN: "content/Art/GUIs/shop_gui/back.png",
     ICON_G: "content/Art/GUIs/shop_gui/g.png",
     ICON_GOLD: "content/Art/GUIs/shop_gui/gold.png",
-    ICON_ELIXIR: "content/Art/GUIs/shop_gui/elixir.png"
+    ICON_ELIXIR: "content/Art/GUIs/shop_gui/elixir.png",
+    ICON_INFO: "content/Art/GUIs/shop_gui/info.png"
 };
 
+/*
 var itemInfo_resources = {
     AMC: "content/Design Documents/Config json/ArmyCamp.json",
     BAR: "content/Design Documents/Config json/Barrack.json",
@@ -167,6 +170,37 @@ var itemInfo_resources = {
     WAL: "content/Design Documents/Config json/Wall.json",
     LAB: "content/Design Documents/Config json/Laboratory.json"
 };
+*/
+
+var itemInfo_resources = new Map();
+itemInfo_resources["AMC"] = "content/Design Documents/Config json/ArmyCamp.json";
+itemInfo_resources["BAR"] = "content/Design Documents/Config json/Barrack.json";
+itemInfo_resources["BDH"] = "content/Design Documents/Config json/BuilderHut.json";
+itemInfo_resources["CCS"] = "content/Design Documents/Config json/ClanCastle.json";
+itemInfo_resources["DEF"] = "content/Design Documents/Config json/Defence.json";
+itemInfo_resources["DEB"] = "content/Design Documents/Config json/DefenceBase.json";
+itemInfo_resources["OBS"] = "content/Design Documents/Config json/Obstacle.json";
+itemInfo_resources["RES"] = "content/Design Documents/Config json/Resource.json";
+itemInfo_resources["STO"] = "content/Design Documents/Config json/Storage.json";
+itemInfo_resources["TOW"] = "content/Design Documents/Config json/TownHall.json";
+itemInfo_resources["ARM"] = "content/Design Documents/Config json/Troop.json";
+itemInfo_resources["ARB"] = "content/Design Documents/Config json/TroopBase.json";
+itemInfo_resources["WAL"] = "content/Design Documents/Config json/Wall.json";
+itemInfo_resources["LAB"] = "content/Design Documents/Config json/Laboratory.json";
+
+var GUIInfo_resources = {
+    BACKGROUND: "content/Art/GUIs/upgrade_building_gui/BG.png",
+    CAPACITY_GOLD: "content/Art/GUIs/upgrade_building_gui/small/Gold_Capacity_Icon.png",
+    CAPACITY_ELIXIR: "content/Art/GUIs/upgrade_building_gui/small/Elixir_Capacity_Icon.png",
+    CAPACITY_TROOP: "content/Art/GUIs/upgrade_building_gui/small/TroopCapacity_Icon.png",
+    PRODUCTIVITY_GOLD: "content/Art/GUIs/upgrade_building_gui/small/Gold_ProductionRate_Icon.png",
+    PRODUCTIVITY_ELIXIR: "content/Art/GUIs/upgrade_building_gui/small/Elixir_ProductionRate_Icon.png",
+    HITPOINTS: "content/Art/GUIs/upgrade_building_gui/small/Hitpoints_Icon.png",
+    DAMAGEPERSHOT: "content/Art/GUIs/upgrade_building_gui/small/Damage_Icon.png",
+    INFO_BAR: "content/Art/GUIs/upgrade_building_gui/info_bar.png",
+    INFO_BAR_BG: "content/Art/GUIs/upgrade_building_gui/info_bar_BG.png",
+    INFO_BAR_NEXTLV: "content/Art/GUIs/upgrade_building_gui/info_bar_nextlv_BG.png"
+}
 
 var g_resources = [
     "CloseNormal.png",

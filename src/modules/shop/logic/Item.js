@@ -1,5 +1,5 @@
 var Item = cc.Class.extend({
-    ctor: function (name, id, infoSource, ratioX, ratioY) {
+    ctor: function (id, ratioX, ratioY) {
         this._ratioX = ratioX;
         this._ratioY = ratioY;
         this.id = id;
@@ -18,7 +18,7 @@ var Item = cc.Class.extend({
         this.need = 0;
 
         // Read info from JSON
-        var info = cc.loader.getRes(infoSource);
+        var info = CONFIG_DATA.file[id[0] + id[1] + id[2]]; 
         var townhall = CONFIG_DATA.file.TOW;//cc.loader.getRes(itemInfo_resources.TOW);
 
         this.loadUserInfo(townhall, id);
@@ -51,8 +51,15 @@ var Item = cc.Class.extend({
         //mainImage.scale = Math.max(this._ratioX, this._ratioY);
         this.itemBackground.addChild(mainImage, 2);
 
+        // Add info button
+        var infoBtn = gv.lobbyButton(shop_resources.ICON_INFO, 1, 1);
+        infoBtn.x = this.itemBackground.width - infoBtn.width / 2 - 15;
+        infoBtn.y = this.itemBackground.height - infoBtn.height / 2 - 15;
+        this.itemBackground.addChild(infoBtn, 1);
+        infoBtn.addClickEventListener(this.onInfoClick.bind(this, id));
+
         // Add title name
-        var name = new cc.LabelBMFont(name, "fonts/soji_16.fnt");
+        var name = new cc.LabelBMFont(OBJECT_MGR_CONFIG.getNameByID[id], "fonts/soji_16.fnt");
         name.x = this.itemBackground.width / 2;
         name.y = this.itemBackground.height * 90 / 100;
         name.scale *= this._ratioX;
@@ -91,7 +98,7 @@ var Item = cc.Class.extend({
             else {
                 built = new cc.LabelBMFont(this.countBuilt + "/" + 5, "fonts/soji_16.fnt");
             }
-            built.x = this.itemBackground.width - built.width;
+            built.x = this.itemBackground.width - built.width / 2 - 15;
             built.y = this.itemBackground.height * 0.3;
             built.scale *= this._ratioX;
             built.scale *= this._ratioY;
@@ -160,6 +167,7 @@ var Item = cc.Class.extend({
     loadUserInfo: function (townhall, id) {
         this._resources = ResourcesData.getInstance()._resources;
         var listObject = ObjectMgrData.getInstance().getListObject();
+
         this.levelTownHall = listObject[OBJECT_MGR_CONFIG.buildingType.TOW_1][0].level;
         this.countBuilt = 0;
         for (var i = 0; i < listObject.length; ++i) {
@@ -222,5 +230,8 @@ var Item = cc.Class.extend({
     },
     getNeed: function () {
         return this.need;
+    },
+    onInfoClick: function (id) {
+        cc.log(id);
     }
 });

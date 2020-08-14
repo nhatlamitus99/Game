@@ -31,11 +31,8 @@ var TableViewTestLayer = cc.Layer.extend({
         this.ratioY = 1;
         this._slotItemWidth = 0;
         this._slotItemHeight = 0;
-        this.listItemsName = null;
         this.listItemsSource = null;
         this._mainGUI = null;
-        this.listItemsInfo = null;
-        this.currentListItemsNameIndex = 0;
         this.id = [];
         this.status = [];
         this.need = [];
@@ -50,10 +47,8 @@ var TableViewTestLayer = cc.Layer.extend({
         //this.animatePopUpGUI();
         //this.init();
     },
-    readInfo: function (listItemsSource, listItemsName, listItemsInfo) {
+    readInfo: function (listItemsSource) {
         this.listItemsSource = listItemsSource;
-        this.listItemsName = listItemsName;
-        this.listItemsInfo = listItemsInfo;
         //cc.log(ResourcesData.getInstance()._resources);
         this.resources = ResourcesData.getInstance()._resources;
         for (var i = 0; i < this.resources.length; ++i) {
@@ -72,13 +67,13 @@ var TableViewTestLayer = cc.Layer.extend({
     addTitle: function (title) {
         this.shopTitle.setString(title);
     },
-    show: function (title, listItemsSource, listItemsName, listItemsInfo) {
+    show: function (title, listItemsSource) {
         this._mainGUI.shopBackground.visible = false;
-        this.readInfo(listItemsSource, listItemsName, listItemsInfo);
+        this.readInfo(listItemsSource);
         this.visible = true;
         this.addTitle(title);
         this.animatePopUpGUI();
-        this.tableView = new TableView(this.shopBackground, listItemsName, listItemsSource, listItemsInfo);
+        this.tableView = new TableView(this.shopBackground, listItemsSource);
         //this.tableView = new TableViewTest();
         this.shopBackground.addChild(this.tableView);
     },
@@ -249,14 +244,11 @@ var TableViewTestLayer = cc.Layer.extend({
 });
 
 var TableView = cc.Layer.extend({
-    ctor: function (shopBackground, listItemsName, listItemsSource, listItemsInfo) {
+    ctor: function (shopBackground, listItemsSource) {
         this.tableView = null;
         this.shopBackground = shopBackground;
-        this.listItemsName = listItemsName;
         this.listItemsSource = listItemsSource;
-        this.listItemsInfo = listItemsInfo;
 
-        this.currentListItemsNameIndex = 0;
         this.id = [];
         this.status = [];
         this.need = [];
@@ -269,7 +261,7 @@ var TableView = cc.Layer.extend({
 
         this._slotItemHeight = null;
         this._slotItemWidth = null;
-        for (var i = 0; i < listItemsName.length; ++i) {
+        for (var i = 0; i < listItemsSource.length; ++i) {
             this.id.push("NULL");
             this.status.push(false);
             this.need.push(0);
@@ -324,7 +316,7 @@ var TableView = cc.Layer.extend({
         var label;
         if (!cell) {
             cell = new CustomTableViewCell();
-            var item = new Item(this.listItemsName[index], this.listItemsSource[index], this.listItemsInfo[index], this.ratioX, this.ratioY);
+            var item = new Item(this.listItemsSource[index], this.ratioX, this.ratioY);
             sprite = item.itemBackground;
             sprite.anchorX = 0;
             sprite.anchorY = 0;
@@ -341,7 +333,7 @@ var TableView = cc.Layer.extend({
         else {
             sprite = cell.getChildByTag(123);
             if (sprite != null) {
-                var item = new Item(this.listItemsName[index], this.listItemsSource[index], this.listItemsInfo[index], this.ratioX, this.ratioY);
+                var item = new Item(this.listItemsSource[index], this.ratioX, this.ratioY);
                 sprite.removeFromParent();
                 sprite = item.itemBackground;
                 sprite.anchorX = 0;
@@ -359,6 +351,6 @@ var TableView = cc.Layer.extend({
         return cell;
     },
     numberOfCellsInTableView: function (table) {
-        return this.listItemsName.length;
+        return this.listItemsSource.length;
     }
 });
