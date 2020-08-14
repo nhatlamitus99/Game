@@ -5,7 +5,7 @@
 var MapObjectView = cc.Sprite.extend({
     _type: null,
     _id: null,
-    ctor: function(attributes) {
+    ctor: function() {
         this._super();
     },
     getType: function(){
@@ -26,12 +26,10 @@ var MapObjectView = cc.Sprite.extend({
                 new BuilderHutView(attributes.level, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.CLC_1:
-                //new ClanCastleView(attributes.level, this);
-                new BarrackView(attributes.level, this);
+                new ClanCastleView(attributes.level, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.RES_1:
-                //new GoldMineView(attributes.level, this);
-                new ElixirMineView(attributes.level, this);
+                new GoldMineView(attributes.level, this);
                 break;
             case OBJECT_MGR_CONFIG.buildingType.RES_2:
                 new ElixirMineView(attributes.level, this);
@@ -65,31 +63,5 @@ var MapObjectView = cc.Sprite.extend({
         this._id = attributes.id;
         this.scale = OBJECT_MGR_CONFIG.SCALE_BUILDING;
     },
-    buildObject: function(attributes) {
-        this.initObject(attributes);
-        if(attributes.type > 13 || attributes.type == 11)
-            return;
-        var path = "content/Art/Map/map_obj_bg/upgrading.png";
-        var ground = new cc.Sprite(path);
-        ground.x = this.width / 2;
-        switch (attributes.size.h) {
-            case 2:
-                ground.y = 70;
-                break;
-            case 3:
-                ground.y = 62;
-                break;
-            case 4:
-                ground.y = 65;
-                break;
-            case 5:
-                ground.y = 25;
-        }
 
-        this.addChild(ground);
-        ground.runAction(cc.ScaleTo(0, 2, 2, 2));
-        cc.log(this.scale + " " + this.width + " " + this.height);
-        cc.log(attributes.type);
-
-    }
 });

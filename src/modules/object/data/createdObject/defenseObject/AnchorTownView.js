@@ -20,7 +20,7 @@ var AnchorTownView = cc.Sprite.extend({
         animation.setRestoreOriginalFrame(true);
 
         var action = cc.animate(animation);
-        view.addChild(this);
+        view.addChild(this, 10);
         this.runAction((action).repeatForever());
 
 

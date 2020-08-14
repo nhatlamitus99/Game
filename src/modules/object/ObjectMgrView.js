@@ -22,11 +22,33 @@ var ObjectMgrView = cc.Class.extend({
                     level: listObject[i][j].level,
                     position: listObject[i][j].position
                 };
-                this.createItemListObject(attributes);
-                this.createItemListSubs(attributes);
+                //this.createItemListObject(attributes);
+                //this.createItemListSubs(attributes);
+                if(attributes.type != 13)
+                    this.buildObject(attributes);
+                else
+                    this.initObject(attributes);
+
 
             }
         }
+    },
+
+    buildObject: function(attributes) {
+        this.createItemListObject(attributes);
+        var object = new Substructure(attributes);
+        object.createGround(attributes);
+        object.createProgressBar(attributes);
+        object.setAnchorPoint(0.5, 0.5);
+        this.addSubs(object);
+
+    },
+
+    initObject: function(attributes) {
+        this.createItemListObject(attributes);
+        var object = new Substructure(attributes);
+        object.setAnchorPoint(0.5, 0.5);
+        this.addSubs(object);
     },
 
     createItemListObject: function(attributes) {
@@ -36,11 +58,6 @@ var ObjectMgrView = cc.Class.extend({
         this.addObject(object);
     },
 
-    createItemListSubs: function(attributes) {
-        var object = new Substructure(attributes);
-        object.setAnchorPoint(0.5, 0.5);
-        this.addSubs(object);
-    },
 
     addObject: function(object) {
         this.listObject[object.getType()].push(object);
