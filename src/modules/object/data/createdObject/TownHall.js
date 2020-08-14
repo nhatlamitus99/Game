@@ -7,4 +7,4 @@ var TownHall = CreatedMapObject.extend({
     }
 
 
-})
+});

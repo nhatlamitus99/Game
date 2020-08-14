@@ -4,7 +4,7 @@ var TownHallView = cc.Sprite.extend({
 
     _numFlame: 7,
 
-    ctor: function(level, pos, view) {
+    ctor: function(level, view) {
         this._super();
         view.initWithFile("content/Art/Buildings/townhall/TOW_1_"+ level +"/idle/image0000.png");
         this.x = view.width / 2;

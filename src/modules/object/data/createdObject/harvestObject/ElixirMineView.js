@@ -4,7 +4,7 @@ var ElixirMineView = cc.Sprite.extend({
 
     _numAttack: 9,
 
-    ctor: function(level, pos, view) {
+    ctor: function(level, view) {
         this._super();
         view.initWithFile("content/Art/Buildings/elixir collector/RES_2_" + level + "/idle/image0000.png");
         this.x = view.width / 2;

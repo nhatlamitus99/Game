@@ -86,6 +86,8 @@
     "src/modules/object/data/createdObject/WarehouseObject.js",
     "src/modules/object/data/createdObject/BuilderHut.js",
     "src/modules/object/data/createdObject/BuilderHutView.js",
+    "src/modules/object/data/createdObject/Wall.js",
+    "src/modules/object/data/createdObject/WallView.js",
     "src/modules/object/data/createdObject/ClanCastle.js",
     "src/modules/object/data/createdObject/ClanCastleView.js",
     "src/modules/object/data/createdObject/TownHall.js",

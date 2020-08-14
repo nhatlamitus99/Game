@@ -83,13 +83,15 @@ var ScreenLogin = cc.Layer.extend({
         this.loading2.x = LOGIN_CONFIG.LOADING_X;
         this.loading2.y = LOGIN_CONFIG.LOADING_Y;
 
-        this.schedule(this.doLoadingBar, 0.02);
+        this.doLoadingBar();
+        //this.schedule(this.doLoadingBar, 0.02);
     },
 
     // schedule properties
     doLoadingBar:function(){
         var percent = this.loading2.getPercent();
-        percent = percent + 1;
+        //percent = percent + 1;
+        percent = 1000;
         this.loading2.setPercent(percent);
         if(percent >= 100){
             this.unschedule(this.doLoadingBar);

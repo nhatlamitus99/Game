@@ -5,7 +5,7 @@ var BarrackView = cc.Sprite.extend({
     _numAttack: 5,
     _levelEffect: 4,
 
-    ctor: function(level, pos, view) {
+    ctor: function(level, view) {
         this._super();
         view.initWithFile("content/Art/Buildings/barrack/BAR_1_" + level + "/idle/image0000.png");
         this.x = view.width / 2;

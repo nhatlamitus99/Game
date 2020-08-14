@@ -3,7 +3,7 @@ var ArmyCampView = cc.Sprite.extend({
 
     _numAttack: 4,
 
-    ctor: function(level, pos, view) {
+    ctor: function(level, view) {
         this._super();
         view.initWithFile("content/Art/Buildings/army camp/AMC_1_" + level + "/idle/image0000.png");
         view.addChild(this);
@@ -34,12 +34,22 @@ var ArmyCampView = cc.Sprite.extend({
             this.runAction((actionSmoke).repeatForever());
 
         }
+        //this.buildObject(view);
+    },
 
+    //buildObject: function(view) {
+    //    var path = "content/Art/Map/map_obj_bg/upgrading.png";
+    //    var ground = new cc.Sprite(path);
+    //    ground.x = view.width / 2;
+    //    ground.y = 25;
+    //    view.addChild(ground);
+    //    ground.runAction(cc.ScaleTo(0, 2, 2, 2));
+    //
+    //
+    //
+    //},
 
-
-
-
-
+    upgradeObject: function(attributes) {
 
     }
 
