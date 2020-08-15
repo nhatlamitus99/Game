@@ -19,6 +19,7 @@ var MapConfig = {
     // zOrder of substructure
     Z_ORDER_SUBSTRUCTURE: 10,
     Z_ORDER_MOVING_SUBS: 11,
+    Z_ORDER_PROGRESSBAR: 12,
 
     Z_ORDER_ARROW: 200,
 

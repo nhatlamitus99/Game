@@ -5,6 +5,8 @@
 var MapObjectView = cc.Sprite.extend({
     _type: null,
     _id: null,
+    _level: null,
+
     ctor: function() {
         this._super();
     },
@@ -61,7 +63,10 @@ var MapObjectView = cc.Sprite.extend({
 
         this._type = attributes.type;
         this._id = attributes.id;
+        this._level = attributes.level;
         this.scale = OBJECT_MGR_CONFIG.SCALE_BUILDING;
     },
+
+
 
 });

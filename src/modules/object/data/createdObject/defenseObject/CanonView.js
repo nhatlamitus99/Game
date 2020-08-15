@@ -21,7 +21,7 @@ var CanonView = cc.Sprite.extend({
 
         var animation = new cc.Animation();
         for (var i = 0; i < this._numFrame; i++) {
-            var frameName = "content/Art/Buildings/cannon/canon_" + level + "/idle/image000"+ i +".png";
+            var frameName = "content/Art/Buildings/canon/canon_" + level + "/idle/image000"+ i +".png";
             animation.addSpriteFrameWithFile(frameName);
         }
         animation.setDelayPerUnit(30);

@@ -48,6 +48,7 @@
     "src/config/ResourcesConfig.js",
     "src/config/TroopType.js",
     "src/config/ObjectMgrConfig.js",
+    "src/config/ObjectTypeConfig.js",
     "src/config/LoginConfig.js",
     "src/config/TroopConfig.js",
     "src/config/LobbyConfig.js",
@@ -75,6 +76,7 @@
     "src/modules/object/ObjectMgrView.js",
     "src/modules/object/graphics/MapObjectView.js",
     "src/modules/object/graphics/Substructure.js",
+    "src/modules/object/graphics/ProgressBar.js",
 
     "src/modules/object/ObjectMgrData.js",
     "src/modules/object/data/MapObject.js",

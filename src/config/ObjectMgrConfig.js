@@ -34,6 +34,22 @@ OBJECT_MGR_CONFIG.buildingType = {
     OBS_14: 27
 };
 
+OBJECT_MGR_CONFIG.getCodeByType = {
+    1: "AMC_1",
+    2: "BAR_1",
+    3: "DEF_1",
+    4: "DEF_2",
+    5: "DEF_3",
+    6: "DEF_5",
+    7: "RES_1",
+    8: "RES_2",
+    9: "STO_1",
+    10: "STO_2",
+    11: "BDH_1",
+    12: "CLC_1",
+    13: "TOW_1"
+};
+
 OBJECT_MGR_CONFIG.SCALE_BUILDING = 0.5;
 
 OBJECT_MGR_CONFIG.CLAN_CASTLE_ACTIVATE_LEVEL = 1;

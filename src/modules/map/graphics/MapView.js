@@ -2,7 +2,7 @@
 var selectedGroup = new MovingGroup(null, null, null, null, MapConfig.NULL_CELL.type);
 
 var MapView = cc.Layer.extend({
-    _map:null,
+    _map: null,
 
     // on client
     _scale: null,                           // scale of current screen view map
@@ -104,20 +104,26 @@ var MapView = cc.Layer.extend({
         var objectMgrData = this.getObjectMgrData();
         var listObject = this.getListObjectView();
         var listSubs = this.getListObjectSubs();
+        var listProgressBar = this.getListProgressBar();
         // add object to map
         for (var i = 0; i < listObject.length; ++i) {
             for (var j = 0; j < listObject[i].length; ++j) {
+                //cc.log(listObject[i][j].type, listObject[i][j].id);
+                //cc.log(listSubs[i][j].type, listSubs[i][j].id);
+                //cc.log(listProgressBar[i][j].type, listProgressBar[i][j].id);
                 // calculate Position
                 var region = objectMgrData.getRegionOfObject(listObject[i][j].getType(), listObject[i][j].getID());
-                cc.log("loadBuilding, type - id = " + listObject[i][j].getType() + listObject[i][j].getID());
+                //cc.log("loadBuilding, type - id = " + listObject[i][j].getType() + listObject[i][j].getID());
                 // addChild and set ZOrder
                 var zOrder = this.calculateZOrderOfRegion(region);
                 this._map.addChild(listObject[i][j], zOrder);
                 this._map.addChild(listSubs[i][j], MapConfig.Z_ORDER_SUBSTRUCTURE);
+                //this._map.addChild(listProgressBar[i][j], MapConfig.Z_ORDER_PROGRESSBAR);
                 // set position
                 this.setPositionObjectSubs(listObject[i][j], listSubs[i][j], region);
             }
         }
+
     },
 
     setPositionObjectSubs: function(object, subs, region) {
@@ -126,6 +132,8 @@ var MapView = cc.Layer.extend({
         object.y = posCenter.y;
         subs.x = posCenter.x;
         subs.y = posCenter.y;
+
+
     },
 
     calculateZOrderOfRegion: function(region) {
@@ -138,6 +146,9 @@ var MapView = cc.Layer.extend({
 
     getListObjectSubs: function () {
         return this._objectMgrView.getListSubs();
+    },
+    getListProgressBar: function(){
+        return this._objectMgrView.getListProgressBar();
     },
 
     getObjectMgrData: function() {
