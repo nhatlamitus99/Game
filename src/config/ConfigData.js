@@ -3,7 +3,13 @@
  */
 var CONFIG_DATA = {
     file: {},
+    code: ["AMC", "BAR", "BDH", "CCS", "DEF", "DEB", "OBS", "RES", "STO", "TOW", "ARM", "ARB", "WAL", "LAB"],
     load: function () {
+        for (var i = 0; i < this.code.length; ++i) {
+            this.file[this.code[i]] = cc.loader.getRes(itemInfo_resources[this.code[i]]);
+        }
+
+        /*
         this.file.AMC = cc.loader.getRes(itemInfo_resources.AMC);
         this.file.BAR = cc.loader.getRes(itemInfo_resources.BAR);
         this.file.BDH = cc.loader.getRes(itemInfo_resources.BDH);
@@ -17,6 +23,7 @@ var CONFIG_DATA = {
         this.file.TRO = cc.loader.getRes(itemInfo_resources.TRO);
         this.file.TRB = cc.loader.getRes(itemInfo_resources.TRB);
         this.file.WAL = cc.loader.getRes(itemInfo_resources.WAL);
+        */
     },
     name: {
         "ArmyCamp": "AMC",
@@ -29,8 +36,8 @@ var CONFIG_DATA = {
         "Resource": "RES",
         "Storage": "STO",
         "TownHall": "TOW",
-        "Troop": "TRO",
-        "TroopBase":"TRB",
+        "Troop": "ARM",
+        "TroopBase":"ARB",
         "Wall": "WAL"
     },
     getData: function(key, type, level) {

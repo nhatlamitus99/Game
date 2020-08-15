@@ -14,11 +14,15 @@
     itemInfo: null,
     ctor: function () {
         this._super();
+        /*var value = { capacityGold: 188000, capacityElixir: 750000 };
+        var tmp = new ObjectInfo("TOW_1", 8, value, "Yooooo");
+        this.addChild(tmp);
+        */
+        //tmp.show();
         this.viewList = null;
         this.init();
         this.popUpShopGUI();
         this.show();
-        
     },
     animatePopUpGUI: function () {
         this.shopBackground.runAction(cc.sequence(
@@ -46,8 +50,8 @@
         this.listCategories["Treasures"] = ["gold_10", "gold_50", "gold_100", "elixir_10", "elixir_50", "elixir_100"];
         
         this.listCategories["Resources"] = ["BDH_1", "RES_1", "RES_2", "STO_1", "STO_2"];
-        this.listItemsName["Resources"] = ["Builder hut", "Gold mine", "Elixir mine", "Gold storage", "Elixir storage"];
-        this.itemInfo["Resources"] = [itemInfo_resources.BDH, itemInfo_resources.RES, itemInfo_resources.RES, itemInfo_resources.STO, itemInfo_resources.STO];
+        //this.listItemsName["Resources"] = ["Builder hut", "Gold mine", "Elixir mine", "Gold storage", "Elixir storage"];
+        //this.itemInfo["Resources"] = [itemInfo_resources.BDH, itemInfo_resources.RES, itemInfo_resources.RES, itemInfo_resources.STO, itemInfo_resources.STO];
 
         this.listCategories["Army"] = ["AMC_1", "BAR_1", "BAR_2", "LAB_1"];
         this.listItemsName["Army"] = ["Army camps", "Barrack", "X-men house", "Laboratory"];
@@ -182,7 +186,6 @@
                 width = Math.min(960 * 2, cc.winSize.width);
                 height = width * 1 / standardRatio;
             }
-            
             this.ratioX = width / 960;
             this.ratioY = height / 640;
 
@@ -233,56 +236,17 @@
             cc.log("1");
     },
     onSelectResources: function () {
-        //var tmp = new Item("LeGau", "STO_1", itemInfo_resources.STO, 1, 1);
-        this.viewList.show("Resources", this.listCategories["Resources"], this.listItemsName["Resources"], this.itemInfo["Resources"]);
-        /*if (this.shopBackground.visible == true && this.visible == true) {
-            //this.visible = false;
-            if (this.viewListResources == null) {
-                this.viewListResources = new TableViewTestLayer(this, this.listCategories["Resources"], this.listItemsName["Resources"], this.itemInfo["Resources"]);
-                this.viewListResources.visible = false;
-                this.addChild(this.viewListResources, 1);
-                this.viewListResources.show("Resources");
-            }
-            else {
-                if (this.viewListResources.visible == false)
-                    this.viewListResources.show("Resources");
-            }
-        }*/
-        
-        
+        this.viewList.show("Resources", this.listCategories["Resources"]);
     },
     onSelectDecorations: function () {
         if (this.shopBackground.visible == true && this.visible == true)
             cc.log("3");
     },
     onSelectArmy: function () {
-        this.viewList.show("Army", this.listCategories["Army"], this.listItemsName["Army"], this.itemInfo["Army"]);
-        /*if (this.shopBackground.visible == true && this.visible == true) {
-            //this.visible = false;
-            if (this.viewListArmy == null) {
-                this.viewListArmy = new TableViewTestLayer(this, this.listCategories["Army"], this.listItemsName["Army"], this.itemInfo["Army"]);
-                this.addChild(this.viewListArmy, 2);
-            }
-            else {
-                if (this.viewListArmy.visible == false)
-                    this.viewListArmy.show();
-            }
-        }
-        */
+        this.viewList.show("Army", this.listCategories["Army"]);
     },
     onSelectDefense: function () {
-        this.viewList.show("Defense", this.listCategories["Defense"], this.listItemsName["Defense"], this.itemInfo["Defense"]);
-        /*if (this.shopBackground.visible == true && this.visible == true) {
-            //this.visible = false;
-            if (this.viewListDefense == null) {
-                this.viewListDefense = new TableViewTestLayer(this, this.listCategories["Defense"], this.listItemsName["Defense"], this.itemInfo["Defense"]);
-                this.addChild(this.viewListDefense, 1);
-            }
-            else {
-                if (this.viewListDefense.visible == false)
-                    this.viewListDefense.show();
-            }
-        }*/
+        this.viewList.show("Defense", this.listCategories["Defense"]);
     },
     onSelectShield: function () {
         if (this.shopBackground.visible == true && this.visible == true)
